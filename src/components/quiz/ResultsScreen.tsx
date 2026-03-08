@@ -158,9 +158,9 @@ export default function ResultsScreen() {
                           rel="noopener noreferrer"
                           className="underline"
                         >
-                          {imageCredits[i].name}
+                          {imageCredits[rec.name].name}
                         </a>
-                        {imageCredits[i].source === "Unsplash" && (
+                        {imageCredits[rec.name].source === "Unsplash" && (
                           <>
                             {" / "}
                             <a
@@ -173,7 +173,7 @@ export default function ResultsScreen() {
                             </a>
                           </>
                         )}
-                        {imageCredits[i].source === "Wikipedia" && " / Wikipedia"}
+                        {imageCredits[rec.name].source === "Wikipedia" && " / Wikipedia"}
                       </div>
                     )}
                   </AspectRatio>
