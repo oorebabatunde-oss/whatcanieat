@@ -145,7 +145,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.subtitle": "Estas son recomendaciones generadas por IA.\nLas imágenes pueden no ser precisas.",
     "results.whereToBuy": "Dónde comprar",
     "results.howToMake": "Cómo hacer",
-    "results.dismiss": "No quiero estas",
+    "results.dismiss": "Refinar mi antojo",
     "results.refinePlaceholder": "Cuéntanos más — ¿qué te apetece en su lugar?",
     "results.cancel": "Cancelar",
     "results.refineSearch": "Refinar Búsqueda",
