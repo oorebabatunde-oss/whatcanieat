@@ -10,17 +10,33 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { craving, flavors, textures, dietary } = await req.json();
+    const { craving, flavors, textures, dietary, locale, timezone } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const systemPrompt = `You are a fun, friendly food recommendation assistant. Based on user preferences, suggest exactly 3 food or recipe ideas. For each suggestion provide:
-- name: a short catchy name
-- description: 1-2 sentences about why it matches their mood
-- emoji: a single relevant food emoji
+    // Derive region context from locale and timezone
+    const regionHint = locale || "en-US";
+    const tzHint = timezone || "UTC";
 
-Respond ONLY with valid JSON array, no markdown, no extra text. Example:
-[{"name":"Spicy Ramen","description":"A warming bowl of noodles with a kick.","emoji":"🍜"}]`;
+    const systemPrompt = `You are a food recommendation expert. Based on the user's preferences and their region, suggest exactly 3 REAL, well-known dishes that actually exist.
+
+CRITICAL RULES:
+- Only suggest REAL dishes that exist in restaurants or cookbooks (e.g., "Pad Thai", "Fish and Chips", "Tacos al Pastor")
+- Prioritize dishes popular in or near the user's region/culture
+- NEVER invent fake dish names
+- Each dish must be something the user could actually order or cook
+
+User's locale: ${regionHint}
+User's timezone: ${tzHint}
+
+For each suggestion provide a JSON object with:
+- name: The real name of the dish
+- description: 1-2 sentences about why it matches their preferences
+- cuisine: The country or region of origin (e.g., "Thai", "British", "Mexican")
+- imageQuery: A simple search term for the dish (just the dish name, no extra words)
+
+Respond ONLY with a valid JSON array, no markdown, no extra text. Example:
+[{"name":"Pad Thai","description":"A satisfying stir-fried noodle dish with the perfect balance of sweet and savory.","cuisine":"Thai","imageQuery":"pad thai"}]`;
 
     const userPrompt = `I'm looking for: ${craving || "anything"}
 Flavors I want: ${flavors?.length ? flavors.join(", ") : "surprise me"}
@@ -49,7 +65,7 @@ Dietary restrictions: ${dietary?.length && !dietary.includes("none") ? dietary.j
         });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI usage limit reached." }), {
+        return new Response(JSON.stringify({ error: "Usage limit reached." }), {
           status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
@@ -63,12 +79,10 @@ Dietary restrictions: ${dietary?.length && !dietary.includes("none") ? dietary.j
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content ?? "[]";
 
-    // Parse the JSON from the AI response
     let recommendations;
     try {
       recommendations = JSON.parse(content);
     } catch {
-      // Try extracting JSON from markdown code blocks
       const match = content.match(/\[[\s\S]*\]/);
       recommendations = match ? JSON.parse(match[0]) : [];
     }
