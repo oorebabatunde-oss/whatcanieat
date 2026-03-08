@@ -22,6 +22,7 @@ export default function ResultsScreen() {
   const { state, reset } = useQuiz();
   const { t, lang } = useI18n();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
