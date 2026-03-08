@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useQuiz, DietaryConstraint } from "./QuizContext";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export default function DietaryStep() {
