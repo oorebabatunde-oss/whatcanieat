@@ -38,7 +38,7 @@ export default function QuizFlow() {
 
       {/* Steps */}
       <div className="flex-1 flex items-center justify-center py-6">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {state.step === 0 && <CravingStep key="craving" />}
           {state.step === 1 && <FlavorStep key="flavor" />}
           {state.step === 2 && <TextureStep key="texture" />}

@@ -21,9 +21,10 @@ export default function TextureStep() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
     >
       <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
