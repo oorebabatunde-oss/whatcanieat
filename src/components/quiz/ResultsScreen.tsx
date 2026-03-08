@@ -159,7 +159,7 @@ export default function ResultsScreen() {
     }
   };
 
-  const visibleCards = recommendations.slice(currentIndex, currentIndex + 1);
+  const visibleCards = recommendations.slice(currentIndex, currentIndex + 2);
 
   return (
     <motion.div
