@@ -51,7 +51,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.subtitle": "These are AI-generated recommendations.\nImages may not be accurate.",
     "results.whereToBuy": "Where to buy",
     "results.howToMake": "How to make",
-    "results.dismiss": "I don't want these",
+    "results.dismiss": "Refine my craving",
     "results.refinePlaceholder": "Tell us more — what are you in the mood for instead?",
     "results.cancel": "Cancel",
     "results.refineSearch": "Refine Search",
