@@ -1,12 +1,14 @@
 import { useQuiz } from "./QuizContext";
-import { motion } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { useNavigate } from "react-router-dom";
 
 interface Recommendation {
   name: string;
@@ -17,10 +19,13 @@ interface Recommendation {
 
 export default function ResultsScreen() {
   const { state, reset } = useQuiz();
+  const navigate = useNavigate();
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
+  const [dismissing, setDismissing] = useState<Record<number, boolean>>({});
+  const [feedback, setFeedback] = useState<Record<number, string>>({});
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -56,13 +61,33 @@ export default function ResultsScreen() {
   const getImageUrl = (query: string) =>
     `https://source.unsplash.com/400x300/?${encodeURIComponent(query)},food`;
 
+  const handleDismiss = (index: number) => {
+    if (dismissing[index]) {
+      // Already showing feedback — remove the card
+      setRecommendations((prev) => prev.filter((_, i) => i !== index));
+      setDismissing((prev) => { const n = { ...prev }; delete n[index]; return n; });
+      setFeedback((prev) => { const n = { ...prev }; delete n[index]; return n; });
+    } else {
+      setDismissing((prev) => ({ ...prev, [index]: true }));
+    }
+  };
+
+  const handleHowToMake = (dishName: string) => {
+    const q = encodeURIComponent(`how to make ${dishName} recipe`);
+    window.open(`https://www.google.com/search?q=${q}`, "_blank");
+  };
+
+  const handleWhereToBuy = (dishName: string) => {
+    navigate(`/where-to-buy?dish=${encodeURIComponent(dishName)}`);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
+      className="flex flex-col items-center gap-6 px-6 w-full max-w-md mx-auto"
     >
       {loading ? (
         <>
@@ -87,40 +112,108 @@ export default function ResultsScreen() {
             Here's what you should eat!
           </h2>
           <div className="flex flex-col gap-4 w-full">
-            {recommendations.map((rec, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.15 }}
-                className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
-              >
-                <AspectRatio ratio={4 / 3} className="bg-muted">
-                  {!imageLoaded[i] && (
-                    <Skeleton className="absolute inset-0 w-full h-full" />
-                  )}
-                  <img
-                    src={getImageUrl(rec.imageQuery)}
-                    alt={rec.name}
-                    className={`w-full h-full object-cover transition-opacity duration-300 ${
-                      imageLoaded[i] ? "opacity-100" : "opacity-0"
-                    }`}
-                    onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
-                  />
-                </AspectRatio>
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-display font-semibold text-foreground text-lg">
-                      {rec.name}
-                    </h3>
-                    <Badge variant="secondary" className="text-xs">
-                      {rec.cuisine}
-                    </Badge>
+            <AnimatePresence>
+              {recommendations.map((rec, i) => (
+                <motion.div
+                  key={rec.name}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, x: -100, height: 0, marginBottom: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
+                >
+                  <AspectRatio ratio={16 / 9} className="bg-muted">
+                    {!imageLoaded[i] && (
+                      <Skeleton className="absolute inset-0 w-full h-full" />
+                    )}
+                    <img
+                      src={getImageUrl(rec.imageQuery)}
+                      alt={rec.name}
+                      className={`w-full h-full object-cover transition-opacity duration-300 ${
+                        imageLoaded[i] ? "opacity-100" : "opacity-0"
+                      }`}
+                      onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
+                    />
+                  </AspectRatio>
+                  <div className="p-3">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-display font-semibold text-foreground text-base">
+                          {rec.name}
+                        </h3>
+                        <Badge variant="secondary" className="text-xs">
+                          {rec.cuisine}
+                        </Badge>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive"
+                        onClick={() => handleDismiss(i)}
+                      >
+                        <ThumbsDown className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                    <p className="text-muted-foreground text-sm mb-3">{rec.description}</p>
+
+                    <AnimatePresence>
+                      {dismissing[i] && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mb-3 overflow-hidden"
+                        >
+                          <Textarea
+                            placeholder="Tell us why (optional)"
+                            value={feedback[i] || ""}
+                            onChange={(e) => setFeedback((prev) => ({ ...prev, [i]: e.target.value }))}
+                            className="text-sm min-h-[60px] mb-2"
+                          />
+                          <div className="flex gap-2">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="text-xs"
+                              onClick={() => handleDismiss(i)}
+                            >
+                              Remove
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-xs"
+                              onClick={() => setDismissing((prev) => { const n = { ...prev }; delete n[i]; return n; })}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs gap-1.5 flex-1"
+                        onClick={() => handleWhereToBuy(rec.name)}
+                      >
+                        <MapPin className="w-3.5 h-3.5" /> Where to buy
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs gap-1.5 flex-1"
+                        onClick={() => handleHowToMake(rec.name)}
+                      >
+                        <ChefHat className="w-3.5 h-3.5" /> How to make
+                      </Button>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground text-sm">{rec.description}</p>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </>
       )}
