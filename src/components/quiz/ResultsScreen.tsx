@@ -24,6 +24,7 @@ export default function ResultsScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
+  const [imageUrls, setImageUrls] = useState<Record<number, string>>({});
   const [dismissing, setDismissing] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState<Record<number, string>>({});
 
