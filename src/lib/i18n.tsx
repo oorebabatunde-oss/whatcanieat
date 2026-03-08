@@ -523,6 +523,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "저장됨!", "results.loginToSave": "저장하려면 로그인하세요",
     "results.swipeHint": "오른쪽으로 밀어서 저장, 왼쪽으로 건너뛰기",
     "results.allDone": "다 봤어요!", "results.allDoneSubtitle": "모든 추천을 확인했습니다.",
+    "results.viewSaved": "저장한 요리 보기",
   },
   hi: {
     "app.title": "मैं क्या खा सकता हूँ?",
