@@ -159,7 +159,7 @@ export default function ResultsScreen() {
     }
   };
 
-  const visibleCards = recommendations.slice(currentIndex, currentIndex + 1);
+  const visibleCards = recommendations.slice(currentIndex, currentIndex + 2);
 
   return (
     <motion.div
@@ -263,7 +263,7 @@ export default function ResultsScreen() {
           </p>
 
           {/* Card stack */}
-          <div className="relative w-full">
+          <div className="relative w-full" style={{ height: 520 }}>
             <AnimatePresence>
               {visibleCards.map((rec, i) => (
                 <SwipeCard
