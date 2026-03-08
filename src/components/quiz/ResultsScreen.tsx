@@ -4,11 +4,15 @@ import { Loader2, RotateCcw, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Recommendation {
   name: string;
   description: string;
-  emoji: string;
+  cuisine: string;
+  imageQuery: string;
 }
 
 export default function ResultsScreen() {
@@ -16,16 +20,22 @@ export default function ResultsScreen() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
+        const locale = navigator.language || "en-US";
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
         const { data, error: fnError } = await supabase.functions.invoke("recommend", {
           body: {
             craving: state.craving,
             flavors: state.flavors,
             textures: state.textures,
             dietary: state.dietary,
+            locale,
+            timezone,
           },
         });
 
@@ -43,6 +53,9 @@ export default function ResultsScreen() {
     fetchRecommendations();
   }, [state.craving, state.flavors, state.textures, state.dietary]);
 
+  const getImageUrl = (query: string) =>
+    `https://source.unsplash.com/400x300/?${encodeURIComponent(query)},food`;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -59,7 +72,7 @@ export default function ResultsScreen() {
           <div className="flex flex-col items-center gap-3 py-8">
             <Loader2 className="w-12 h-12 text-primary animate-spin" />
             <p className="text-muted-foreground text-sm text-center">
-              Our AI chef is thinking...
+              Finding recommendations...
             </p>
           </div>
         </>
@@ -73,18 +86,37 @@ export default function ResultsScreen() {
           <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
             Here's what you should eat!
           </h2>
-          <div className="flex flex-col gap-3 w-full">
+          <div className="flex flex-col gap-4 w-full">
             {recommendations.map((rec, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.15 }}
-                className="bg-card border border-border rounded-lg p-4 flex items-start gap-3 shadow-sm"
+                className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
               >
-                <span className="text-3xl">{rec.emoji}</span>
-                <div>
-                  <h3 className="font-display font-semibold text-foreground">{rec.name}</h3>
+                <AspectRatio ratio={4 / 3} className="bg-muted">
+                  {!imageLoaded[i] && (
+                    <Skeleton className="absolute inset-0 w-full h-full" />
+                  )}
+                  <img
+                    src={getImageUrl(rec.imageQuery)}
+                    alt={rec.name}
+                    className={`w-full h-full object-cover transition-opacity duration-300 ${
+                      imageLoaded[i] ? "opacity-100" : "opacity-0"
+                    }`}
+                    onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
+                  />
+                </AspectRatio>
+                <div className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-display font-semibold text-foreground text-lg">
+                      {rec.name}
+                    </h3>
+                    <Badge variant="secondary" className="text-xs">
+                      {rec.cuisine}
+                    </Badge>
+                  </div>
                   <p className="text-muted-foreground text-sm">{rec.description}</p>
                 </div>
               </motion.div>
