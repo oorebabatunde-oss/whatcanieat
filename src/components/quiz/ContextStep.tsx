@@ -43,7 +43,7 @@ export default function ContextStep() {
         </Button>
         <Button
           onClick={nextStep}
-          disabled={!state.context.trim()}
+          disabled={!(state.context || "").trim()}
           size="lg"
           className="flex-1 rounded-lg font-semibold tracking-wide"
         >
