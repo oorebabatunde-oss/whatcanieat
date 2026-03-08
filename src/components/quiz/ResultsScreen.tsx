@@ -120,6 +120,9 @@ export default function ResultsScreen() {
           <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
             Here's what you could eat!
           </h2>
+          <p className="text-muted-foreground text-xs text-center -mt-4">
+            These are AI-generated recommendations. Images may not be accurate.
+          </p>
           <div className="flex flex-col gap-4 w-full">
             <AnimatePresence>
               {recommendations.map((rec, i) => (
