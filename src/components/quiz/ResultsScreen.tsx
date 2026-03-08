@@ -61,6 +61,9 @@ export default function ResultsScreen() {
             if (imgData?.imageUrl) {
               setImageUrls((prev) => ({ ...prev, [i]: imgData.imageUrl }));
             }
+            if (imgData?.credit?.name) {
+              setImageCredits((prev) => ({ ...prev, [i]: imgData.credit }));
+            }
           } catch {
             // fallback: no image
           }
