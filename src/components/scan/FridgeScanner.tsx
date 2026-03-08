@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Camera, Upload, Loader2, ArrowLeft, ChefHat, Clock, BarChart3, ExternalLink, Youtube } from "lucide-react";
+import { Camera, Upload, Loader2, ArrowLeft, ChefHat, Clock, BarChart3, ExternalLink, Youtube, ImageOff, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
