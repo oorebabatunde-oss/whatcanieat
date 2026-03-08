@@ -112,6 +112,7 @@ const Index = () => {
           <span className="text-sm font-semibold tracking-wide">{t("home.scanFridge")}</span>
         </motion.button>
       </div>
+      </div>
     </div>
   );
 };
