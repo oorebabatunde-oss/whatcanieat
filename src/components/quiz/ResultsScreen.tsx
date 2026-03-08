@@ -74,8 +74,6 @@ export default function ResultsScreen() {
     fetchRecommendations();
   }, [state.craving, state.flavors, state.textures, state.dietary]);
 
-  const getImageUrl = (query: string) =>
-    `https://source.unsplash.com/400x300/?${encodeURIComponent(query)},food`;
 
   const handleDismiss = (index: number) => {
     if (dismissing[index]) {
