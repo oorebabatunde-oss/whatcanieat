@@ -91,7 +91,7 @@ const Index = () => {
 
   if (mode === "scan") {
     return (
-      <div>
+      <div className="min-h-screen bg-background flex flex-col">
         {toolbar}
         <FridgeScanner onBack={goWelcome} />
       </div>
