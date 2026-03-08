@@ -268,6 +268,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "Capturez clairement les étiquettes ou articles",
     "scan.tryAgain": "Essayer une Autre Photo",
     "theme.toggle": "Changer le thème",
+    "auth.signInCta": "Connectez-vous pour sauvegarder",
     "auth.title": "Connexion",
     "auth.subtitle": "Entrez votre email et nous vous enverrons un lien magique",
     "auth.emailLabel": "Email", "auth.emailPlaceholder": "vous@exemple.com",
