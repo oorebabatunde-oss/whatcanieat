@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
+
 import { useNavigate } from "react-router-dom";
 
 interface Recommendation {
@@ -26,8 +26,6 @@ export default function ResultsScreen() {
   const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
   const [imageUrls, setImageUrls] = useState<Record<number, string>>({});
   const [imageCredits, setImageCredits] = useState<Record<number, { name: string; link: string; source?: string }>>({});
-  const [dismissing, setDismissing] = useState<Record<number, boolean>>({});
-  const [feedback, setFeedback] = useState<Record<number, string>>({});
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -80,14 +78,7 @@ export default function ResultsScreen() {
 
 
   const handleDismiss = (index: number) => {
-    if (dismissing[index]) {
-      // Already showing feedback — remove the card
-      setRecommendations((prev) => prev.filter((_, i) => i !== index));
-      setDismissing((prev) => { const n = { ...prev }; delete n[index]; return n; });
-      setFeedback((prev) => { const n = { ...prev }; delete n[index]; return n; });
-    } else {
-      setDismissing((prev) => ({ ...prev, [index]: true }));
-    }
+    setRecommendations((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleHowToMake = (dishName: string) => {
@@ -203,41 +194,8 @@ export default function ResultsScreen() {
                     </div>
                     <p className="text-muted-foreground text-sm mb-3">{rec.description}</p>
 
-                    <AnimatePresence>
-                      {dismissing[i] && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mb-3 overflow-hidden"
-                        >
-                          <Textarea
-                            placeholder="Tell us why (optional)"
-                            value={feedback[i] || ""}
-                            onChange={(e) => setFeedback((prev) => ({ ...prev, [i]: e.target.value }))}
-                            className="text-sm min-h-[60px] mb-2"
-                          />
-                          <div className="flex gap-2">
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="text-xs"
-                              onClick={() => handleDismiss(i)}
-                            >
-                              Remove
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-xs"
-                              onClick={() => setDismissing((prev) => { const n = { ...prev }; delete n[i]; return n; })}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+
+
 
                     <div className="flex gap-2">
                       <Button
