@@ -32,27 +32,9 @@ export default function Auth() {
     setLoading(false);
   };
 
-  const handleVerifyOtp = async () => {
-    if (otpCode.length !== 6) return;
-    setVerifying(true);
-    setError(null);
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token: otpCode,
-      type: "email",
-    });
-    if (error) {
-      setError(error.message);
-    } else {
-      navigate("/");
-    }
-    setVerifying(false);
-  };
-
   const handleResend = async () => {
     setLoading(true);
     setError(null);
-    setOtpCode("");
     const { error } = await signInWithMagicLink(email);
     if (error) {
       setError(error.message);
