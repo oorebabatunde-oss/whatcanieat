@@ -5,23 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { useI18n } from "@/lib/i18n";
-import { Mail, Loader2, ArrowLeft, CheckCircle, KeyRound } from "lucide-react";
+import { Mail, Loader2, ArrowLeft, CheckCircle } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { Link } from "react-router-dom";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [verifying, setVerifying] = useState(false);
-  const [otpCode, setOtpCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const { signInWithMagicLink } = useAuth();
   const { t } = useI18n();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,27 +32,9 @@ export default function Auth() {
     setLoading(false);
   };
 
-  const handleVerifyOtp = async () => {
-    if (otpCode.length !== 6) return;
-    setVerifying(true);
-    setError(null);
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token: otpCode,
-      type: "email",
-    });
-    if (error) {
-      setError(error.message);
-    } else {
-      navigate("/");
-    }
-    setVerifying(false);
-  };
-
   const handleResend = async () => {
     setLoading(true);
     setError(null);
-    setOtpCode("");
     const { error } = await signInWithMagicLink(email);
     if (error) {
       setError(error.message);
@@ -99,69 +76,36 @@ export default function Auth() {
               animate={{ opacity: 1, scale: 1 }}
               className="bg-card border border-border rounded-xl p-6 space-y-5"
             >
-              <div className="text-center space-y-2">
+              <div className="text-center space-y-3">
                 <CheckCircle className="w-10 h-10 text-primary mx-auto" />
                 <h2 className="font-display font-semibold text-foreground">
                   {t("auth.checkEmail")}
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  {t("auth.otpInstruction")}
+                  {t("auth.linkSent")}
                 </p>
                 <button
                   type="button"
-                  onClick={() => { setSent(false); setOtpCode(""); setError(null); }}
+                  onClick={() => { setSent(false); setError(null); }}
                   className="text-primary text-sm underline underline-offset-2 hover:opacity-80"
                 >
                   {email} — {t("auth.changeEmail")}
                 </button>
               </div>
 
-              <div className="flex flex-col items-center gap-4">
-                <InputOTP
-                  maxLength={6}
-                  value={otpCode}
-                  onChange={setOtpCode}
-                >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
+              {error && (
+                <p className="text-destructive text-sm text-center">{error}</p>
+              )}
 
-                {error && (
-                  <p className="text-destructive text-sm text-center">{error}</p>
-                )}
-
-                <Button
-                  className="w-full gap-2"
-                  onClick={handleVerifyOtp}
-                  disabled={otpCode.length !== 6 || verifying}
-                >
-                  {verifying ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <KeyRound className="w-4 h-4" />
-                  )}
-                  {t("auth.verifyCode")}
-                </Button>
-
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleResend}
-                    disabled={loading}
-                    className="text-muted-foreground text-xs"
-                  >
-                    {loading ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : null}
-                    {t("auth.resendCode")}
-                  </Button>
-                </div>
-              </div>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleResend}
+                disabled={loading}
+              >
+                {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                {t("auth.resendCode")}
+              </Button>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
