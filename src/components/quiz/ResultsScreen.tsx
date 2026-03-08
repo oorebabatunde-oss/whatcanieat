@@ -121,7 +121,9 @@ export default function ResultsScreen() {
             Here's what you could eat!
           </h2>
           <p className="text-muted-foreground text-xs text-center -mt-4">
-            These are AI-generated recommendations. Images may not be accurate.
+            These are AI-generated recommendations.
+            <br />
+            Images may not be accurate.
           </p>
           <div className="flex flex-col gap-4 w-full">
             <AnimatePresence>
