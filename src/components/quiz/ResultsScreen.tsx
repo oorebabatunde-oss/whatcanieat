@@ -135,7 +135,7 @@ export default function ResultsScreen() {
   };
 
   const handleHowToMake = (dishName: string) => {
-    navigate(`/recipe?dish=${encodeURIComponent(dishName)}`);
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(dishName + " recipe")}`, "_blank");
   };
 
   const handleWhereToBuy = (dishName: string) => {
