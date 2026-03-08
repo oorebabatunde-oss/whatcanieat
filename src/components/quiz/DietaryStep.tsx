@@ -41,7 +41,7 @@ export default function DietaryStep() {
             <motion.button
               key={d.type}
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              animate={{ opacity: 1, scale: selected ? 1.05 : 1 }}
               transition={{ delay: i * 0.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => toggleDietary(d.type)}
