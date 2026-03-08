@@ -746,6 +746,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Kaydedildi!", "results.loginToSave": "Kaydetmek için giriş yap",
     "results.swipeHint": "Kaydetmek için sağa, geçmek için sola kaydır",
     "results.allDone": "Hepsi bu!", "results.allDoneSubtitle": "Tüm önerileri gördün.",
+    "results.undo": "Geri al",
     "results.viewSaved": "Kaydedilen yemekleri gör",
   },
   it: {
