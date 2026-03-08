@@ -229,6 +229,9 @@ export default function ResultsScreen() {
       <Button variant="outline" onClick={reset} className="rounded-full gap-2 mt-4">
         <RotateCcw className="w-4 h-4" /> Start Over
       </Button>
+      <Button variant="outline" onClick={reset} className="rounded-full gap-2">
+        <RotateCcw className="w-4 h-4" /> Start Over
+      </Button>
     </motion.div>
   );
 }
