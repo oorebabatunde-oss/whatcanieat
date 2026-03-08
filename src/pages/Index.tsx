@@ -88,7 +88,7 @@ const Index = () => {
           onClick={() => setMode("scan")}
           className="flex-1 bg-[#80CFA9] text-foreground rounded-lg p-5 flex flex-col items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
         >
-          <span className="text-4xl">🗄️</span>
+          <span className="text-4xl">🧊</span>
           <div className="text-center">
             <span className="text-sm font-display font-bold block">Scan my fridge or cupboard</span>
             <span className="text-xs opacity-80">Photo recipes</span>
