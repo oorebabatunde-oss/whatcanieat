@@ -471,6 +471,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "تم الحفظ!", "results.loginToSave": "سجل دخولك للحفظ",
     "results.swipeHint": "اسحب يميناً للحفظ، يساراً للتخطي",
     "results.allDone": "هذا كل شيء!", "results.allDoneSubtitle": "لقد رأيت كل التوصيات.",
+    "results.undo": "تراجع",
     "results.viewSaved": "عرض الأطباق المحفوظة",
   },
   zh: {
