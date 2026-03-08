@@ -85,6 +85,55 @@ export default function ResultsScreen() {
     setRecommendations((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleRefineSearch = async () => {
+    if (!refineFeedback.trim()) return;
+    setRefining(true);
+    setError(null);
+    try {
+      const locale = navigator.language || "en-US";
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+      const rejected = recommendations.map((r) => r.name);
+
+      const { data, error: fnError } = await supabase.functions.invoke("recommend", {
+        body: {
+          craving: state.craving,
+          flavors: state.flavors,
+          textures: state.textures,
+          dietary: state.dietary,
+          locale,
+          timezone,
+          feedback: refineFeedback,
+          rejected,
+        },
+      });
+
+      if (fnError) throw new Error(fnError.message);
+      if (data?.error) throw new Error(data.error);
+
+      const recs: Recommendation[] = data.recommendations ?? [];
+      setRecommendations(recs);
+      setImageLoaded({});
+      setImageUrls({});
+      setImageCredits({});
+      setShowRefine(false);
+      setRefineFeedback("");
+
+      recs.forEach(async (rec) => {
+        try {
+          const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
+            body: { query: rec.imageQuery },
+          });
+          if (imgData?.imageUrl) setImageUrls((prev) => ({ ...prev, [rec.name]: imgData.imageUrl }));
+          if (imgData?.credit?.name) setImageCredits((prev) => ({ ...prev, [rec.name]: imgData.credit }));
+        } catch {}
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
+    } finally {
+      setRefining(false);
+    }
+  };
+
   const handleHowToMake = (dishName: string) => {
     navigate(`/recipe?dish=${encodeURIComponent(dishName)}`);
   };
