@@ -86,7 +86,7 @@ const Index = () => {
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => setMode("scan")}
-          className="flex-1 bg-[#A7E2E3] text-foreground rounded-lg p-5 flex flex-col items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+          className="flex-1 bg-[#80CFA9] text-foreground rounded-lg p-5 flex flex-col items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
         >
           <span className="text-4xl">🧊</span>
           <div className="text-center">
