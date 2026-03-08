@@ -49,7 +49,7 @@ export default function TextureStep() {
                   : "bg-card text-foreground border border-border hover:border-primary/30"
               }`}
             >
-              <span>{t.emoji}</span>
+              
               {t.label}
             </motion.button>
           );
