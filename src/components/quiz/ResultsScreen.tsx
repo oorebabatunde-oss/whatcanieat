@@ -199,7 +199,9 @@ export default function ResultsScreen() {
                       </Button>
                     </div>
                     <p className="text-muted-foreground text-sm mb-3">{rec.description}</p>
-
+  const [refineOpen, setRefineOpen] = useState(false);
+  const [refineFeedback, setRefineFeedback] = useState("");
+  const [refining, setRefining] = useState(false);
 
 
 
