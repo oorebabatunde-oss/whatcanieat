@@ -87,7 +87,7 @@ export default function ResultsScreen() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col items-center gap-6 px-6 w-full max-w-md mx-auto"
+      className="flex flex-col items-center gap-6 px-6 w-full max-w-sm mx-auto"
     >
       {loading ? (
         <>
