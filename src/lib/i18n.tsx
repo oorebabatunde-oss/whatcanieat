@@ -467,7 +467,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "正在寻找完美食物...", "results.loading.subtitle": "正在查找推荐...",
     "results.title": "你可以吃这些！", "results.subtitle": "AI生成的推荐。\n图片可能不准确。",
     "results.whereToBuy": "去哪买", "results.howToMake": "怎么做",
-    "results.dismiss": "不想要这些", "results.refinePlaceholder": "告诉我们更多",
+    "results.dismiss": "细化我的口味", "results.refinePlaceholder": "告诉我们更多",
     "results.cancel": "取消", "results.refineSearch": "优化搜索", "results.startOver": "重新开始",
     "scan.title": "扫描你的冰箱", "scan.subtitle": "拍照或上传图片",
     "scan.takePhoto": "拍照", "scan.uploadImage": "上传图片", "scan.back": "返回",
