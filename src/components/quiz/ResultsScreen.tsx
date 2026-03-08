@@ -23,9 +23,9 @@ export default function ResultsScreen() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
-  const [imageUrls, setImageUrls] = useState<Record<number, string>>({});
-  const [imageCredits, setImageCredits] = useState<Record<number, { name: string; link: string; source?: string }>>({});
+  const [imageLoaded, setImageLoaded] = useState<Record<string, boolean>>({});
+  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
+  const [imageCredits, setImageCredits] = useState<Record<string, { name: string; link: string; source?: string }>>({});
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -51,16 +51,16 @@ export default function ResultsScreen() {
 
         // Fetch Unsplash images for each recommendation
         const recs: Recommendation[] = data.recommendations ?? [];
-        recs.forEach(async (rec: Recommendation, i: number) => {
+        recs.forEach(async (rec: Recommendation) => {
           try {
             const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
               body: { query: rec.imageQuery },
             });
             if (imgData?.imageUrl) {
-              setImageUrls((prev) => ({ ...prev, [i]: imgData.imageUrl }));
+              setImageUrls((prev) => ({ ...prev, [rec.name]: imgData.imageUrl }));
             }
             if (imgData?.credit?.name) {
-              setImageCredits((prev) => ({ ...prev, [i]: imgData.credit }));
+              setImageCredits((prev) => ({ ...prev, [rec.name]: imgData.credit }));
             }
           } catch {
             // fallback: no image
@@ -136,31 +136,31 @@ export default function ResultsScreen() {
                   className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
                 >
                   <AspectRatio ratio={16 / 9} className="bg-muted relative">
-                    {!imageLoaded[i] && (
+                    {!imageLoaded[rec.name] && (
                       <Skeleton className="absolute inset-0 w-full h-full" />
                     )}
-                    {imageUrls[i] && (
+                    {imageUrls[rec.name] && (
                       <img
-                        src={imageUrls[i]}
+                        src={imageUrls[rec.name]}
                         alt={rec.name}
                         className={`w-full h-full object-cover transition-opacity duration-300 ${
-                          imageLoaded[i] ? "opacity-100" : "opacity-0"
+                          imageLoaded[rec.name] ? "opacity-100" : "opacity-0"
                         }`}
-                        onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
+                        onLoad={() => setImageLoaded((prev) => ({ ...prev, [rec.name]: true }))}
                       />
                     )}
-                    {imageCredits[i] && imageLoaded[i] && (
+                    {imageCredits[rec.name] && imageLoaded[rec.name] && (
                       <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-black/50 rounded-tl text-[10px] text-white/80">
                         Photo by{" "}
                         <a
-                          href={`${imageCredits[i].link}${imageCredits[i].source === "Unsplash" ? "?utm_source=your_app&utm_medium=referral" : ""}`}
+                          href={`${imageCredits[rec.name].link}${imageCredits[rec.name].source === "Unsplash" ? "?utm_source=your_app&utm_medium=referral" : ""}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="underline"
                         >
-                          {imageCredits[i].name}
+                          {imageCredits[rec.name].name}
                         </a>
-                        {imageCredits[i].source === "Unsplash" && (
+                        {imageCredits[rec.name].source === "Unsplash" && (
                           <>
                             {" / "}
                             <a
@@ -173,7 +173,7 @@ export default function ResultsScreen() {
                             </a>
                           </>
                         )}
-                        {imageCredits[i].source === "Wikipedia" && " / Wikipedia"}
+                        {imageCredits[rec.name].source === "Wikipedia" && " / Wikipedia"}
                       </div>
                     )}
                   </AspectRatio>
