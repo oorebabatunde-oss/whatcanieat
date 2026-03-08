@@ -5,3 +5,9 @@ verify_jwt = false
 
 [functions.unsplash-image]
 verify_jwt = false
+
+[functions.recipe]
+verify_jwt = false
+
+[functions.nearby-places]
+verify_jwt = false

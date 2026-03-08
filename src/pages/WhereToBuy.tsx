@@ -1,11 +1,12 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, MapPin, Loader2, Search } from "lucide-react";
+import { ArrowLeft, MapPin, Loader2, Search, RotateCcw } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 // Fix default marker icons for Leaflet + bundlers
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -40,6 +41,7 @@ export default function WhereToBuy() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
   const [manualLocation, setManualLocation] = useState("");
   const [geoError, setGeoError] = useState(false);
 
@@ -65,33 +67,17 @@ export default function WhereToBuy() {
 
   const searchNearby = async (coords: [number, number]) => {
     setSearching(true);
+    setSearchError(null);
     try {
       const [lat, lon] = coords;
-      const query = `
-        [out:json][timeout:10];
-        (
-          node["amenity"~"restaurant|cafe|fast_food|food_court"](around:3000,${lat},${lon});
-          node["shop"~"supermarket|convenience|grocery"](around:3000,${lat},${lon});
-        );
-        out body 20;
-      `;
-      const res = await fetch("https://overpass-api.de/api/interpreter", {
-        method: "POST",
-        body: `data=${encodeURIComponent(query)}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      const { data, error } = await supabase.functions.invoke("nearby-places", {
+        body: { lat, lon },
       });
-      const data = await res.json();
-      const results: Place[] = (data.elements || [])
-        .filter((el: any) => el.tags?.name)
-        .map((el: any) => ({
-          id: el.id,
-          lat: el.lat,
-          lon: el.lon,
-          name: el.tags.name,
-          type: el.tags.amenity || el.tags.shop || "place",
-        }));
-      setPlaces(results);
-    } catch {
+      if (error) throw new Error(error.message);
+      if (data?.error) throw new Error(data.error);
+      setPlaces(data.places ?? []);
+    } catch (e) {
+      setSearchError(e instanceof Error ? e.message : "Failed to find nearby places");
       setPlaces([]);
     } finally {
       setSearching(false);
@@ -169,6 +155,14 @@ export default function WhereToBuy() {
               <span className="text-xs text-muted-foreground">Searching nearby...</span>
             </div>
           )}
+          {searchError && !searching && (
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] bg-card border border-destructive rounded-lg px-4 py-2 flex items-center gap-2 shadow-sm">
+              <span className="text-xs text-destructive">{searchError}</span>
+              <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => searchNearby(position)}>
+                <RotateCcw className="w-3 h-3 mr-1" /> Retry
+              </Button>
+            </div>
+          )}
           <MapContainer
             center={position}
             zoom={14}
@@ -196,7 +190,7 @@ export default function WhereToBuy() {
         </div>
       )}
 
-      {/* No location, no geo error means still waiting */}
+      {/* No location prompt */}
       {!position && !loading && geoError && !manualLocation && (
         <div className="flex-1 flex items-center justify-center p-6">
           <div className="text-center">
