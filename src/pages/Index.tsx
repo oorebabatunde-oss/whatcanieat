@@ -71,7 +71,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-12 relative">
+    <div className="min-h-screen bg-background flex flex-col items-center px-4">
       {toolbar}
 
       <motion.div
