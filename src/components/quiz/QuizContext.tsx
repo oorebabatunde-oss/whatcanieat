@@ -11,6 +11,7 @@ interface QuizState {
   flavors: FlavorProfile[];
   textures: TextureProfile[];
   dietary: DietaryConstraint[];
+  context: string;
 }
 
 interface QuizContextType {
