@@ -42,7 +42,7 @@ export default function CravingStep() {
             }`}
           >
             <span className="text-3xl">{opt.emoji}</span>
-            <span className="text-sm font-display font-bold">{opt.label}</span>
+            <span className="text-sm font-body font-bold">{opt.label}</span>
           </motion.button>
         ))}
       </div>
