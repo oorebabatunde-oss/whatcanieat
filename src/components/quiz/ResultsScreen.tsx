@@ -19,7 +19,7 @@ interface Recommendation {
 
 export default function ResultsScreen() {
   const { state, reset } = useQuiz();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
 
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +34,7 @@ export default function ResultsScreen() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const locale = navigator.language || "en-US";
+        const locale = lang || navigator.language || "en-US";
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
         const { data, error: fnError } = await supabase.functions.invoke("recommend", {
@@ -86,7 +86,7 @@ export default function ResultsScreen() {
     setRefining(true);
     setError(null);
     try {
-      const locale = navigator.language || "en-US";
+      const locale = lang || navigator.language || "en-US";
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
       const rejected = recommendations.map((r) => r.name);
 

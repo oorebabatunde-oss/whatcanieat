@@ -18,6 +18,15 @@ serve(async (req) => {
     const regionHint = locale || "en-US";
     const tzHint = timezone || "UTC";
 
+    // Determine response language from locale
+    const langCode = regionHint.split("-")[0] || "en";
+    const langMap: Record<string, string> = {
+      en: "English", es: "Spanish", fr: "French", de: "German", pt: "Portuguese",
+      ar: "Arabic", zh: "Chinese", ja: "Japanese", ko: "Korean", hi: "Hindi",
+      tr: "Turkish", it: "Italian", nl: "Dutch", ru: "Russian",
+    };
+    const responseLang = langMap[langCode] || "English";
+
     const systemPrompt = `You are a food recommendation expert. Based on the user's preferences and their region, suggest exactly 3 REAL, well-known dishes that actually exist.
 
 CRITICAL RULES:
@@ -25,15 +34,16 @@ CRITICAL RULES:
 - Prioritize dishes popular in or near the user's region/culture
 - NEVER invent fake dish names
 - Each dish must be something the user could actually order or cook
+- IMPORTANT: Write the "name", "description", and "cuisine" fields in ${responseLang}. Keep "imageQuery" in English for image search.
 
 User's locale: ${regionHint}
 User's timezone: ${tzHint}
 
 For each suggestion provide a JSON object with:
-- name: The real name of the dish
-- description: 1-2 sentences about why it matches their preferences
-- cuisine: The country or region of origin (e.g., "Thai", "British", "Mexican")
-- imageQuery: A simple search term for the dish (just the dish name, no extra words)
+- name: The real name of the dish (in ${responseLang})
+- description: 1-2 sentences about why it matches their preferences (in ${responseLang})
+- cuisine: The country or region of origin (in ${responseLang})
+- imageQuery: A simple search term for the dish in English (just the dish name, no extra words)
 
 Respond ONLY with a valid JSON array, no markdown, no extra text. Example:
 [{"name":"Pad Thai","description":"A satisfying stir-fried noodle dish with the perfect balance of sweet and savory.","cuisine":"Thai","imageQuery":"pad thai"}]`;
