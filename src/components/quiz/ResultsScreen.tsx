@@ -86,6 +86,7 @@ export default function ResultsScreen() {
   }, [state.craving, state.flavors, state.textures, state.dietary, state.context]);
 
   const handleSwipeRight = async (rec: Recommendation) => {
+    setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "right", rec }]);
     if (user) {
       await supabase.from("saved_recommendations").insert({
         user_id: user.id,
@@ -107,7 +108,29 @@ export default function ResultsScreen() {
   };
 
   const handleSwipeLeft = () => {
+    setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "left", rec: recommendations[currentIndex] }]);
     advance();
+  };
+
+  const handleUndo = async () => {
+    if (swipeHistory.length === 0) return;
+    const last = swipeHistory[swipeHistory.length - 1];
+    setSwipeHistory((prev) => prev.slice(0, -1));
+
+    // If it was a right-swipe (save), remove from DB
+    if (last.action === "right" && user) {
+      await supabase
+        .from("saved_recommendations")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("name", last.rec.name)
+        .order("created_at", { ascending: false })
+        .limit(1);
+    }
+
+    setCurrentIndex(last.index);
+    setAllSwiped(false);
+    toast(t("results.undo") + ": " + last.rec.name);
   };
 
   const advance = () => {
