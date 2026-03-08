@@ -583,6 +583,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "라벨이나 전체 품목을 촬영하세요",
     "scan.tryAgain": "다른 사진 시도",
     "theme.toggle": "테마 전환",
+    "auth.signInCta": "로그인하여 추천 저장",
     "auth.title": "로그인", "auth.subtitle": "이메일을 입력하면 매직 링크를 보내드립니다",
     "auth.emailLabel": "이메일", "auth.emailPlaceholder": "you@example.com",
     "auth.sendLink": "매직 링크 보내기", "auth.checkEmail": "이메일을 확인하세요!",
