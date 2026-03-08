@@ -312,7 +312,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.title": "Das könntest du essen!",
     "results.subtitle": "KI-generierte Empfehlungen.\nBilder können ungenau sein.",
     "results.whereToBuy": "Wo kaufen", "results.howToMake": "Wie zubereiten",
-    "results.dismiss": "Das will ich nicht",
+    "results.dismiss": "Gelüst verfeinern",
     "results.refinePlaceholder": "Erzähl uns mehr — worauf hast du stattdessen Lust?",
     "results.cancel": "Abbrechen", "results.refineSearch": "Suche verfeinern",
     "results.startOver": "Neu starten",
