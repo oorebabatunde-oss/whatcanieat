@@ -374,6 +374,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "Wir haben einen Code an deine E-Mail gesendet. Gib ihn unten ein oder klicke auf den Link.",
     "auth.verifyCode": "Code bestätigen",
     "auth.resendCode": "Code erneut senden",
+    "auth.changeEmail": "E-Mail ändern",
     "saved.title": "Gespeicherte Gerichte", "saved.empty": "Noch keine gespeicherten Gerichte.",
     "results.saved": "Gespeichert!", "results.loginToSave": "Melde dich an zum Speichern",
     "results.swipeHint": "Rechts wischen zum Speichern, links zum Überspringen",
