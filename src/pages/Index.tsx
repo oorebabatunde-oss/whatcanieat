@@ -111,7 +111,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => setMode("quiz")}
+          onClick={() => changeMode("quiz")}
           className="bg-primary text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]"
         >
           <span className="text-2xl">🍽️</span>
