@@ -30,7 +30,7 @@ const QuizContext = createContext<QuizContextType | null>(null);
 
 const STORAGE_KEY = "quiz-state";
 
-const initialState: QuizState = { step: 0, craving: null, flavors: [], textures: [], dietary: [] };
+const initialState: QuizState = { step: 0, craving: null, flavors: [], textures: [], dietary: [], context: "" };
 
 function loadState(): QuizState {
   try {
