@@ -59,7 +59,7 @@ export default function ResultsScreen() {
   }, [state.craving, state.flavors, state.textures, state.dietary]);
 
   const getImageUrl = (query: string) =>
-    `https://source.unsplash.com/400x300/?${encodeURIComponent(query)},food`;
+    `https://loremflickr.com/400/225/${encodeURIComponent(query)},food/all`;
 
   const handleDismiss = (index: number) => {
     if (dismissing[index]) {
@@ -136,23 +136,13 @@ export default function ResultsScreen() {
                     />
                   </AspectRatio>
                   <div className="p-3">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-display font-semibold text-foreground text-base">
-                          {rec.name}
-                        </h3>
-                        <Badge variant="secondary" className="text-xs">
-                          {rec.cuisine}
-                        </Badge>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive"
-                        onClick={() => handleDismiss(i)}
-                      >
-                        <ThumbsDown className="w-3.5 h-3.5" />
-                      </Button>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-display font-semibold text-foreground text-base">
+                        {rec.name}
+                      </h3>
+                      <Badge variant="secondary" className="text-xs">
+                        {rec.cuisine}
+                      </Badge>
                     </div>
                     <p className="text-muted-foreground text-sm mb-3">{rec.description}</p>
 
@@ -208,6 +198,14 @@ export default function ResultsScreen() {
                         onClick={() => handleHowToMake(rec.name)}
                       >
                         <ChefHat className="w-3.5 h-3.5" /> How to make
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs gap-1.5 text-muted-foreground hover:text-destructive"
+                        onClick={() => handleDismiss(i)}
+                      >
+                        <ThumbsDown className="w-3.5 h-3.5" /> Not for me
                       </Button>
                     </div>
                   </div>
