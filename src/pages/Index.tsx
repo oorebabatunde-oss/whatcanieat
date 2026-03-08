@@ -140,7 +140,7 @@ const Index = () => {
             <Link to="/auth">
               <Button variant="ghost" className="gap-2 text-muted-foreground">
                 <LogIn className="w-4 h-4" />
-                <span className="text-sm">{t("auth.title")}</span>
+                <span className="text-sm">{t("auth.signInCta")}</span>
               </Button>
             </Link>
           </motion.div>
