@@ -8,6 +8,7 @@ import { useI18n } from "@/lib/i18n";
 import { Mail, Loader2, ArrowLeft, CheckCircle } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { Link } from "react-router-dom";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
