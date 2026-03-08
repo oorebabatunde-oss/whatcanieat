@@ -22,8 +22,8 @@ const Index = () => {
             <QuizFlow />
           </main>
         </div>
-      </QuizProvider>
-    );
+      </QuizProvider>);
+
   }
 
   if (mode === "scan") {
@@ -41,8 +41,8 @@ const Index = () => {
         <Button variant="ghost" onClick={() => setMode("welcome")} className="mt-6 text-muted-foreground">
           ← Back
         </Button>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -52,15 +52,15 @@ const Index = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-14"
-      >
+        className="text-center mb-14">
+        
         <h1 className="text-5xl md:text-6xl font-display font-bold text-foreground mb-4 leading-tight">
           What Can<br />
           <span className="text-primary">I Eat?</span>
         </h1>
-        <p className="text-muted-foreground text-sm tracking-widest max-w-xs mx-auto">
-          Let us help you figure out your next delicious bite
-        </p>
+        
+
+        
       </motion.div>
 
       {/* Action cards */}
@@ -71,8 +71,8 @@ const Index = () => {
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => setMode("quiz")}
-          className="w-full bg-[hsl(var(--primary))] text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]"
-        >
+          className="w-full bg-[hsl(var(--primary))] text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]">
+          
           <span className="text-2xl">🍽️</span>
           <span className="text-sm font-semibold tracking-wide">Find what I'm craving</span>
         </motion.button>
@@ -83,8 +83,8 @@ const Index = () => {
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => setMode("scan")}
-          className="w-full bg-[hsl(var(--primary))] text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]"
-        >
+          className="w-full bg-[hsl(var(--primary))] text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]">
+          
           <span className="text-2xl">📱</span>
           <span className="text-sm font-semibold tracking-wide">Scan my fridge or cupboard</span>
         </motion.button>
@@ -94,12 +94,12 @@ const Index = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="text-xs text-muted-foreground mt-14 uppercase tracking-widest"
-      >
+        className="text-xs text-muted-foreground mt-14 uppercase tracking-widest">
+        
         No brands · No ads · Just food ideas
       </motion.p>
-    </div>
-  );
+    </div>);
+
 };
 
 export default Index;
