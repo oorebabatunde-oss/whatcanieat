@@ -11,10 +11,28 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Heart, LogIn, LogOut } from "lucide-react";
 
+type AppMode = "welcome" | "quiz" | "scan";
+const MODE_KEY = "app-mode";
+
+function loadMode(): AppMode {
+  try {
+    const stored = sessionStorage.getItem(MODE_KEY);
+    if (stored === "quiz" || stored === "scan") return stored;
+  } catch {}
+  return "welcome";
+}
+
 const Index = () => {
-  const [mode, setMode] = useState<"welcome" | "quiz" | "scan">("welcome");
+  const [mode, setMode] = useState<AppMode>(loadMode);
   const { t } = useI18n();
   const { user, signOut } = useAuth();
+
+  const changeMode = (m: AppMode) => {
+    sessionStorage.setItem(MODE_KEY, m);
+    setMode(m);
+  };
+
+  const goWelcome = () => changeMode("welcome");
 
   const toolbar = (
     <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
@@ -47,7 +65,7 @@ const Index = () => {
         <div className="min-h-screen bg-background flex flex-col">
           {toolbar}
           <header className="pt-6 pb-2 px-4 text-center">
-            <button onClick={() => setMode("welcome")} className="inline-block">
+            <button onClick={goWelcome} className="inline-block">
               <h1 className="text-xl font-display font-bold text-primary">
                 {t("app.title")}
               </h1>
@@ -65,7 +83,7 @@ const Index = () => {
     return (
       <div>
         {toolbar}
-        <FridgeScanner onBack={() => setMode("welcome")} />
+        <FridgeScanner onBack={goWelcome} />
       </div>
     );
   }
@@ -93,7 +111,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => setMode("quiz")}
+          onClick={() => changeMode("quiz")}
           className="bg-primary text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]"
         >
           <span className="text-2xl">🍽️</span>
@@ -105,7 +123,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => setMode("scan")}
+          onClick={() => changeMode("scan")}
           className="bg-primary text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]"
         >
           <span className="text-2xl">📱</span>

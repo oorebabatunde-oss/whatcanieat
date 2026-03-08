@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export type CravingType = "snack" | "meal" | "unknown";
 export type FlavorProfile = "salty" | "sweet" | "savoury" | "spicy" | "sour" | "umami" | "bitter" | "unknown";
@@ -26,10 +26,24 @@ interface QuizContextType {
 
 const QuizContext = createContext<QuizContextType | null>(null);
 
+const STORAGE_KEY = "quiz-state";
+
 const initialState: QuizState = { step: 0, craving: null, flavors: [], textures: [], dietary: [] };
 
+function loadState(): QuizState {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return initialState;
+}
+
 export function QuizProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<QuizState>(initialState);
+  const [state, setState] = useState<QuizState>(loadState);
+
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }, [state]);
 
   const setCraving = (c: CravingType) => setState((s) => ({ ...s, craving: c }));
 
@@ -65,7 +79,10 @@ export function QuizProvider({ children }: { children: ReactNode }) {
 
   const nextStep = () => setState((s) => ({ ...s, step: s.step + 1 }));
   const prevStep = () => setState((s) => ({ ...s, step: Math.max(0, s.step - 1) }));
-  const reset = () => setState(initialState);
+  const reset = () => {
+    sessionStorage.removeItem(STORAGE_KEY);
+    setState(initialState);
+  };
 
   return (
     <QuizContext.Provider value={{ state, setCraving, toggleFlavor, toggleTexture, toggleDietary, nextStep, prevStep, reset }}>
