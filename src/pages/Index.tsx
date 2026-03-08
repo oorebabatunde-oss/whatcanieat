@@ -74,6 +74,7 @@ const Index = () => {
     <div className="min-h-screen bg-background flex flex-col items-center px-4">
       {toolbar}
 
+      <div className="flex-1 flex flex-col items-center justify-center">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
