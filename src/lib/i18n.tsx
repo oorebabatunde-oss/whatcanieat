@@ -817,7 +817,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "Ищем идеальную еду...", "results.loading.subtitle": "Поиск рекомендаций...",
     "results.title": "Вот что можно съесть!", "results.subtitle": "Рекомендации от ИИ.\nИзображения могут быть неточными.",
     "results.whereToBuy": "Где купить", "results.howToMake": "Как готовить",
-    "results.dismiss": "Не хочу это", "results.refinePlaceholder": "Расскажите подробнее",
+    "results.dismiss": "Уточнить желание", "results.refinePlaceholder": "Расскажите подробнее",
     "results.cancel": "Отмена", "results.refineSearch": "Уточнить поиск", "results.startOver": "Начать заново",
     "scan.title": "Сканировать холодильник", "scan.subtitle": "Сделайте фото или загрузите изображение",
     "scan.takePhoto": "Сделать фото", "scan.uploadImage": "Загрузить", "scan.back": "Назад",
