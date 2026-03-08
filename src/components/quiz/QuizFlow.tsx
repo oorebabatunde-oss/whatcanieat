@@ -18,7 +18,7 @@ export default function QuizFlow() {
   return (
     <div className="w-full min-h-[60vh] flex flex-col">
       {/* Progress bar */}
-      <div className="w-full max-w-md mx-auto px-4 mb-2">
+      <div className="w-full max-w-sm mx-auto px-6 mb-2">
         <div className="flex items-center gap-3 mb-2">
           {state.step > 0 && state.step < 4 && (
             <motion.button
