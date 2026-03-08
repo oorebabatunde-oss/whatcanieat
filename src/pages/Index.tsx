@@ -28,6 +28,9 @@ const Index = () => {
   const { user, signOut } = useAuth();
 
   const changeMode = (m: AppMode) => {
+    if (m === "quiz") {
+      sessionStorage.removeItem("quiz-state");
+    }
     sessionStorage.setItem(MODE_KEY, m);
     setMode(m);
   };
