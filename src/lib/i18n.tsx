@@ -483,6 +483,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "尽量拍清标签或完整物品",
     "scan.tryAgain": "换张照片试试",
     "theme.toggle": "切换主题",
+    "auth.signInCta": "登录以保存推荐",
     "auth.title": "登录", "auth.subtitle": "输入邮箱，我们会发送魔法链接",
     "auth.emailLabel": "邮箱", "auth.emailPlaceholder": "you@example.com",
     "auth.sendLink": "发送魔法链接", "auth.checkEmail": "检查你的邮箱！",
