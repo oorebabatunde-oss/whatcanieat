@@ -675,6 +675,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "이메일로 코드를 보냈습니다. 아래에 입력하거나 링크를 클릭하세요.",
     "auth.verifyCode": "코드 확인",
     "auth.resendCode": "코드 재전송",
+    "auth.changeEmail": "이메일 변경",
     "saved.title": "저장한 요리", "saved.empty": "아직 저장한 요리가 없습니다.",
     "results.saved": "저장됨!", "results.loginToSave": "저장하려면 로그인하세요",
     "results.swipeHint": "오른쪽으로 밀어서 저장, 왼쪽으로 건너뛰기",
