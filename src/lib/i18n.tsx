@@ -735,6 +735,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "हमने आपके ईमेल पर एक कोड भेजा है। नीचे दर्ज करें या लिंक पर क्लिक करें।",
     "auth.verifyCode": "कोड सत्यापित करें",
     "auth.resendCode": "कोड पुनः भेजें",
+    "auth.changeEmail": "ईमेल बदलें",
     "saved.title": "सहेजे गए व्यंजन", "saved.empty": "अभी तक कोई सहेजा गया व्यंजन नहीं।",
     "results.saved": "सहेजा गया!", "results.loginToSave": "सहेजने के लिए साइन इन करें",
     "results.swipeHint": "दाएं स्वाइप करें सहेजने के लिए, बाएं छोड़ने के लिए",
