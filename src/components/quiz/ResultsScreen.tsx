@@ -60,6 +60,7 @@ export default function ResultsScreen() {
             flavors: state.flavors,
             textures: state.textures,
             dietary: state.dietary,
+            context: state.context || undefined,
             locale,
             timezone,
           },
