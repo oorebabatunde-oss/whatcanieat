@@ -96,6 +96,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "We sent a code to your email. Enter it below or click the magic link.",
     "auth.verifyCode": "Verify Code",
     "auth.resendCode": "Resend code",
+    "auth.changeEmail": "Change email",
     "saved.title": "Saved Dishes",
     "saved.empty": "No saved dishes yet. Swipe right on recommendations to save them!",
     "results.saved": "Saved!",
