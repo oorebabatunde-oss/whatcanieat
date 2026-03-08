@@ -20,6 +20,7 @@ interface QuizContextType {
   toggleFlavor: (f: FlavorProfile) => void;
   toggleTexture: (t: TextureProfile) => void;
   toggleDietary: (d: DietaryConstraint) => void;
+  setContext: (c: string) => void;
   nextStep: () => void;
   prevStep: () => void;
   reset: () => void;
