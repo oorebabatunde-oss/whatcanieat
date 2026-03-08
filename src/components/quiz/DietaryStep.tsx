@@ -62,9 +62,9 @@ export default function DietaryStep() {
           transition={{ delay: 0.4 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => toggleDietary("none")}
-          className={`rounded-lg px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
+          className={`rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 ${
             isNone
-              ? "bg-primary text-primary-foreground shadow-lg scale-105"
+              ? "bg-primary text-primary-foreground shadow-lg"
               : "bg-card text-foreground border border-border hover:border-primary/30"
           }`}
         >

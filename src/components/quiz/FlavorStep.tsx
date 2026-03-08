@@ -63,7 +63,7 @@ export default function FlavorStep() {
           transition={{ delay: 0.4 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => toggleFlavor("unknown")}
-          className={`rounded-lg px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
+          className={`rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 ${
             isUnknown
               ? "bg-[hsl(var(--mystery))] text-[hsl(var(--mystery-foreground))] shadow-lg"
               : "bg-card text-foreground border border-border hover:border-accent/30"
