@@ -1,6 +1,6 @@
 import { useQuiz } from "./QuizContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown, X } from "lucide-react";
+import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,6 +24,7 @@ export default function ResultsScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
+  const [imageUrls, setImageUrls] = useState<Record<number, string>>({});
   const [dismissing, setDismissing] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState<Record<number, string>>({});
 
@@ -48,6 +49,21 @@ export default function ResultsScreen() {
         if (data?.error) throw new Error(data.error);
 
         setRecommendations(data.recommendations ?? []);
+
+        // Fetch Unsplash images for each recommendation
+        const recs: Recommendation[] = data.recommendations ?? [];
+        recs.forEach(async (rec: Recommendation, i: number) => {
+          try {
+            const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
+              body: { query: rec.imageQuery },
+            });
+            if (imgData?.imageUrl) {
+              setImageUrls((prev) => ({ ...prev, [i]: imgData.imageUrl }));
+            }
+          } catch {
+            // fallback: no image
+          }
+        });
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong");
       } finally {
@@ -58,8 +74,6 @@ export default function ResultsScreen() {
     fetchRecommendations();
   }, [state.craving, state.flavors, state.textures, state.dietary]);
 
-  const getImageUrl = (query: string) =>
-    `https://source.unsplash.com/400x300/?${encodeURIComponent(query)},food`;
 
   const handleDismiss = (index: number) => {
     if (dismissing[index]) {
@@ -126,14 +140,16 @@ export default function ResultsScreen() {
                     {!imageLoaded[i] && (
                       <Skeleton className="absolute inset-0 w-full h-full" />
                     )}
-                    <img
-                      src={getImageUrl(rec.imageQuery)}
-                      alt={rec.name}
-                      className={`w-full h-full object-cover transition-opacity duration-300 ${
-                        imageLoaded[i] ? "opacity-100" : "opacity-0"
-                      }`}
-                      onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
-                    />
+                    {imageUrls[i] && (
+                      <img
+                        src={imageUrls[i]}
+                        alt={rec.name}
+                        className={`w-full h-full object-cover transition-opacity duration-300 ${
+                          imageLoaded[i] ? "opacity-100" : "opacity-0"
+                        }`}
+                        onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
+                      />
+                    )}
                   </AspectRatio>
                   <div className="p-3">
                     <div className="flex items-center justify-between gap-2 mb-1">
