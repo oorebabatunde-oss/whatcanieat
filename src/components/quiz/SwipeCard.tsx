@@ -68,7 +68,7 @@ export default function SwipeCard({
       initial={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
       animate={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
       exit={{ x: 300, opacity: 0, transition: { duration: 0.2 } }}
-      className="absolute w-full cursor-grab active:cursor-grabbing"
+      className="w-full cursor-grab active:cursor-grabbing"
     >
       <div className="bg-card border border-border rounded-xl overflow-hidden shadow-lg">
         {/* Swipe indicators */}
