@@ -19,7 +19,7 @@ interface Recommendation {
 
 export default function ResultsScreen() {
   const { state, reset } = useQuiz();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
 
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
