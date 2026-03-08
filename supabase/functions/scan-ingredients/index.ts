@@ -21,7 +21,7 @@ function getCorsHeaders(req: Request) {
 
 // --- Rate limiter ---
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 10; // scans per window (more restrictive — expensive operation)
+const RATE_LIMIT = 10;
 const RATE_WINDOW_MS = 60_000;
 
 function isRateLimited(key: string): boolean {
@@ -35,7 +35,19 @@ function isRateLimited(key: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
-const MAX_B64_CHARS = 14_000_000; // ~10 MB decoded
+// Decode JWT payload without verification (just to check role claim)
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+const MAX_B64_CHARS = 14_000_000;
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -61,56 +73,32 @@ serve(async (req) => {
       });
     }
 
-    // --- Auth check ---
+    // --- Optional auth (not required for scanning) ---
+    let userId = "anonymous";
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      console.warn(`[${requestId}] Missing auth: IP=${clientIp}`);
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
-      console.warn(`[${requestId}] Invalid token: IP=${clientIp}`);
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const userId = claimsData.claims.sub as string;
-
-    // --- Role check ---
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId);
-
-    const userRoles = (roles || []).map((r: any) => r.role);
-    if (!userRoles.some((r: string) => ["user", "admin"].includes(r))) {
-      console.warn(`[${requestId}] Forbidden: userId=${userId}`);
-      return new Response(JSON.stringify({ error: "Forbidden" }), {
-        status: 403,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Rate limit per user too
-    if (isRateLimited(`user:${userId}`)) {
-      console.warn(`[${requestId}] Rate limited user: userId=${userId}`);
-      return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
-        status: 429,
-        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
-      });
+    if (authHeader?.startsWith("Bearer ")) {
+      try {
+        const token = authHeader.replace("Bearer ", "");
+        // Skip getClaims if this is the anon key (role === "anon")
+        const payload = decodeJwtPayload(token);
+        if (payload && payload.role !== "anon") {
+          const supabase = createClient(
+            Deno.env.get("SUPABASE_URL")!,
+            Deno.env.get("SUPABASE_ANON_KEY")!,
+            { global: { headers: { Authorization: authHeader } } }
+          );
+          const { data: claimsData } = await supabase.auth.getClaims(token);
+          if (claimsData?.claims?.sub) {
+            userId = claimsData.claims.sub as string;
+            if (isRateLimited(`user:${userId}`)) {
+              return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+                status: 429,
+                headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+              });
+            }
+          }
+        }
+      } catch { /* proceed as anonymous */ }
     }
 
     // --- Input validation ---
@@ -146,7 +134,6 @@ serve(async (req) => {
       });
     }
 
-    // Validate MIME subtype
     const mimeMatch = imageBase64.match(/^data:image\/(jpeg|png|gif|webp|bmp);base64,/);
     if (!mimeMatch) {
       return new Response(JSON.stringify({ error: "Unsupported image type" }), {
@@ -165,6 +152,7 @@ serve(async (req) => {
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
+      signal: AbortSignal.timeout(120_000),
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
