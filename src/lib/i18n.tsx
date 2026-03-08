@@ -975,6 +975,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "Мы отправили код на вашу почту. Введите его ниже или нажмите на ссылку.",
     "auth.verifyCode": "Подтвердить код",
     "auth.resendCode": "Отправить код снова",
+    "auth.changeEmail": "Изменить email",
     "saved.title": "Сохранённые блюда", "saved.empty": "Пока нет сохранённых блюд.",
     "results.saved": "Сохранено!", "results.loginToSave": "Войдите чтобы сохранить",
     "results.swipeHint": "Свайп вправо — сохранить, влево — пропустить",
