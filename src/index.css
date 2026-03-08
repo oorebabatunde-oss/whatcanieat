@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,40 +6,41 @@
 
 @layer base {
   :root {
-    --background: 40 33% 98%;
-    --foreground: 240 10% 12%;
+    --background: 270 30% 95%;
+    --foreground: 170 16% 25%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 12%;
+    --card: 270 30% 92%;
+    --card-foreground: 170 16% 25%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 12%;
+    --popover-foreground: 170 16% 25%;
 
-    --primary: 24 95% 58%;
+    --primary: 170 16% 35%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 160 60% 45%;
+    --secondary: 153 38% 66%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 40 20% 94%;
-    --muted-foreground: 240 5% 46%;
+    --muted: 270 20% 90%;
+    --muted-foreground: 170 10% 45%;
 
-    --accent: 270 60% 60%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 221 78% 88%;
+    --accent-foreground: 170 16% 25%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 90%;
-    --input: 40 15% 90%;
-    --ring: 24 95% 58%;
+    --border: 270 20% 85%;
+    --input: 270 20% 85%;
+    --ring: 170 16% 35%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
     /* Custom app colors */
     --snack: 24 95% 58%;
-    --meal: 160 60% 45%;
-    --mystery: 270 60% 60%;
+    --meal: 153 38% 66%;
+    --mystery: 270 30% 88%;
+    --mystery-foreground: 170 16% 35%;
     --salty: 45 90% 55%;
     --sweet: 340 75% 60%;
     --savoury: 30 60% 45%;
@@ -62,33 +63,33 @@
   }
 
   .dark {
-    --background: 240 10% 8%;
-    --foreground: 40 20% 95%;
+    --background: 170 16% 10%;
+    --foreground: 270 20% 90%;
 
-    --card: 240 10% 12%;
-    --card-foreground: 40 20% 95%;
+    --card: 170 16% 14%;
+    --card-foreground: 270 20% 90%;
 
-    --popover: 240 10% 12%;
-    --popover-foreground: 40 20% 95%;
+    --popover: 170 16% 14%;
+    --popover-foreground: 270 20% 90%;
 
-    --primary: 24 95% 58%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 153 38% 66%;
+    --primary-foreground: 170 16% 10%;
 
-    --secondary: 160 60% 45%;
+    --secondary: 170 16% 35%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 240 10% 18%;
-    --muted-foreground: 40 10% 60%;
+    --muted: 170 10% 18%;
+    --muted-foreground: 270 15% 60%;
 
-    --accent: 270 60% 60%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 221 50% 30%;
+    --accent-foreground: 221 78% 88%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 10% 20%;
-    --input: 240 10% 20%;
-    --ring: 24 95% 58%;
+    --border: 170 10% 20%;
+    --input: 170 10% 20%;
+    --ring: 153 38% 66%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -111,6 +112,6 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Playpen Sans', cursive;
   }
 }
