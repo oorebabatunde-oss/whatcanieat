@@ -329,9 +329,21 @@ export default function ResultsScreen() {
             </Button>
           </div>
 
-          <p className="text-muted-foreground text-xs">
-            {currentIndex + 1} / {recommendations.length}
-          </p>
+          <div className="flex items-center gap-3">
+            {swipeHistory.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleUndo}
+                className="rounded-full gap-1.5 text-muted-foreground"
+              >
+                <Undo2 className="w-4 h-4" /> {t("results.undo")}
+              </Button>
+            )}
+            <p className="text-muted-foreground text-xs">
+              {currentIndex + 1} / {recommendations.length}
+            </p>
+          </div>
         </>
       )}
     </motion.div>
