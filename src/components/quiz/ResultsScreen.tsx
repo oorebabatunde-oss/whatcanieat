@@ -209,6 +209,14 @@ export default function ResultsScreen() {
                       >
                         <ChefHat className="w-3.5 h-3.5" /> How to make
                       </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs gap-1.5 text-muted-foreground hover:text-destructive"
+                        onClick={() => handleDismiss(i)}
+                      >
+                        <ThumbsDown className="w-3.5 h-3.5" /> Not for me
+                      </Button>
                     </div>
                   </div>
                 </motion.div>
