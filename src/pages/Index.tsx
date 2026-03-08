@@ -91,7 +91,7 @@ const Index = () => {
           <span className="text-4xl">📱</span>
           <div className="text-left">
             <span className="text-sm font-display font-bold block">Scan my fridge or cupboard</span>
-            <span className="text-xs opacity-80">Photo recipes</span>
+            
           </div>
         </motion.button>
       </div>
