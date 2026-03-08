@@ -617,7 +617,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "सही खाना खोज रहे हैं...", "results.loading.subtitle": "सिफारिशें खोज रहे हैं...",
     "results.title": "यह खा सकते हैं!", "results.subtitle": "AI द्वारा सुझाव।\nचित्र सटीक नहीं हो सकते।",
     "results.whereToBuy": "कहाँ से खरीदें", "results.howToMake": "कैसे बनाएं",
-    "results.dismiss": "ये नहीं चाहिए", "results.refinePlaceholder": "और बताइए",
+    "results.dismiss": "पसंद को और स्पष्ट करें", "results.refinePlaceholder": "और बताइए",
     "results.cancel": "रद्द", "results.refineSearch": "खोज सुधारें", "results.startOver": "फिर से शुरू",
     "scan.title": "अपना फ्रिज स्कैन करें", "scan.subtitle": "फोटो लें या अपलोड करें",
     "scan.takePhoto": "फोटो लें", "scan.uploadImage": "छवि अपलोड", "scan.back": "वापस",
