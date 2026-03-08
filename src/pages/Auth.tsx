@@ -8,6 +8,7 @@ import { useI18n } from "@/lib/i18n";
 import { Mail, Loader2, ArrowLeft, CheckCircle } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { Link } from "react-router-dom";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -33,7 +34,13 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-4">
-      <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
+      <div className="flex items-center gap-2 px-4 pt-4 pb-2 w-full">
+        <Link to="/">
+          <Button variant="ghost" size="icon">
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+        </Link>
+        <div className="flex-1" />
         <LanguageSwitcher />
         <ThemeToggle />
       </div>

@@ -1,6 +1,6 @@
 import { useQuiz } from "./QuizContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle, Heart, X, XCircle, Send } from "lucide-react";
+import { Loader2, RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,7 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import SwipeCard from "./SwipeCard";
 import { toast } from "sonner";
+import { useNavigate, Link } from "react-router-dom";
 
 interface Recommendation {
   name: string;
@@ -21,6 +22,7 @@ export default function ResultsScreen() {
   const { state, reset } = useQuiz();
   const { t, lang } = useI18n();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +94,12 @@ export default function ResultsScreen() {
       });
       toast.success(t("results.saved"));
     } else {
-      toast(t("results.loginToSave"));
+      toast(t("results.loginToSave"), {
+        action: {
+          label: t("auth.title"),
+          onClick: () => navigate("/auth"),
+        },
+      });
     }
     advance();
   };
@@ -190,6 +197,13 @@ export default function ResultsScreen() {
 
           {!showRefine ? (
             <div className="flex flex-col items-center gap-3 w-full">
+              {user && (
+                <Link to="/saved">
+                  <Button variant="default" className="rounded-full gap-2">
+                    <BookmarkCheck className="w-4 h-4" /> {t("results.viewSaved")}
+                  </Button>
+                </Link>
+              )}
               <Button
                 variant="outline"
                 onClick={() => setShowRefine(true)}
