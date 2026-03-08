@@ -51,16 +51,16 @@ export default function ResultsScreen() {
 
         // Fetch Unsplash images for each recommendation
         const recs: Recommendation[] = data.recommendations ?? [];
-        recs.forEach(async (rec: Recommendation, i: number) => {
+        recs.forEach(async (rec: Recommendation) => {
           try {
             const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
               body: { query: rec.imageQuery },
             });
             if (imgData?.imageUrl) {
-              setImageUrls((prev) => ({ ...prev, [i]: imgData.imageUrl }));
+              setImageUrls((prev) => ({ ...prev, [rec.name]: imgData.imageUrl }));
             }
             if (imgData?.credit?.name) {
-              setImageCredits((prev) => ({ ...prev, [i]: imgData.credit }));
+              setImageCredits((prev) => ({ ...prev, [rec.name]: imgData.credit }));
             }
           } catch {
             // fallback: no image
