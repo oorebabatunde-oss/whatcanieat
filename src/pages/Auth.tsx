@@ -94,6 +94,7 @@ export default function Auth() {
           </form>
         )}
       </motion.div>
+      </div>
     </div>
   );
 }
