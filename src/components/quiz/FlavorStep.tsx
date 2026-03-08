@@ -2,21 +2,23 @@ import { motion } from "framer-motion";
 import { useQuiz, FlavorProfile } from "./QuizContext";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-
-const flavors: { type: FlavorProfile; label: string; emoji: string; hue: string }[] = [
-  { type: "salty", label: "Salty", emoji: "🧂", hue: "bg-[hsl(var(--salty))]" },
-  { type: "sweet", label: "Sweet", emoji: "🍬", hue: "bg-[hsl(var(--sweet))]" },
-  { type: "savoury", label: "Savoury", emoji: "🍖", hue: "bg-[hsl(var(--savoury))]" },
-  { type: "spicy", label: "Spicy", emoji: "🌶️", hue: "bg-[hsl(var(--spicy))]" },
-  { type: "sour", label: "Sour", emoji: "🍋", hue: "bg-[hsl(var(--sour))]" },
-  { type: "umami", label: "Umami", emoji: "🍄", hue: "bg-[hsl(var(--umami))]" },
-  { type: "bitter", label: "Bitter", emoji: "🍵", hue: "bg-[hsl(var(--bitter))]" },
-];
+import { useI18n } from "@/lib/i18n";
 
 export default function FlavorStep() {
   const { state, toggleFlavor, nextStep } = useQuiz();
+  const { t } = useI18n();
   const isUnknown = state.flavors.includes("unknown");
   const hasSelection = state.flavors.length > 0;
+
+  const flavors: { type: FlavorProfile; label: string; emoji: string; hue: string }[] = [
+    { type: "salty", label: t("quiz.flavor.salty"), emoji: "🧂", hue: "bg-[hsl(var(--salty))]" },
+    { type: "sweet", label: t("quiz.flavor.sweet"), emoji: "🍬", hue: "bg-[hsl(var(--sweet))]" },
+    { type: "savoury", label: t("quiz.flavor.savoury"), emoji: "🍖", hue: "bg-[hsl(var(--savoury))]" },
+    { type: "spicy", label: t("quiz.flavor.spicy"), emoji: "🌶️", hue: "bg-[hsl(var(--spicy))]" },
+    { type: "sour", label: t("quiz.flavor.sour"), emoji: "🍋", hue: "bg-[hsl(var(--sour))]" },
+    { type: "umami", label: t("quiz.flavor.umami"), emoji: "🍄", hue: "bg-[hsl(var(--umami))]" },
+    { type: "bitter", label: t("quiz.flavor.bitter"), emoji: "🍵", hue: "bg-[hsl(var(--bitter))]" },
+  ];
 
   return (
     <motion.div
@@ -27,10 +29,10 @@ export default function FlavorStep() {
       className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
     >
       <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
-        What flavours sound good?
+        {t("quiz.flavor.title")}
       </h2>
       <p className="text-muted-foreground text-center text-xs uppercase tracking-widest">
-        Pick as many as you like
+        {t("quiz.flavor.subtitle")}
       </p>
       <div className="flex flex-wrap justify-center gap-3 w-full">
         {flavors.map((f, i) => {
@@ -66,7 +68,7 @@ export default function FlavorStep() {
               : "bg-card text-foreground border border-border hover:border-accent/30"
           }`}
         >
-          🤷 I Don't Know
+          🤷 {t("quiz.flavor.unknown")}
         </motion.button>
       </div>
       <Button
@@ -75,7 +77,7 @@ export default function FlavorStep() {
         size="lg"
         className="w-full max-w-xs mt-4 rounded-lg font-semibold tracking-wide"
       >
-        Next <ArrowRight className="w-5 h-5 ml-1" />
+        {t("quiz.next")} <ArrowRight className="w-5 h-5 ml-1" />
       </Button>
     </motion.div>
   );

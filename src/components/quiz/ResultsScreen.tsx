@@ -8,8 +8,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-
-
+import { useI18n } from "@/lib/i18n";
 
 interface Recommendation {
   name: string;
@@ -20,7 +19,8 @@ interface Recommendation {
 
 export default function ResultsScreen() {
   const { state, reset } = useQuiz();
-  
+  const { t } = useI18n();
+
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,7 +53,6 @@ export default function ResultsScreen() {
 
         setRecommendations(data.recommendations ?? []);
 
-        // Fetch Unsplash images for each recommendation
         const recs: Recommendation[] = data.recommendations ?? [];
         recs.forEach(async (rec: Recommendation) => {
           try {
@@ -66,9 +65,7 @@ export default function ResultsScreen() {
             if (imgData?.credit?.name) {
               setImageCredits((prev) => ({ ...prev, [rec.name]: imgData.credit }));
             }
-          } catch {
-            // fallback: no image
-          }
+          } catch {}
         });
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong");
@@ -79,7 +76,6 @@ export default function ResultsScreen() {
 
     fetchRecommendations();
   }, [state.craving, state.flavors, state.textures, state.dietary]);
-
 
   const handleDismiss = (index: number) => {
     setRecommendations((prev) => prev.filter((_, i) => i !== index));
@@ -153,12 +149,12 @@ export default function ResultsScreen() {
       {loading ? (
         <>
           <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
-            Finding your perfect food...
+            {t("results.loading.title")}
           </h2>
           <div className="flex flex-col items-center gap-3 py-8">
             <Loader2 className="w-12 h-12 text-primary animate-spin" />
             <p className="text-muted-foreground text-sm text-center">
-              Finding recommendations...
+              {t("results.loading.subtitle")}
             </p>
           </div>
         </>
@@ -170,12 +166,10 @@ export default function ResultsScreen() {
       ) : (
         <>
           <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
-            Here's what you could eat!
+            {t("results.title")}
           </h2>
-          <p className="text-muted-foreground text-xs text-center -mt-4">
-            These are AI-generated recommendations.
-            <br />
-            Images may not be accurate.
+          <p className="text-muted-foreground text-xs text-center -mt-4 whitespace-pre-line">
+            {t("results.subtitle")}
           </p>
           <div className="flex flex-col gap-4 w-full">
             <AnimatePresence>
@@ -250,9 +244,6 @@ export default function ResultsScreen() {
                     </div>
                     <p className="text-muted-foreground text-sm mb-3">{rec.description}</p>
 
-
-
-
                     <div className="flex gap-2">
                       <Button
                         variant="outline"
@@ -260,7 +251,7 @@ export default function ResultsScreen() {
                         className="text-xs gap-1.5 flex-1"
                         onClick={() => handleWhereToBuy(rec.name)}
                       >
-                        <MapPin className="w-3.5 h-3.5" /> Where to buy
+                        <MapPin className="w-3.5 h-3.5" /> {t("results.whereToBuy")}
                       </Button>
                       <Button
                         variant="outline"
@@ -268,7 +259,7 @@ export default function ResultsScreen() {
                         className="text-xs gap-1.5 flex-1"
                         onClick={() => handleHowToMake(rec.name)}
                       >
-                        <ChefHat className="w-3.5 h-3.5" /> How to make
+                        <ChefHat className="w-3.5 h-3.5" /> {t("results.howToMake")}
                       </Button>
                     </div>
                   </div>
@@ -286,7 +277,7 @@ export default function ResultsScreen() {
               onClick={() => setShowRefine(true)}
               className="rounded-full gap-2"
             >
-              <XCircle className="w-4 h-4" /> I don't want these
+              <XCircle className="w-4 h-4" /> {t("results.dismiss")}
             </Button>
           ) : (
             <motion.div
@@ -295,7 +286,7 @@ export default function ResultsScreen() {
               className="w-full space-y-3"
             >
               <Textarea
-                placeholder="Tell us more — what are you in the mood for instead?"
+                placeholder={t("results.refinePlaceholder")}
                 value={refineFeedback}
                 onChange={(e) => setRefineFeedback(e.target.value)}
                 className="resize-none text-sm"
@@ -308,7 +299,7 @@ export default function ResultsScreen() {
                   onClick={() => { setShowRefine(false); setRefineFeedback(""); }}
                   className="flex-1"
                 >
-                  Cancel
+                  {t("results.cancel")}
                 </Button>
                 <Button
                   size="sm"
@@ -317,13 +308,13 @@ export default function ResultsScreen() {
                   className="flex-1 gap-1.5"
                 >
                   {refining ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                  Refine Search
+                  {t("results.refineSearch")}
                 </Button>
               </div>
             </motion.div>
           )}
           <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground">
-            <RotateCcw className="w-4 h-4" /> Start Over
+            <RotateCcw className="w-4 h-4" /> {t("results.startOver")}
           </Button>
         </div>
       )}
