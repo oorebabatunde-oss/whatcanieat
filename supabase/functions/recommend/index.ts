@@ -1,19 +1,89 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+// --- Strict CORS: only allow known origins ---
+const ALLOWED_ORIGINS = [
+  "https://whatcanieat.lovable.app",
+  "https://id-preview--505389c9-ce6f-4340-8722-492bcb6e5414.lovable.app",
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("Origin") || "";
+  // Allow lovable preview origins (dynamic subdomains)
+  const isAllowed =
+    ALLOWED_ORIGINS.includes(origin) ||
+    origin.endsWith(".lovable.app");
+  return {
+    "Access-Control-Allow-Origin": isAllowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+}
+
+// --- In-memory rate limiter ---
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 30; // requests per window
+const RATE_WINDOW_MS = 60_000; // 1 minute
+
+function isRateLimited(key: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
+
+// --- Input validation ---
+const VALID_FLAVORS = ["sweet", "salty", "sour", "bitter", "umami", "spicy", "smoky", "fresh", "rich", "tangy", "mild", "herby"];
+const VALID_TEXTURES = ["crispy", "creamy", "chewy", "crunchy", "soft", "flaky", "tender", "smooth", "juicy", "light", "dense", "silky"];
+const VALID_DIETARY = ["none", "vegetarian", "vegan", "gluten-free", "dairy-free", "keto", "halal", "kosher", "nut-free", "pescatarian"];
+
+function sanitizeString(val: unknown, maxLen: number): string | null {
+  if (typeof val !== "string") return null;
+  const trimmed = val.trim().slice(0, maxLen);
+  // Strip anything that's not alphanumeric, space, or basic punctuation
+  return trimmed.replace(/[^\p{L}\p{N}\s.,!?'-]/gu, "");
+}
+
+function validateArray(val: unknown, allowed: string[]): string[] {
+  if (!Array.isArray(val)) return [];
+  return val.filter((v) => typeof v === "string" && allowed.includes(v));
+}
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  // Only allow POST
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const requestId = crypto.randomUUID();
+
   try {
+    // --- Rate limiting ---
+    if (isRateLimited(clientIp)) {
+      console.warn(`[${requestId}] Rate limited: IP=${clientIp}`);
+      return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+      });
+    }
+
     // --- Auth check ---
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
+      console.warn(`[${requestId}] Missing auth: IP=${clientIp}`);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -29,21 +99,69 @@ serve(async (req) => {
     const token = authHeader.replace("Bearer ", "");
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
     if (claimsError || !claimsData?.claims) {
+      console.warn(`[${requestId}] Invalid token: IP=${clientIp}`);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    const userId = claimsData.claims.sub as string;
+
+    // --- Role check: must have 'user' or 'admin' role ---
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+
+    const userRoles = (roles || []).map((r: any) => r.role);
+    const allowedRoles = ["user", "admin"];
+    if (!userRoles.some((r: string) => allowedRoles.includes(r))) {
+      console.warn(`[${requestId}] Forbidden: userId=${userId} roles=${userRoles}`);
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Also rate limit per user
+    if (isRateLimited(`user:${userId}`)) {
+      console.warn(`[${requestId}] Rate limited user: userId=${userId}`);
+      return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+      });
+    }
+
+    // --- Input validation ---
+    let body: any;
+    try {
+      body = await req.json();
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const craving = sanitizeString(body.craving, 200) || "anything";
+    const flavors = validateArray(body.flavors, VALID_FLAVORS);
+    const textures = validateArray(body.textures, VALID_TEXTURES);
+    const dietary = validateArray(body.dietary, VALID_DIETARY);
+    const locale = sanitizeString(body.locale, 10) || "en-US";
+    const timezone = sanitizeString(body.timezone, 50) || "UTC";
+    const feedback = sanitizeString(body.feedback, 500);
+    const rejected = Array.isArray(body.rejected)
+      ? body.rejected.filter((v: unknown) => typeof v === "string").map((v: string) => v.slice(0, 100)).slice(0, 20)
+      : [];
+
+    console.log(`[${requestId}] recommend: userId=${userId} IP=${clientIp} craving=${craving}`);
+
     // --- Business logic ---
-    const { craving, flavors, textures, dietary, locale, timezone, feedback, rejected } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!LOVABLE_API_KEY) throw new Error("Server configuration error");
 
-    const regionHint = locale || "en-US";
-    const tzHint = timezone || "UTC";
-
-    const langCode = regionHint.split("-")[0] || "en";
+    const langCode = locale.split("-")[0] || "en";
     const langMap: Record<string, string> = {
       en: "English", es: "Spanish", fr: "French", de: "German", pt: "Portuguese",
       ar: "Arabic", zh: "Chinese", ja: "Japanese", ko: "Korean", hi: "Hindi",
@@ -60,8 +178,8 @@ CRITICAL RULES:
 - Each dish must be something the user could actually order or cook
 - IMPORTANT: Write the "name", "description", and "cuisine" fields in ${responseLang}. Keep "imageQuery" in English for image search.
 
-User's locale: ${regionHint}
-User's timezone: ${tzHint}
+User's locale: ${locale}
+User's timezone: ${timezone}
 
 For each suggestion provide a JSON object with:
 - name: The real name of the dish (in ${responseLang})
@@ -72,12 +190,12 @@ For each suggestion provide a JSON object with:
 Respond ONLY with a valid JSON array, no markdown, no extra text. Example:
 [{"name":"Pad Thai","description":"A satisfying stir-fried noodle dish with the perfect balance of sweet and savory.","cuisine":"Thai","imageQuery":"pad thai"}]`;
 
-    let userPrompt = `I'm looking for: ${craving || "anything"}
-Flavors I want: ${flavors?.length ? flavors.join(", ") : "surprise me"}
-Textures I like: ${textures?.length ? textures.join(", ") : "surprise me"}
-Dietary restrictions: ${dietary?.length && !dietary.includes("none") ? dietary.join(", ") : "none"}`;
+    let userPrompt = `I'm looking for: ${craving}
+Flavors I want: ${flavors.length ? flavors.join(", ") : "surprise me"}
+Textures I like: ${textures.length ? textures.join(", ") : "surprise me"}
+Dietary restrictions: ${dietary.length && !dietary.includes("none") ? dietary.join(", ") : "none"}`;
 
-    if (rejected?.length) {
+    if (rejected.length) {
       userPrompt += `\n\nDo NOT suggest these dishes (user already rejected them): ${rejected.join(", ")}`;
     }
     if (feedback) {
@@ -110,8 +228,7 @@ Dietary restrictions: ${dietary?.length && !dietary.includes("none") ? dietary.j
           status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
+      console.error(`[${requestId}] AI gateway error: ${response.status}`);
       return new Response(JSON.stringify({ error: "Failed to get recommendations" }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -128,12 +245,14 @@ Dietary restrictions: ${dietary?.length && !dietary.includes("none") ? dietary.j
       recommendations = match ? JSON.parse(match[0]) : [];
     }
 
+    console.log(`[${requestId}] recommend: success, ${recommendations.length} results`);
+
     return new Response(JSON.stringify({ recommendations }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    console.error("recommend error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
+    console.error(`[${requestId}] recommend error:`, e);
+    return new Response(JSON.stringify({ error: "An unexpected error occurred" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

@@ -1,21 +1,70 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+// --- Strict CORS ---
+const ALLOWED_ORIGINS = [
+  "https://whatcanieat.lovable.app",
+  "https://id-preview--505389c9-ce6f-4340-8722-492bcb6e5414.lovable.app",
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("Origin") || "";
+  const isAllowed = ALLOWED_ORIGINS.includes(origin) || origin.endsWith(".lovable.app");
+  return {
+    "Access-Control-Allow-Origin": isAllowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+}
+
+// --- Rate limiter ---
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 10; // scans per window (more restrictive — expensive operation)
+const RATE_WINDOW_MS = 60_000;
+
+function isRateLimited(key: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
 
 const MAX_B64_CHARS = 14_000_000; // ~10 MB decoded
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const requestId = crypto.randomUUID();
+
   try {
+    // --- Rate limiting (IP) ---
+    if (isRateLimited(clientIp)) {
+      console.warn(`[${requestId}] Rate limited: IP=${clientIp}`);
+      return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+      });
+    }
+
     // --- Auth check ---
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
+      console.warn(`[${requestId}] Missing auth: IP=${clientIp}`);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -31,15 +80,57 @@ serve(async (req) => {
     const token = authHeader.replace("Bearer ", "");
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
     if (claimsError || !claimsData?.claims) {
+      console.warn(`[${requestId}] Invalid token: IP=${clientIp}`);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    const userId = claimsData.claims.sub as string;
+
+    // --- Role check ---
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+
+    const userRoles = (roles || []).map((r: any) => r.role);
+    if (!userRoles.some((r: string) => ["user", "admin"].includes(r))) {
+      console.warn(`[${requestId}] Forbidden: userId=${userId}`);
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Rate limit per user too
+    if (isRateLimited(`user:${userId}`)) {
+      console.warn(`[${requestId}] Rate limited user: userId=${userId}`);
+      return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+      });
+    }
+
     // --- Input validation ---
-    const { imageBase64 } = await req.json();
-    if (!imageBase64) throw new Error("Missing imageBase64 parameter");
+    let body: any;
+    try {
+      body = await req.json();
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { imageBase64 } = body;
+    if (!imageBase64) {
+      return new Response(JSON.stringify({ error: "Missing imageBase64 parameter" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     if (typeof imageBase64 !== "string" || imageBase64.length > MAX_B64_CHARS) {
       return new Response(JSON.stringify({ error: "Image too large or invalid" }), {
@@ -55,9 +146,20 @@ serve(async (req) => {
       });
     }
 
+    // Validate MIME subtype
+    const mimeMatch = imageBase64.match(/^data:image\/(jpeg|png|gif|webp|bmp);base64,/);
+    if (!mimeMatch) {
+      return new Response(JSON.stringify({ error: "Unsupported image type" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    console.log(`[${requestId}] scan-ingredients: userId=${userId} IP=${clientIp} size=${imageBase64.length}`);
+
     // --- Business logic ---
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!LOVABLE_API_KEY) throw new Error("Server configuration error");
 
     const locale = req.headers.get("accept-language")?.split(",")[0] || "en-US";
 
@@ -148,13 +250,12 @@ You MUST respond using the "analyze_fridge" tool.`,
         });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Please add funds." }), {
+        return new Response(JSON.stringify({ error: "AI credits exhausted." }), {
           status: 402,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const text = await response.text();
-      console.error("AI gateway error:", response.status, text);
+      console.error(`[${requestId}] AI gateway error: ${response.status}`);
       throw new Error("AI analysis failed");
     }
 
@@ -167,13 +268,15 @@ You MUST respond using the "analyze_fridge" tool.`,
 
     const result = JSON.parse(toolCall.function.arguments);
 
+    console.log(`[${requestId}] scan-ingredients: success, ${result.ingredients?.length || 0} ingredients, ${result.recipes?.length || 0} recipes`);
+
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    console.error("scan-ingredients error:", e);
+    console.error(`[${requestId}] scan-ingredients error:`, e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ error: "An unexpected error occurred" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
