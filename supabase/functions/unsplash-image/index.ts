@@ -47,6 +47,15 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
   }
 }
 
+const FOOD_SIGNALS = new Set([
+  "food", "dish", "meal", "plate", "bowl", "cuisine", "recipe", "cooking",
+  "restaurant", "served", "delicious", "tasty", "appetizer", "dessert",
+  "breakfast", "lunch", "dinner", "snack", "soup", "salad", "pasta",
+  "rice", "noodle", "noodles", "curry", "stew", "baked", "fried",
+  "grilled", "roasted", "sauteed", "steamed", "broth", "sauce",
+  "plated", "garnish", "ingredient", "homemade", "cooked",
+]);
+
 function isRelevantPhoto(photo: any, query: string): boolean {
   const text = [
     photo.alt_description || "",
@@ -54,10 +63,14 @@ function isRelevantPhoto(photo: any, query: string): boolean {
     ...(photo.tags?.map((t: any) => t.title || "") || []),
   ].join(" ").toLowerCase();
 
-  // Extract meaningful words from the query (2+ chars)
   const queryWords = query.toLowerCase().split(/\s+/).filter((w) => w.length >= 2);
-  // Photo must mention at least one query keyword
-  return queryWords.some((word) => text.includes(word));
+  const hasQueryMatch = queryWords.some((word) => text.includes(word));
+  if (!hasQueryMatch) return false;
+
+  // Must also have a food-related signal to avoid irrelevant matches (e.g. live animals)
+  const textWords = text.split(/\s+/);
+  const hasFoodSignal = textWords.some((w) => FOOD_SIGNALS.has(w));
+  return hasFoodSignal;
 }
 
 async function searchUnsplash(query: string, accessKey: string, originalQuery: string) {
