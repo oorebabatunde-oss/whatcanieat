@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { craving, flavors, textures, dietary, locale, timezone } = await req.json();
+    const { craving, flavors, textures, dietary, locale, timezone, feedback, rejected } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -38,10 +38,17 @@ For each suggestion provide a JSON object with:
 Respond ONLY with a valid JSON array, no markdown, no extra text. Example:
 [{"name":"Pad Thai","description":"A satisfying stir-fried noodle dish with the perfect balance of sweet and savory.","cuisine":"Thai","imageQuery":"pad thai"}]`;
 
-    const userPrompt = `I'm looking for: ${craving || "anything"}
+    let userPrompt = `I'm looking for: ${craving || "anything"}
 Flavors I want: ${flavors?.length ? flavors.join(", ") : "surprise me"}
 Textures I like: ${textures?.length ? textures.join(", ") : "surprise me"}
 Dietary restrictions: ${dietary?.length && !dietary.includes("none") ? dietary.join(", ") : "none"}`;
+
+    if (rejected?.length) {
+      userPrompt += `\n\nDo NOT suggest these dishes (user already rejected them): ${rejected.join(", ")}`;
+    }
+    if (feedback) {
+      userPrompt += `\n\nAdditional feedback from user: "${feedback}"`;
+    }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

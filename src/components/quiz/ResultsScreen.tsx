@@ -1,12 +1,13 @@
 import { useQuiz } from "./QuizContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown } from "lucide-react";
+import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown, XCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +27,9 @@ export default function ResultsScreen() {
   const [imageLoaded, setImageLoaded] = useState<Record<string, boolean>>({});
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [imageCredits, setImageCredits] = useState<Record<string, { name: string; link: string; source?: string }>>({});
+  const [showRefine, setShowRefine] = useState(false);
+  const [refineFeedback, setRefineFeedback] = useState("");
+  const [refining, setRefining] = useState(false);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -79,6 +83,55 @@ export default function ResultsScreen() {
 
   const handleDismiss = (index: number) => {
     setRecommendations((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRefineSearch = async () => {
+    if (!refineFeedback.trim()) return;
+    setRefining(true);
+    setError(null);
+    try {
+      const locale = navigator.language || "en-US";
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+      const rejected = recommendations.map((r) => r.name);
+
+      const { data, error: fnError } = await supabase.functions.invoke("recommend", {
+        body: {
+          craving: state.craving,
+          flavors: state.flavors,
+          textures: state.textures,
+          dietary: state.dietary,
+          locale,
+          timezone,
+          feedback: refineFeedback,
+          rejected,
+        },
+      });
+
+      if (fnError) throw new Error(fnError.message);
+      if (data?.error) throw new Error(data.error);
+
+      const recs: Recommendation[] = data.recommendations ?? [];
+      setRecommendations(recs);
+      setImageLoaded({});
+      setImageUrls({});
+      setImageCredits({});
+      setShowRefine(false);
+      setRefineFeedback("");
+
+      recs.forEach(async (rec) => {
+        try {
+          const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
+            body: { query: rec.imageQuery },
+          });
+          if (imgData?.imageUrl) setImageUrls((prev) => ({ ...prev, [rec.name]: imgData.imageUrl }));
+          if (imgData?.credit?.name) setImageCredits((prev) => ({ ...prev, [rec.name]: imgData.credit }));
+        } catch {}
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
+    } finally {
+      setRefining(false);
+    }
   };
 
   const handleHowToMake = (dishName: string) => {
@@ -226,12 +279,55 @@ export default function ResultsScreen() {
           </div>
         </>
       )}
-      <Button variant="outline" onClick={reset} className="rounded-full gap-2 mt-4">
-        <RotateCcw className="w-4 h-4" /> Start Over
-      </Button>
-      <Button variant="outline" onClick={reset} className="rounded-full gap-2">
-        <RotateCcw className="w-4 h-4" /> Start Over
-      </Button>
+      {!loading && !error && (
+        <div className="flex flex-col items-center gap-3 w-full mt-4">
+          {!showRefine ? (
+            <Button
+              variant="outline"
+              onClick={() => setShowRefine(true)}
+              className="rounded-full gap-2"
+            >
+              <XCircle className="w-4 h-4" /> I don't want these
+            </Button>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="w-full space-y-3"
+            >
+              <Textarea
+                placeholder="Tell us more — what are you in the mood for instead?"
+                value={refineFeedback}
+                onChange={(e) => setRefineFeedback(e.target.value)}
+                className="resize-none text-sm"
+                rows={3}
+              />
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setShowRefine(false); setRefineFeedback(""); }}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleRefineSearch}
+                  disabled={!refineFeedback.trim() || refining}
+                  className="flex-1 gap-1.5"
+                >
+                  {refining ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                  Refine Search
+                </Button>
+              </div>
+            </motion.div>
+          )}
+          <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground">
+            <RotateCcw className="w-4 h-4" /> Start Over
+          </Button>
+        </div>
+      )}
     </motion.div>
   );
 }
