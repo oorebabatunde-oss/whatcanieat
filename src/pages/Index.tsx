@@ -11,10 +11,28 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Heart, LogIn, LogOut } from "lucide-react";
 
+type AppMode = "welcome" | "quiz" | "scan";
+const MODE_KEY = "app-mode";
+
+function loadMode(): AppMode {
+  try {
+    const stored = sessionStorage.getItem(MODE_KEY);
+    if (stored === "quiz" || stored === "scan") return stored;
+  } catch {}
+  return "welcome";
+}
+
 const Index = () => {
-  const [mode, setMode] = useState<"welcome" | "quiz" | "scan">("welcome");
+  const [mode, setMode] = useState<AppMode>(loadMode);
   const { t } = useI18n();
   const { user, signOut } = useAuth();
+
+  const changeMode = (m: AppMode) => {
+    sessionStorage.setItem(MODE_KEY, m);
+    setMode(m);
+  };
+
+  const goWelcome = () => changeMode("welcome");
 
   const toolbar = (
     <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
