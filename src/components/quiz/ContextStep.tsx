@@ -32,24 +32,23 @@ export default function ContextStep() {
         maxLength={200}
       />
 
-      <div className="flex gap-3 w-full max-w-xs">
-        <Button
-          variant="outline"
-          onClick={nextStep}
-          size="lg"
-          className="flex-1 rounded-lg font-semibold tracking-wide gap-1.5"
-        >
-          <SkipForward className="w-4 h-4" /> {t("quiz.context.skip")}
-        </Button>
-        <Button
-          onClick={nextStep}
-          disabled={!(state.context || "").trim()}
-          size="lg"
-          className="flex-1 rounded-lg font-semibold tracking-wide"
-        >
-          {t("quiz.dietary.submit")} <Sparkles className="w-5 h-5 ml-1" />
-        </Button>
-      </div>
+      <Button
+        onClick={nextStep}
+        disabled={!(state.context || "").trim()}
+        size="lg"
+        className="w-full max-w-xs rounded-lg font-semibold tracking-wide"
+      >
+        {t("quiz.dietary.submit")} <Sparkles className="w-5 h-5 ml-1" />
+      </Button>
+
+      <Button
+        variant="outline"
+        onClick={nextStep}
+        size="lg"
+        className="w-full max-w-xs rounded-lg font-semibold tracking-wide gap-1.5"
+      >
+        <SkipForward className="w-4 h-4" /> {t("quiz.context.skip")}
+      </Button>
     </motion.div>
   );
 }
