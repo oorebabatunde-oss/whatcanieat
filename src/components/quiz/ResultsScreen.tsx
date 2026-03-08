@@ -34,7 +34,7 @@ export default function ResultsScreen() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const locale = navigator.language || "en-US";
+        const locale = lang || navigator.language || "en-US";
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
         const { data, error: fnError } = await supabase.functions.invoke("recommend", {
