@@ -27,6 +27,9 @@ export default function ResultsScreen() {
   const [imageLoaded, setImageLoaded] = useState<Record<string, boolean>>({});
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [imageCredits, setImageCredits] = useState<Record<string, { name: string; link: string; source?: string }>>({});
+  const [showRefine, setShowRefine] = useState(false);
+  const [refineFeedback, setRefineFeedback] = useState("");
+  const [refining, setRefining] = useState(false);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
