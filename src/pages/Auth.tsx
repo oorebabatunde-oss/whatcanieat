@@ -32,8 +32,8 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 relative">
-      <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+    <div className="min-h-screen bg-background flex flex-col items-center px-4">
+      <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
         <LanguageSwitcher />
         <ThemeToggle />
       </div>
