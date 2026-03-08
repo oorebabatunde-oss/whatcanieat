@@ -111,6 +111,22 @@ const Index = () => {
           <span className="text-2xl">📱</span>
           <span className="text-sm font-semibold tracking-wide">{t("home.scanFridge")}</span>
         </motion.button>
+
+        {!user && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="mt-4"
+          >
+            <Link to="/auth">
+              <Button variant="ghost" className="gap-2 text-muted-foreground">
+                <LogIn className="w-4 h-4" />
+                <span className="text-sm">{t("auth.title")}</span>
+              </Button>
+            </Link>
+          </motion.div>
+        )}
       </div>
       </div>
     </div>
