@@ -581,6 +581,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "保存しました！", "results.loginToSave": "保存するにはログイン",
     "results.swipeHint": "右スワイプで保存、左で次へ",
     "results.allDone": "全部見ました！", "results.allDoneSubtitle": "すべてのおすすめを見ました。",
+    "results.undo": "元に戻す",
     "results.viewSaved": "保存した料理を見る",
   },
   ko: {
