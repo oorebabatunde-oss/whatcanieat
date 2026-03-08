@@ -667,7 +667,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "Mükemmel yemeğin aranıyor...", "results.loading.subtitle": "Öneriler aranıyor...",
     "results.title": "Bunları yiyebilirsin!", "results.subtitle": "AI tarafından öneriler.\nGörseller doğru olmayabilir.",
     "results.whereToBuy": "Nereden alınır", "results.howToMake": "Nasıl yapılır",
-    "results.dismiss": "Bunları istemiyorum", "results.refinePlaceholder": "Daha fazla anlat",
+    "results.dismiss": "İsteğimi daralt", "results.refinePlaceholder": "Daha fazla anlat",
     "results.cancel": "İptal", "results.refineSearch": "Aramayı İyileştir", "results.startOver": "Baştan Başla",
     "scan.title": "Buzdolabını tara", "scan.subtitle": "Fotoğraf çek veya yükle",
     "scan.takePhoto": "Fotoğraf Çek", "scan.uploadImage": "Görsel Yükle", "scan.back": "Geri",
