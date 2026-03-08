@@ -567,7 +567,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "완벽한 음식 찾는 중...", "results.loading.subtitle": "추천 검색 중...",
     "results.title": "이런 것들을 먹을 수 있어요!", "results.subtitle": "AI가 생성한 추천입니다.\n이미지가 정확하지 않을 수 있습니다.",
     "results.whereToBuy": "어디서 살까", "results.howToMake": "만드는 법",
-    "results.dismiss": "이건 싫어", "results.refinePlaceholder": "더 알려주세요",
+    "results.dismiss": "취향 다듬기", "results.refinePlaceholder": "더 알려주세요",
     "results.cancel": "취소", "results.refineSearch": "검색 개선", "results.startOver": "다시 시작",
     "scan.title": "냉장고 스캔", "scan.subtitle": "사진을 찍거나 업로드하세요",
     "scan.takePhoto": "사진 찍기", "scan.uploadImage": "이미지 업로드", "scan.back": "뒤로",
