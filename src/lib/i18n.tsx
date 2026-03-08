@@ -633,6 +633,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "लेबल या पूरी वस्तुओं को स्पष्ट रूप से कैप्चर करें",
     "scan.tryAgain": "दूसरी फोटो आज़माएं",
     "theme.toggle": "थीम बदलें",
+    "auth.signInCta": "सिफारिशें सहेजने के लिए साइन इन करें",
     "auth.title": "साइन इन", "auth.subtitle": "अपना ईमेल दर्ज करें और हम एक मैजिक लिंक भेजेंगे",
     "auth.emailLabel": "ईमेल", "auth.emailPlaceholder": "you@example.com",
     "auth.sendLink": "मैजिक लिंक भेजें", "auth.checkEmail": "अपना ईमेल जांचें!",
