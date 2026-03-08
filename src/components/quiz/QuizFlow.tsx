@@ -32,9 +32,6 @@ export default function QuizFlow() {
           <div className="flex-1">
             <Progress value={progress} className="h-2 rounded-full" />
           </div>
-          <span className="text-xs text-muted-foreground font-medium min-w-[80px] text-right">
-            {stepLabels[state.step]}
-          </span>
         </div>
       </div>
 
