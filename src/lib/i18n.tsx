@@ -417,7 +417,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "جاري البحث عن طعامك المثالي...", "results.loading.subtitle": "جاري البحث...",
     "results.title": "إليك ما يمكنك أكله!", "results.subtitle": "توصيات مولدة بالذكاء الاصطناعي.\nقد لا تكون الصور دقيقة.",
     "results.whereToBuy": "أين تشتري", "results.howToMake": "كيف تصنع",
-    "results.dismiss": "لا أريد هذه", "results.refinePlaceholder": "أخبرنا المزيد",
+    "results.dismiss": "تحسين رغبتي", "results.refinePlaceholder": "أخبرنا المزيد",
     "results.cancel": "إلغاء", "results.refineSearch": "تحسين البحث", "results.startOver": "ابدأ من جديد",
     "scan.title": "امسح ثلاجتك", "scan.subtitle": "التقط صورة أو ارفع صورة",
     "scan.takePhoto": "التقط صورة", "scan.uploadImage": "ارفع صورة", "scan.back": "رجوع",
