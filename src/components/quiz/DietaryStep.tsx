@@ -2,21 +2,23 @@ import { motion } from "framer-motion";
 import { useQuiz, DietaryConstraint } from "./QuizContext";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
-
-const dietaryOptions: { type: DietaryConstraint; label: string; emoji: string }[] = [
-  { type: "vegetarian", label: "Vegetarian", emoji: "🥬" },
-  { type: "vegan", label: "Vegan", emoji: "🌱" },
-  { type: "gluten-free", label: "Gluten-Free", emoji: "🌾" },
-  { type: "dairy-free", label: "Dairy-Free", emoji: "🥛" },
-  { type: "nut-free", label: "Nut-Free", emoji: "🥜" },
-  { type: "halal", label: "Halal", emoji: "☪️" },
-  { type: "kosher", label: "Kosher", emoji: "✡️" },
-];
+import { useI18n } from "@/lib/i18n";
 
 export default function DietaryStep() {
   const { state, toggleDietary, nextStep } = useQuiz();
+  const { t } = useI18n();
   const isNone = state.dietary.includes("none");
   const hasSelection = state.dietary.length > 0;
+
+  const dietaryOptions: { type: DietaryConstraint; label: string; emoji: string }[] = [
+    { type: "vegetarian", label: t("quiz.dietary.vegetarian"), emoji: "🥬" },
+    { type: "vegan", label: t("quiz.dietary.vegan"), emoji: "🌱" },
+    { type: "gluten-free", label: t("quiz.dietary.glutenFree"), emoji: "🌾" },
+    { type: "dairy-free", label: t("quiz.dietary.dairyFree"), emoji: "🥛" },
+    { type: "nut-free", label: t("quiz.dietary.nutFree"), emoji: "🥜" },
+    { type: "halal", label: t("quiz.dietary.halal"), emoji: "☪️" },
+    { type: "kosher", label: t("quiz.dietary.kosher"), emoji: "✡️" },
+  ];
 
   return (
     <motion.div
@@ -27,10 +29,10 @@ export default function DietaryStep() {
       className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
     >
       <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
-        Any dietary restrictions?
+        {t("quiz.dietary.title")}
       </h2>
       <p className="text-muted-foreground text-center text-xs uppercase tracking-widest">
-        Select all that apply
+        {t("quiz.dietary.subtitle")}
       </p>
       <div className="flex flex-wrap justify-center gap-3 w-full">
         {dietaryOptions.map((d, i) => {
@@ -66,7 +68,7 @@ export default function DietaryStep() {
               : "bg-card text-foreground border border-border hover:border-primary/30"
           }`}
         >
-          ✅ No Restrictions
+          ✅ {t("quiz.dietary.none")}
         </motion.button>
       </div>
       <Button
@@ -75,7 +77,7 @@ export default function DietaryStep() {
         size="lg"
         className="w-full max-w-xs mt-4 rounded-lg font-semibold tracking-wide"
       >
-        Show me what I can eat <Sparkles className="w-5 h-5 ml-1" />
+        {t("quiz.dietary.submit")} <Sparkles className="w-5 h-5 ml-1" />
       </Button>
     </motion.div>
   );

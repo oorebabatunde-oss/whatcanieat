@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
 import { useQuiz, CravingType } from "./QuizContext";
-
-const options: { type: CravingType; label: string; emoji: string }[] = [
-  { type: "snack", label: "A Snack", emoji: "🍿" },
-  { type: "meal", label: "A Meal", emoji: "🥘" },
-  { type: "unknown", label: "Surprise Me", emoji: "✨" },
-];
+import { useI18n } from "@/lib/i18n";
 
 export default function CravingStep() {
   const { state, setCraving, nextStep } = useQuiz();
+  const { t } = useI18n();
+
+  const options: { type: CravingType; label: string; emoji: string }[] = [
+    { type: "snack", label: t("quiz.craving.snack"), emoji: "🍿" },
+    { type: "meal", label: t("quiz.craving.meal"), emoji: "🥘" },
+    { type: "unknown", label: t("quiz.craving.unknown"), emoji: "✨" },
+  ];
 
   const handleSelect = (type: CravingType) => {
     setCraving(type);
@@ -24,10 +26,10 @@ export default function CravingStep() {
       className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
     >
       <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
-        What are you craving?
+        {t("quiz.craving.title")}
       </h2>
       <p className="text-muted-foreground text-center text-xs uppercase tracking-widest">
-        Pick one to get started
+        {t("quiz.craving.subtitle")}
       </p>
       <div className="flex flex-row gap-3 w-full">
         {options.map((opt, i) => (
@@ -38,7 +40,7 @@ export default function CravingStep() {
             transition={{ delay: i * 0.1 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => handleSelect(opt.type)}
-            className={`flex-1 bg-[hsl(var(--primary))] text-primary-foreground rounded-lg p-4 flex flex-col items-center gap-2 shadow-md hover:shadow-lg transition-all ${
+            className={`flex-1 bg-primary text-primary-foreground rounded-lg p-4 flex flex-col items-center gap-2 shadow-md hover:shadow-lg transition-all ${
               state.craving === opt.type ? "ring-2 ring-foreground/20" : ""
             }`}
           >
