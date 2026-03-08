@@ -109,7 +109,7 @@ export default function ResultsScreen() {
       ) : (
         <>
           <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
-            Here's what you should eat!
+            Here's what you could eat!
           </h2>
           <div className="flex flex-col gap-4 w-full">
             <AnimatePresence>
