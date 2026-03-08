@@ -2,3 +2,6 @@ project_id = "oolqwypnmoxcvesaeefx"
 
 [functions.recommend]
 verify_jwt = false
+
+[functions.unsplash-image]
+verify_jwt = false
