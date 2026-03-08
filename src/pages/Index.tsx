@@ -54,7 +54,7 @@ const Index = () => {
         transition={{ duration: 0.6 }}
         className="text-center mb-14"
       >
-        <h1 className="text-5xl md:text-6xl font-display text-foreground mb-4 leading-tight">
+        <h1 className="text-5xl md:text-6xl font-display font-bold text-foreground mb-4 leading-tight">
           What Can<br />
           <span className="text-primary">I Eat?</span>
         </h1>
