@@ -45,11 +45,12 @@ export default function FlavorStep() {
               transition={{ delay: i * 0.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => toggleFlavor(f.type)}
-              className={`rounded-lg px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
+              className={`rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 ${
                 selected
-                  ? `${f.hue} text-white shadow-lg scale-105`
+                  ? `${f.hue} text-white shadow-lg`
                   : "bg-card text-foreground border border-border hover:border-primary/30"
               }`}
+              animate={{ opacity: 1, scale: selected ? 1.05 : 1 }}
             >
               <span>{f.emoji}</span>
               {f.label}
