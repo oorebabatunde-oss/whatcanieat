@@ -28,21 +28,21 @@ export default function CravingStep() {
       <p className="text-muted-foreground text-center text-sm">
         Pick one to get started
       </p>
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-row gap-3 w-full">
         {options.map((opt, i) => (
           <motion.button
             key={opt.type}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => handleSelect(opt.type)}
-            className={`${opt.bg} text-primary-foreground rounded-lg p-5 flex items-center gap-4 shadow-lg hover:shadow-xl transition-shadow text-left w-full ${
+            className={`flex-1 bg-[#3D5151] text-white rounded-lg p-4 flex flex-col items-center gap-2 shadow-lg hover:shadow-xl transition-shadow ${
               state.craving === opt.type ? "ring-4 ring-foreground/20" : ""
             }`}
           >
             <span className="text-3xl">{opt.emoji}</span>
-            <span className="text-xl font-display font-bold">{opt.label}</span>
+            <span className="text-sm font-display font-bold">{opt.label}</span>
           </motion.button>
         ))}
       </div>
