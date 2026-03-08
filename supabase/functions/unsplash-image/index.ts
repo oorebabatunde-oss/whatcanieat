@@ -207,26 +207,37 @@ serve(async (req) => {
       }
     }
 
-    // 2. Fallback: Wikipedia image
-    try {
-      const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(sanitizedQuery)}`;
-      const wikiRes = await fetch(wikiUrl, { headers: { "User-Agent": "FoodQuizApp/1.0" } });
-      if (wikiRes.ok) {
-        const wikiData = await wikiRes.json();
-        const wikiImage = wikiData.thumbnail?.source || wikiData.originalimage?.source;
-        if (wikiImage) {
-          console.log(`[${requestId}] unsplash-image: found via Wikipedia`);
-          return new Response(
-            JSON.stringify({
-              imageUrl: wikiImage,
-              alt: wikiData.title || sanitizedQuery,
-              credit: { name: "Wikipedia", link: wikiData.content_urls?.desktop?.page || null, source: "Wikipedia" },
-            }),
-            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
+    // 2. Fallback: Wikipedia image — try full query, then stripped variants
+    const wikiQueries = [sanitizedQuery];
+    // Strip common nationality/regional prefixes for better Wikipedia matches
+    const words = sanitizedQuery.split(/\s+/);
+    if (words.length > 1) {
+      wikiQueries.push(words.slice(1).join(" ")); // e.g. "Nigerian Suya" → "Suya"
+    }
+    if (words.length > 2) {
+      wikiQueries.push(words.slice(-2).join(" ")); // last two words
+    }
+    for (const wq of wikiQueries) {
+      try {
+        const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wq)}`;
+        const wikiRes = await fetch(wikiUrl, { headers: { "User-Agent": "FoodQuizApp/1.0" } });
+        if (wikiRes.ok) {
+          const wikiData = await wikiRes.json();
+          const wikiImage = wikiData.thumbnail?.source || wikiData.originalimage?.source;
+          if (wikiImage) {
+            console.log(`[${requestId}] unsplash-image: found via Wikipedia (query="${wq}")`);
+            return new Response(
+              JSON.stringify({
+                imageUrl: wikiImage,
+                alt: wikiData.title || sanitizedQuery,
+                credit: { name: "Wikipedia", link: wikiData.content_urls?.desktop?.page || null, source: "Wikipedia" },
+              }),
+              { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
         }
-      }
-    } catch { /* skip */ }
+      } catch { /* try next */ }
+    }
 
     // 3. Fallback: AI-generated food image
     if (LOVABLE_API_KEY) {
