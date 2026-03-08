@@ -555,6 +555,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "我们已向你的邮箱发送了验证码。在下方输入或点击链接。",
     "auth.verifyCode": "验证代码",
     "auth.resendCode": "重新发送",
+    "auth.changeEmail": "更改邮箱",
     "saved.title": "已保存的菜品", "saved.empty": "还没有保存的菜品。",
     "results.saved": "已保存！", "results.loginToSave": "登录后可保存",
     "results.swipeHint": "右滑保存，左滑跳过",
