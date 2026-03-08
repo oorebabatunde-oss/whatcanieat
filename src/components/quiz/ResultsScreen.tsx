@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useNavigate } from "react-router-dom";
+
 
 interface Recommendation {
   name: string;
@@ -20,7 +20,7 @@ interface Recommendation {
 
 export default function ResultsScreen() {
   const { state, reset } = useQuiz();
-  const navigate = useNavigate();
+  
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -139,7 +139,7 @@ export default function ResultsScreen() {
   };
 
   const handleWhereToBuy = (dishName: string) => {
-    navigate(`/where-to-buy?dish=${encodeURIComponent(dishName)}`);
+    window.open(`https://www.google.com/maps/search/${encodeURIComponent(dishName + " near me")}`, "_blank");
   };
 
   return (
