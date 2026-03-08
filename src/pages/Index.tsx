@@ -63,7 +63,7 @@ const Index = () => {
 
   if (mode === "scan") {
     return (
-      <div className="relative">
+      <div>
         {toolbar}
         <FridgeScanner onBack={() => setMode("welcome")} />
       </div>
