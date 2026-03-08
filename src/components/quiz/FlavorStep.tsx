@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useQuiz, FlavorProfile } from "./QuizContext";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, HelpCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const flavors: { type: FlavorProfile; label: string; emoji: string; hue: string }[] = [
   { type: "salty", label: "Salty", emoji: "🧂", hue: "bg-[hsl(var(--salty))]" },
@@ -42,7 +42,7 @@ export default function FlavorStep() {
               transition={{ delay: i * 0.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => toggleFlavor(f.type)}
-              className={`rounded-full px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
+              className={`rounded-lg px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
                 selected
                   ? `${f.hue} text-white shadow-lg scale-105`
                   : "bg-card text-foreground border border-border hover:border-primary/30"
@@ -59,21 +59,20 @@ export default function FlavorStep() {
           transition={{ delay: 0.4 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => toggleFlavor("unknown")}
-          className={`rounded-full px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
+          className={`rounded-lg px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
             isUnknown
-              ? "bg-mystery text-white shadow-lg"
+              ? "bg-[hsl(var(--mystery))] text-[hsl(var(--mystery-foreground))] shadow-lg"
               : "bg-card text-foreground border border-border hover:border-accent/30"
           }`}
         >
-          <HelpCircle className="w-4 h-4" />
-          I Don't Know
+          🤷 I Don't Know
         </motion.button>
       </div>
       <Button
         onClick={nextStep}
         disabled={!hasSelection}
         size="lg"
-        className="w-full max-w-xs mt-4 rounded-full font-display font-bold text-lg"
+        className="w-full max-w-xs mt-4 rounded-lg font-display font-bold text-lg"
       >
         Next <ArrowRight className="w-5 h-5 ml-1" />
       </Button>

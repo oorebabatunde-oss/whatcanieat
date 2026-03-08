@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Camera, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QuizProvider } from "@/components/quiz/QuizContext";
 import QuizFlow from "@/components/quiz/QuizFlow";
@@ -31,8 +30,8 @@ const Index = () => {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
         <h1 className="text-xl font-display font-bold text-primary mb-6">What Can I Eat?</h1>
-        <div className="bg-card rounded-2xl border border-border p-8 text-center max-w-sm w-full shadow-sm">
-          <Camera className="w-16 h-16 text-secondary mx-auto mb-4" />
+        <div className="bg-card rounded-lg border border-border p-8 text-center max-w-sm w-full shadow-sm">
+          <span className="text-5xl block mb-4">📷</span>
           <h2 className="text-xl font-display font-bold mb-2 text-foreground">Fridge Scanner</h2>
           <p className="text-muted-foreground text-sm mb-6">
             Take a photo of your fridge or cupboard and get recipe ideas based on what you have!
@@ -64,45 +63,37 @@ const Index = () => {
         </p>
       </motion.div>
 
-      {/* Action cards */}
-      <div className="flex flex-col gap-4 w-full max-w-sm">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+      {/* Action cards — horizontal */}
+      <div className="flex flex-row gap-4 w-full max-w-sm justify-center">
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => setMode("quiz")}
+          className="flex-1 bg-primary text-primary-foreground rounded-lg p-5 flex flex-col items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
         >
-          <button
-            onClick={() => setMode("quiz")}
-            className="w-full bg-primary text-primary-foreground rounded-2xl p-6 flex items-center gap-4 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <div className="p-3 bg-white/20 rounded-xl">
-              <Utensils className="w-7 h-7" />
-            </div>
-            <div className="text-left">
-              <span className="text-lg font-display font-bold block">What am I craving?</span>
-              <span className="text-sm opacity-80">Answer a few quick questions</span>
-            </div>
-          </button>
-        </motion.div>
+          <span className="text-4xl">🍽️</span>
+          <div className="text-center">
+            <span className="text-sm font-display font-bold block">What am I craving?</span>
+            <span className="text-xs opacity-80">Quick quiz</span>
+          </div>
+        </motion.button>
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => setMode("scan")}
+          className="flex-1 bg-secondary text-secondary-foreground rounded-lg p-5 flex flex-col items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
         >
-          <button
-            onClick={() => setMode("scan")}
-            className="w-full bg-secondary text-secondary-foreground rounded-2xl p-6 flex items-center gap-4 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <div className="p-3 bg-white/20 rounded-xl">
-              <Camera className="w-7 h-7" />
-            </div>
-            <div className="text-left">
-              <span className="text-lg font-display font-bold block">Scan my fridge</span>
-              <span className="text-sm opacity-80">Get recipes from what you have</span>
-            </div>
-          </button>
-        </motion.div>
+          <span className="text-4xl">🧊</span>
+          <div className="text-center">
+            <span className="text-sm font-display font-bold block">Scan my fridge</span>
+            <span className="text-xs opacity-80">Photo recipes</span>
+          </div>
+        </motion.button>
       </div>
 
       <motion.p

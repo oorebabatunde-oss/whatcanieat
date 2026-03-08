@@ -1,11 +1,10 @@
 import { motion } from "framer-motion";
-import { UtensilsCrossed, Cookie, HelpCircle } from "lucide-react";
 import { useQuiz, CravingType } from "./QuizContext";
 
-const options: { type: CravingType; label: string; icon: React.ReactNode; color: string; bg: string }[] = [
-  { type: "snack", label: "A Snack", icon: <Cookie className="w-8 h-8" />, color: "text-primary-foreground", bg: "bg-snack" },
-  { type: "meal", label: "A Meal", icon: <UtensilsCrossed className="w-8 h-8" />, color: "text-primary-foreground", bg: "bg-meal" },
-  { type: "unknown", label: "I Don't Know", icon: <HelpCircle className="w-8 h-8" />, color: "text-primary-foreground", bg: "bg-mystery" },
+const options: { type: CravingType; label: string; emoji: string; bg: string }[] = [
+  { type: "snack", label: "A Snack", emoji: "🍿", bg: "bg-snack" },
+  { type: "meal", label: "A Meal", emoji: "🥘", bg: "bg-meal" },
+  { type: "unknown", label: "I Don't Know", emoji: "🤷", bg: "bg-[hsl(var(--mystery))]" },
 ];
 
 export default function CravingStep() {
@@ -38,11 +37,11 @@ export default function CravingStep() {
             transition={{ delay: i * 0.1 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => handleSelect(opt.type)}
-            className={`${opt.bg} ${opt.color} rounded-2xl p-6 flex items-center gap-4 shadow-lg hover:shadow-xl transition-shadow text-left w-full ${
+            className={`${opt.bg} text-primary-foreground rounded-lg p-5 flex items-center gap-4 shadow-lg hover:shadow-xl transition-shadow text-left w-full ${
               state.craving === opt.type ? "ring-4 ring-foreground/20" : ""
             }`}
           >
-            <div className="p-3 bg-white/20 rounded-xl">{opt.icon}</div>
+            <span className="text-3xl">{opt.emoji}</span>
             <span className="text-xl font-display font-bold">{opt.label}</span>
           </motion.button>
         ))}
