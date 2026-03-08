@@ -712,6 +712,14 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.ingredientsFound": "Найденные ингредиенты", "scan.recipeIdeas": "Идеи рецептов",
     "scan.recipeSubtitle": "ИИ-предложения", "scan.recipe": "Рецепт", "scan.video": "Видео",
     "scan.scanAgain": "Сканировать снова", "scan.backHome": "На главную", "theme.toggle": "Сменить тему",
+    "auth.title": "Войти", "auth.subtitle": "Введите email и мы отправим волшебную ссылку",
+    "auth.emailLabel": "Email", "auth.emailPlaceholder": "you@example.com",
+    "auth.sendLink": "Отправить ссылку", "auth.checkEmail": "Проверьте почту!",
+    "auth.linkSent": "Мы отправили вам волшебную ссылку.",
+    "saved.title": "Сохранённые блюда", "saved.empty": "Пока нет сохранённых блюд.",
+    "results.saved": "Сохранено!", "results.loginToSave": "Войдите чтобы сохранить",
+    "results.swipeHint": "Свайп вправо — сохранить, влево — пропустить",
+    "results.allDone": "Это всё!", "results.allDoneSubtitle": "Вы просмотрели все рекомендации.",
   },
 };
 
