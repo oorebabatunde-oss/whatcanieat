@@ -1,6 +1,6 @@
 import { useQuiz } from "./QuizContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown, X } from "lucide-react";
+import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
