@@ -9,6 +9,7 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import SwipeCard from "./SwipeCard";
 import { toast } from "sonner";
+import { useNavigate, Link } from "react-router-dom";
 
 interface Recommendation {
   name: string;
