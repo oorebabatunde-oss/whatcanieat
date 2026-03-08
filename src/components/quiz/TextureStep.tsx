@@ -25,10 +25,10 @@ export default function TextureStep() {
       exit={{ opacity: 0, y: -20 }}
       className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
     >
-      <h2 className="text-2xl md:text-3xl font-display font-bold text-center text-foreground">
+      <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
         What texture are you feeling?
       </h2>
-      <p className="text-muted-foreground text-center text-sm">
+      <p className="text-muted-foreground text-center text-xs uppercase tracking-widest">
         Pick as many as you like
       </p>
       <div className="flex flex-wrap justify-center gap-3 w-full">
