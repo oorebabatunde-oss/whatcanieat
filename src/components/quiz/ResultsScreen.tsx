@@ -136,20 +136,20 @@ export default function ResultsScreen() {
                   className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
                 >
                   <AspectRatio ratio={16 / 9} className="bg-muted relative">
-                    {!imageLoaded[i] && (
+                    {!imageLoaded[rec.name] && (
                       <Skeleton className="absolute inset-0 w-full h-full" />
                     )}
-                    {imageUrls[i] && (
+                    {imageUrls[rec.name] && (
                       <img
-                        src={imageUrls[i]}
+                        src={imageUrls[rec.name]}
                         alt={rec.name}
                         className={`w-full h-full object-cover transition-opacity duration-300 ${
-                          imageLoaded[i] ? "opacity-100" : "opacity-0"
+                          imageLoaded[rec.name] ? "opacity-100" : "opacity-0"
                         }`}
-                        onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
+                        onLoad={() => setImageLoaded((prev) => ({ ...prev, [rec.name]: true }))}
                       />
                     )}
-                    {imageCredits[i] && imageLoaded[i] && (
+                    {imageCredits[rec.name] && imageLoaded[rec.name] && (
                       <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-black/50 rounded-tl text-[10px] text-white/80">
                         Photo by{" "}
                         <a
