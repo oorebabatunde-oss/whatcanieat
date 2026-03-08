@@ -200,6 +200,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "Enviamos un código a tu email. Ingrésalo abajo o haz clic en el enlace.",
     "auth.verifyCode": "Verificar código",
     "auth.resendCode": "Reenviar código",
+    "auth.changeEmail": "Cambiar email",
     "saved.title": "Platos guardados",
     "saved.empty": "Aún no hay platos guardados. ¡Desliza a la derecha para guardar!",
     "results.saved": "¡Guardado!",
