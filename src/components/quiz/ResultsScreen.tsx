@@ -279,12 +279,55 @@ export default function ResultsScreen() {
           </div>
         </>
       )}
-      <Button variant="outline" onClick={reset} className="rounded-full gap-2 mt-4">
-        <RotateCcw className="w-4 h-4" /> Start Over
-      </Button>
-      <Button variant="outline" onClick={reset} className="rounded-full gap-2">
-        <RotateCcw className="w-4 h-4" /> Start Over
-      </Button>
+      {!loading && !error && (
+        <div className="flex flex-col items-center gap-3 w-full mt-4">
+          {!showRefine ? (
+            <Button
+              variant="outline"
+              onClick={() => setShowRefine(true)}
+              className="rounded-full gap-2"
+            >
+              <XCircle className="w-4 h-4" /> I don't want these
+            </Button>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="w-full space-y-3"
+            >
+              <Textarea
+                placeholder="Tell us more — what are you in the mood for instead?"
+                value={refineFeedback}
+                onChange={(e) => setRefineFeedback(e.target.value)}
+                className="resize-none text-sm"
+                rows={3}
+              />
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setShowRefine(false); setRefineFeedback(""); }}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleRefineSearch}
+                  disabled={!refineFeedback.trim() || refining}
+                  className="flex-1 gap-1.5"
+                >
+                  {refining ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                  Refine Search
+                </Button>
+              </div>
+            </motion.div>
+          )}
+          <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground">
+            <RotateCcw className="w-4 h-4" /> Start Over
+          </Button>
+        </div>
+      )}
     </motion.div>
   );
 }
