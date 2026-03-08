@@ -433,6 +433,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "التقط الملصقات أو العناصر بوضوح",
     "scan.tryAgain": "جرب صورة أخرى",
     "theme.toggle": "تبديل المظهر",
+    "auth.signInCta": "سجّل الدخول لحفظ التوصيات",
     "auth.title": "تسجيل الدخول", "auth.subtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابطاً سحرياً",
     "auth.emailLabel": "البريد الإلكتروني", "auth.emailPlaceholder": "you@example.com",
     "auth.sendLink": "إرسال الرابط السحري", "auth.checkEmail": "تحقق من بريدك!",
