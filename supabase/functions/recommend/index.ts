@@ -185,6 +185,9 @@ Flavors I want: ${flavors.length ? flavors.join(", ") : "surprise me"}
 Textures I like: ${textures.length ? textures.join(", ") : "surprise me"}
 Dietary restrictions: ${dietary.length && !dietary.includes("none") ? dietary.join(", ") : "none"}`;
 
+    if (context) {
+      userPrompt += `\n\nAdditional context from user: "${context}"`;
+    }
     if (rejected.length) {
       userPrompt += `\n\nDo NOT suggest these dishes (user already rejected them): ${rejected.join(", ")}`;
     }

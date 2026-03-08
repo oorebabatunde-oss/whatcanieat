@@ -82,7 +82,7 @@ export default function ResultsScreen() {
     };
 
     fetchRecommendations();
-  }, [state.craving, state.flavors, state.textures, state.dietary]);
+  }, [state.craving, state.flavors, state.textures, state.dietary, state.context]);
 
   const handleSwipeRight = async (rec: Recommendation) => {
     if (user) {

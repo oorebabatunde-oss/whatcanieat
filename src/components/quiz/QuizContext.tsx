@@ -79,6 +79,8 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       };
     });
 
+  const setContext = (c: string) => setState((s) => ({ ...s, context: c }));
+
   const nextStep = () => setState((s) => ({ ...s, step: s.step + 1 }));
   const prevStep = () => setState((s) => ({ ...s, step: Math.max(0, s.step - 1) }));
   const reset = () => {
@@ -87,7 +89,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <QuizContext.Provider value={{ state, setCraving, toggleFlavor, toggleTexture, toggleDietary, nextStep, prevStep, reset }}>
+    <QuizContext.Provider value={{ state, setCraving, toggleFlavor, toggleTexture, toggleDietary, setContext, nextStep, prevStep, reset }}>
       {children}
     </QuizContext.Provider>
   );
