@@ -139,6 +139,7 @@ serve(async (req) => {
     const dietary = validateArray(body.dietary, VALID_DIETARY);
     const locale = sanitizeString(body.locale, 10) || "en-US";
     const timezone = sanitizeString(body.timezone, 50) || "UTC";
+    const context = sanitizeString(body.context, 200);
     const feedback = sanitizeString(body.feedback, 500);
     const rejected = Array.isArray(body.rejected)
       ? body.rejected.filter((v: unknown) => typeof v === "string").map((v: string) => v.slice(0, 100)).slice(0, 20)
@@ -184,6 +185,9 @@ Flavors I want: ${flavors.length ? flavors.join(", ") : "surprise me"}
 Textures I like: ${textures.length ? textures.join(", ") : "surprise me"}
 Dietary restrictions: ${dietary.length && !dietary.includes("none") ? dietary.join(", ") : "none"}`;
 
+    if (context) {
+      userPrompt += `\n\nAdditional context from user: "${context}"`;
+    }
     if (rejected.length) {
       userPrompt += `\n\nDo NOT suggest these dishes (user already rejected them): ${rejected.join(", ")}`;
     }

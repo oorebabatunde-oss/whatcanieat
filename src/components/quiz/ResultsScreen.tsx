@@ -60,6 +60,7 @@ export default function ResultsScreen() {
             flavors: state.flavors,
             textures: state.textures,
             dietary: state.dietary,
+            context: state.context || undefined,
             locale,
             timezone,
           },
@@ -81,7 +82,7 @@ export default function ResultsScreen() {
     };
 
     fetchRecommendations();
-  }, [state.craving, state.flavors, state.textures, state.dietary]);
+  }, [state.craving, state.flavors, state.textures, state.dietary, state.context]);
 
   const handleSwipeRight = async (rec: Recommendation) => {
     if (user) {
