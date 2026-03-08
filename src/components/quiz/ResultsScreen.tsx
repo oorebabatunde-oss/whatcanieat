@@ -261,6 +261,9 @@ export default function ResultsScreen() {
           <p className="text-muted-foreground text-xs text-center -mt-4 whitespace-pre-line">
             {t("results.swipeHint")}
           </p>
+          <p className="text-muted-foreground/70 text-[10px] text-center -mt-4 whitespace-pre-line italic">
+            {t("results.subtitle")}
+          </p>
 
           {/* Card stack */}
           <div className="relative w-full" style={{ height: 520 }}>
