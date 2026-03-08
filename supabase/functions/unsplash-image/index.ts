@@ -110,54 +110,29 @@ serve(async (req) => {
       });
     }
 
-    // --- Auth check ---
+    // --- Optional auth (for logging, not required) ---
+    let userId = "anonymous";
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      console.warn(`[${requestId}] Missing auth: IP=${clientIp}`);
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (authHeader?.startsWith("Bearer ")) {
+      try {
+        const supabase = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_ANON_KEY")!,
+          { global: { headers: { Authorization: authHeader } } }
+        );
+        const token = authHeader.replace("Bearer ", "");
+        const { data: claimsData } = await supabase.auth.getClaims(token);
+        if (claimsData?.claims?.sub) {
+          userId = claimsData.claims.sub as string;
+          if (isRateLimited(`user:${userId}`)) {
+            return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+              status: 429,
+              headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+            });
+          }
+        }
+      } catch { /* proceed as anonymous */ }
     }
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
-      console.warn(`[${requestId}] Invalid token: IP=${clientIp}`);
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const userId = claimsData.claims.sub as string;
-
-    // --- Role check ---
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId);
-
-    const userRoles = (roles || []).map((r: any) => r.role);
-    if (!userRoles.some((r: string) => ["user", "admin"].includes(r))) {
-      console.warn(`[${requestId}] Forbidden: userId=${userId}`);
-      return new Response(JSON.stringify({ error: "Forbidden" }), {
-        status: 403,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Per-user rate limit
-    if (isRateLimited(`user:${userId}`)) {
-      console.warn(`[${requestId}] Rate limited user: userId=${userId}`);
-      return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
-        status: 429,
         headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
       });
     }
