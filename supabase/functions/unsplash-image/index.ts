@@ -133,9 +133,6 @@ serve(async (req) => {
         }
       } catch { /* proceed as anonymous */ }
     }
-        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
-      });
-    }
 
     // --- Input validation ---
     let body: any;
