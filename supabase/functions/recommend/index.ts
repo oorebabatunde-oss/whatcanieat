@@ -39,6 +39,18 @@ function isRateLimited(key: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
+// Decode JWT payload without verification (just to check role claim)
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
 // --- Input validation ---
 const VALID_FLAVORS = ["sweet", "salty", "sour", "bitter", "umami", "spicy", "smoky", "fresh", "rich", "tangy", "mild", "herby"];
 const VALID_TEXTURES = ["crispy", "creamy", "chewy", "crunchy", "soft", "flaky", "tender", "smooth", "juicy", "light", "dense", "silky"];
@@ -86,22 +98,25 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization");
     if (authHeader?.startsWith("Bearer ")) {
       try {
-        const supabase = createClient(
-          Deno.env.get("SUPABASE_URL")!,
-          Deno.env.get("SUPABASE_ANON_KEY")!,
-          { global: { headers: { Authorization: authHeader } } }
-        );
         const token = authHeader.replace("Bearer ", "");
-        const { data: claimsData } = await supabase.auth.getClaims(token);
-        if (claimsData?.claims?.sub) {
-          userId = claimsData.claims.sub as string;
-          // Per-user rate limit for authenticated users
-          if (isRateLimited(`user:${userId}`)) {
-            console.warn(`[${requestId}] Rate limited user: userId=${userId}`);
-            return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
-              status: 429,
-              headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
-            });
+        // Skip getClaims if this is the anon key (role === "anon")
+        const payload = decodeJwtPayload(token);
+        if (payload && payload.role !== "anon") {
+          const supabase = createClient(
+            Deno.env.get("SUPABASE_URL")!,
+            Deno.env.get("SUPABASE_ANON_KEY")!,
+            { global: { headers: { Authorization: authHeader } } }
+          );
+          const { data: claimsData } = await supabase.auth.getClaims(token);
+          if (claimsData?.claims?.sub) {
+            userId = claimsData.claims.sub as string;
+            if (isRateLimited(`user:${userId}`)) {
+              console.warn(`[${requestId}] Rate limited user: userId=${userId}`);
+              return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+                status: 429,
+                headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+              });
+            }
           }
         }
       } catch { /* proceed as anonymous */ }
@@ -178,6 +193,7 @@ Dietary restrictions: ${dietary.length && !dietary.includes("none") ? dietary.jo
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
+      signal: AbortSignal.timeout(120_000),
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",

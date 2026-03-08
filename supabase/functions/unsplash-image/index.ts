@@ -35,6 +35,18 @@ function isRateLimited(key: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
+// Decode JWT payload without verification (just to check role claim)
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
 const FOOD_KEYWORDS = ["food", "dish", "meal", "recipe", "cuisine", "plate", "bowl", "cooking", "ingredient", "dessert", "soup", "salad", "bread", "meat", "vegetable", "fruit", "pastry", "cheese", "rice", "noodle", "pasta", "cake", "pie", "stew", "curry", "sandwich", "drink", "beverage", "cream", "sauce", "roast", "baked", "fried"];
 
 function looksLikeFood(photo: any): boolean {
@@ -115,20 +127,24 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization");
     if (authHeader?.startsWith("Bearer ")) {
       try {
-        const supabase = createClient(
-          Deno.env.get("SUPABASE_URL")!,
-          Deno.env.get("SUPABASE_ANON_KEY")!,
-          { global: { headers: { Authorization: authHeader } } }
-        );
         const token = authHeader.replace("Bearer ", "");
-        const { data: claimsData } = await supabase.auth.getClaims(token);
-        if (claimsData?.claims?.sub) {
-          userId = claimsData.claims.sub as string;
-          if (isRateLimited(`user:${userId}`)) {
-            return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
-              status: 429,
-              headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
-            });
+        // Skip getClaims if this is the anon key (role === "anon")
+        const payload = decodeJwtPayload(token);
+        if (payload && payload.role !== "anon") {
+          const supabase = createClient(
+            Deno.env.get("SUPABASE_URL")!,
+            Deno.env.get("SUPABASE_ANON_KEY")!,
+            { global: { headers: { Authorization: authHeader } } }
+          );
+          const { data: claimsData } = await supabase.auth.getClaims(token);
+          if (claimsData?.claims?.sub) {
+            userId = claimsData.claims.sub as string;
+            if (isRateLimited(`user:${userId}`)) {
+              return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+                status: 429,
+                headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+              });
+            }
           }
         }
       } catch { /* proceed as anonymous */ }
