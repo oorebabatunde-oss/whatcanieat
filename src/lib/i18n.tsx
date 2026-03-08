@@ -495,6 +495,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "أرسلنا رمزاً إلى بريدك. أدخله أدناه أو انقر على الرابط.",
     "auth.verifyCode": "تحقق من الرمز",
     "auth.resendCode": "إعادة إرسال الرمز",
+    "auth.changeEmail": "تغيير البريد",
     "saved.title": "الأطباق المحفوظة", "saved.empty": "لا توجد أطباق محفوظة بعد.",
     "results.saved": "تم الحفظ!", "results.loginToSave": "سجل دخولك للحفظ",
     "results.swipeHint": "اسحب يميناً للحفظ، يساراً للتخطي",
