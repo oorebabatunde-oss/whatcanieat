@@ -80,14 +80,7 @@ export default function ResultsScreen() {
 
 
   const handleDismiss = (index: number) => {
-    if (dismissing[index]) {
-      // Already showing feedback — remove the card
-      setRecommendations((prev) => prev.filter((_, i) => i !== index));
-      setDismissing((prev) => { const n = { ...prev }; delete n[index]; return n; });
-      setFeedback((prev) => { const n = { ...prev }; delete n[index]; return n; });
-    } else {
-      setDismissing((prev) => ({ ...prev, [index]: true }));
-    }
+    setRecommendations((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleHowToMake = (dishName: string) => {
