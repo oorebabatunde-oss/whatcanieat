@@ -140,14 +140,16 @@ export default function ResultsScreen() {
                     {!imageLoaded[i] && (
                       <Skeleton className="absolute inset-0 w-full h-full" />
                     )}
-                    <img
-                      src={getImageUrl(rec.imageQuery)}
-                      alt={rec.name}
-                      className={`w-full h-full object-cover transition-opacity duration-300 ${
-                        imageLoaded[i] ? "opacity-100" : "opacity-0"
-                      }`}
-                      onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
-                    />
+                    {imageUrls[i] && (
+                      <img
+                        src={imageUrls[i]}
+                        alt={rec.name}
+                        className={`w-full h-full object-cover transition-opacity duration-300 ${
+                          imageLoaded[i] ? "opacity-100" : "opacity-0"
+                        }`}
+                        onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
+                      />
+                    )}
                   </AspectRatio>
                   <div className="p-3">
                     <div className="flex items-center justify-between gap-2 mb-1">
