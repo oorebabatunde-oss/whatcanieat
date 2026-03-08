@@ -64,15 +64,15 @@ const Index = () => {
       </motion.div>
 
       {/* Action cards */}
-      <div className="flex flex-col items-center gap-4 w-full max-w-xs">
+      <div className="flex flex-col items-center gap-4">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => setMode("quiz")}
-          className="w-full bg-[hsl(var(--primary))] text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]">
-          
+          className="bg-[hsl(var(--primary))] text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]">
+
           <span className="text-2xl">🍽️</span>
           <span className="text-sm font-semibold tracking-wide">Find what I'm craving</span>
         </motion.button>
