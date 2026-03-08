@@ -86,7 +86,7 @@ export default function ResultsScreen() {
     setRefining(true);
     setError(null);
     try {
-      const locale = navigator.language || "en-US";
+      const locale = lang || navigator.language || "en-US";
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
       const rejected = recommendations.map((r) => r.name);
 
