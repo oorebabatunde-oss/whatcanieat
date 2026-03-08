@@ -38,6 +38,7 @@ export default function Auth() {
         <ThemeToggle />
       </div>
 
+      <div className="flex-1 flex items-center justify-center w-full">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
