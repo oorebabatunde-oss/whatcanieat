@@ -795,6 +795,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "auth.otpInstruction": "E-postanıza bir kod gönderdik. Aşağıya girin veya linke tıklayın.",
     "auth.verifyCode": "Kodu doğrula",
     "auth.resendCode": "Kodu tekrar gönder",
+    "auth.changeEmail": "E-postayı değiştir",
     "saved.title": "Kaydedilen Yemekler", "saved.empty": "Henüz kaydedilen yemek yok.",
     "results.saved": "Kaydedildi!", "results.loginToSave": "Kaydetmek için giriş yap",
     "results.swipeHint": "Kaydetmek için sağa, geçmek için sola kaydır",
