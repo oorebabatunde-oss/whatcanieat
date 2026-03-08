@@ -153,7 +153,7 @@ export default function ResultsScreen() {
                       <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-black/50 rounded-tl text-[10px] text-white/80">
                         Photo by{" "}
                         <a
-                          href={`${imageCredits[i].link}${imageCredits[i].source === "Unsplash" ? "?utm_source=your_app&utm_medium=referral" : ""}`}
+                          href={`${imageCredits[rec.name].link}${imageCredits[rec.name].source === "Unsplash" ? "?utm_source=your_app&utm_medium=referral" : ""}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="underline"
