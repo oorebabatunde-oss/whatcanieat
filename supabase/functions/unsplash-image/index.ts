@@ -89,7 +89,27 @@ serve(async (req) => {
       }
     }
 
-    // 2. Fallback: AI-generated food image
+    // 2. Fallback: Wikipedia image
+    try {
+      const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+      const wikiRes = await fetch(wikiUrl, { headers: { "User-Agent": "FoodQuizApp/1.0" } });
+      if (wikiRes.ok) {
+        const wikiData = await wikiRes.json();
+        const wikiImage = wikiData.thumbnail?.source || wikiData.originalimage?.source;
+        if (wikiImage) {
+          return new Response(
+            JSON.stringify({
+              imageUrl: wikiImage,
+              alt: wikiData.title || query,
+              credit: { name: "Wikipedia", link: wikiData.content_urls?.desktop?.page || null, source: "Wikipedia" },
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+      }
+    } catch { /* skip */ }
+
+    // 3. Fallback: AI-generated food image (last resort)
     if (LOVABLE_API_KEY) {
       const aiImage = await generateFoodImage(query, LOVABLE_API_KEY);
       if (aiImage) {
