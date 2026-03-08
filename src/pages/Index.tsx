@@ -58,7 +58,7 @@ const Index = () => {
           What Can<br />
           <span className="text-primary">I Eat?</span>
         </h1>
-        <p className="text-muted-foreground text-sm uppercase tracking-widest max-w-xs mx-auto">
+        <p className="text-muted-foreground text-sm tracking-widest max-w-xs mx-auto">
           Let us help you figure out your next delicious bite
         </p>
       </motion.div>
