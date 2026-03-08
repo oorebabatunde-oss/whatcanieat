@@ -1,47 +1,35 @@
 
 
-## AI Food Recommendations
+## Add Dietary Constraints Step
 
-Enable the results screen to generate real food/recipe suggestions using Lovable AI (Gemini) via Lovable Cloud.
+Insert a new step between Texture and Results to capture dietary restrictions before generating AI recommendations.
 
-### What it does
-After the user completes the quiz, the app calls an edge function that sends their preferences (craving type, flavors, textures) to the Lovable AI Gateway. The AI returns 3-5 food suggestions with names, short descriptions, and emoji. Results stream in token-by-token for a nice UX.
+### Changes
 
-### Implementation
+**1. QuizContext.tsx**
+- Add `DietaryConstraint` type: `"vegetarian" | "vegan" | "gluten-free" | "dairy-free" | "nut-free" | "halal" | "kosher" | "none"`
+- Add `dietary: DietaryConstraint[]` to `QuizState`
+- Add `toggleDietary` function (same pattern as `toggleFlavor`/`toggleTexture`)
+- Update initial state and context provider
 
-**1. Enable Lovable Cloud**
-Required for edge functions and the pre-configured `LOVABLE_API_KEY`.
+**2. Create DietaryStep.tsx**
+- New component following the same pattern as TextureStep
+- Options: Vegetarian, Vegan, Gluten-Free, Dairy-Free, Nut-Free, Halal, Kosher, + "No Restrictions"
+- Multi-select with "No Restrictions" clearing other selections
+- Button: "Get my recommendations"
 
-**2. Create edge function `supabase/functions/suggest-food/index.ts`**
-- Accepts `{ craving, flavors, textures }` from the client
-- Builds a system prompt: *"You are a food recommendation engine. Given the user's preferences, suggest 3-5 foods/recipes..."*
-- Uses tool calling to extract structured output: array of `{ name, emoji, description, recipe_hint }`
-- Calls `https://ai.gateway.lovable.dev/v1/chat/completions` with `google/gemini-3-flash-preview`
-- Handles 429/402 errors gracefully
+**3. QuizFlow.tsx**
+- Update `stepLabels` to `["Craving", "Flavour", "Texture", "Dietary", "Results"]`
+- Add `{state.step === 3 && <DietaryStep key="dietary" />}`
+- Move Results to step 4
+- Update back button visibility (`state.step < 4`)
 
-**3. Update `supabase/config.toml`**
-- Add `[functions.suggest-food]` with `verify_jwt = false`
+**4. ResultsScreen (later)**
+- Pass `dietary` constraints to the AI edge function when implemented
 
-**4. Update `ResultsScreen.tsx`**
-- On mount, call the edge function via `supabase.functions.invoke('suggest-food', { body: { craving, flavors, textures } })`
-- Show a loading spinner while waiting
-- Render results as styled cards (emoji + name + description + recipe hint)
-- Show error toast on failure (rate limit, payment, network)
-- Keep the "Start Over" button
-
-**5. Create a types file or inline type for suggestions**
-```typescript
-type FoodSuggestion = {
-  name: string;
-  emoji: string;
-  description: string;
-  recipe_hint: string;
-};
+### Flow
+```text
+Craving → Flavour → Texture → Dietary → Results
+(step 0)  (step 1)  (step 2)  (step 3)  (step 4)
 ```
-
-### Files to create/edit
-- `supabase/functions/suggest-food/index.ts` — new edge function
-- `supabase/config.toml` — register function
-- `src/components/quiz/ResultsScreen.tsx` — fetch and display AI results
-- `src/integrations/supabase/client.ts` — may need to create Supabase client if not present
 
