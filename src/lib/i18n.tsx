@@ -683,6 +683,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "Etiketleri veya ürünleri net çekin",
     "scan.tryAgain": "Başka Fotoğraf Dene",
     "theme.toggle": "Tema değiştir",
+    "auth.signInCta": "Önerileri kaydetmek için giriş yap",
     "auth.title": "Giriş Yap", "auth.subtitle": "E-postanı gir, sihirli link gönderelim",
     "auth.emailLabel": "E-posta", "auth.emailPlaceholder": "sen@ornek.com",
     "auth.sendLink": "Sihirli Link Gönder", "auth.checkEmail": "E-postanı kontrol et!",
