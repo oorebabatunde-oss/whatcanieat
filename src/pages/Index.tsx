@@ -6,15 +6,38 @@ import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/hooks/useAuth";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Heart, LogIn, LogOut } from "lucide-react";
 
 const Index = () => {
   const [mode, setMode] = useState<"welcome" | "quiz" | "scan">("welcome");
   const { t } = useI18n();
+  const { user, signOut } = useAuth();
 
   const toolbar = (
     <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+      {user && (
+        <Link to="/saved">
+          <Button variant="ghost" size="icon" className="text-muted-foreground">
+            <Heart className="w-5 h-5" />
+          </Button>
+        </Link>
+      )}
       <LanguageSwitcher />
       <ThemeToggle />
+      {user ? (
+        <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={signOut}>
+          <LogOut className="w-5 h-5" />
+        </Button>
+      ) : (
+        <Link to="/auth">
+          <Button variant="ghost" size="icon" className="text-muted-foreground">
+            <LogIn className="w-5 h-5" />
+          </Button>
+        </Link>
+      )}
     </div>
   );
 
