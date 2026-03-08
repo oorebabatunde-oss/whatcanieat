@@ -25,7 +25,7 @@ export default function ResultsScreen() {
   const [error, setError] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
   const [imageUrls, setImageUrls] = useState<Record<number, string>>({});
-  const [imageCredits, setImageCredits] = useState<Record<number, { name: string; link: string }>>({});
+  const [imageCredits, setImageCredits] = useState<Record<number, { name: string; link: string; source?: string }>>({});
   const [dismissing, setDismissing] = useState<Record<number, boolean>>({});
   const [feedback, setFeedback] = useState<Record<number, string>>({});
 
@@ -158,22 +158,27 @@ export default function ResultsScreen() {
                       <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-black/50 rounded-tl text-[10px] text-white/80">
                         Photo by{" "}
                         <a
-                          href={`${imageCredits[i].link}?utm_source=your_app&utm_medium=referral`}
+                          href={`${imageCredits[i].link}${imageCredits[i].source === "Unsplash" ? "?utm_source=your_app&utm_medium=referral" : ""}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="underline"
                         >
                           {imageCredits[i].name}
                         </a>
-                        {" / "}
-                        <a
-                          href="https://unsplash.com/?utm_source=your_app&utm_medium=referral"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        >
-                          Unsplash
-                        </a>
+                        {imageCredits[i].source === "Unsplash" && (
+                          <>
+                            {" / "}
+                            <a
+                              href="https://unsplash.com/?utm_source=your_app&utm_medium=referral"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline"
+                            >
+                              Unsplash
+                            </a>
+                          </>
+                        )}
+                        {imageCredits[i].source === "Wikipedia" && " / Wikipedia"}
                       </div>
                     )}
                   </AspectRatio>
