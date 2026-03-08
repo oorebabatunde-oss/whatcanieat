@@ -99,6 +99,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.swipeHint": "Swipe right to save, left to skip",
     "results.allDone": "That's all!",
     "results.allDoneSubtitle": "You've seen all recommendations. Refine your search or start over.",
+    "results.undo": "Undo",
     "results.viewSaved": "View Saved Dishes",
   },
   es: {
@@ -197,6 +198,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.swipeHint": "Desliza derecha para guardar, izquierda para saltar",
     "results.allDone": "¡Eso es todo!",
     "results.allDoneSubtitle": "Has visto todas las recomendaciones.",
+    "results.undo": "Deshacer",
     "results.viewSaved": "Ver platos guardados",
   },
   fr: {
@@ -290,6 +292,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Sauvegardé !", "results.loginToSave": "Connectez-vous pour sauvegarder",
     "results.swipeHint": "Glissez à droite pour sauvegarder, à gauche pour passer",
     "results.allDone": "C'est tout !", "results.allDoneSubtitle": "Vous avez vu toutes les recommandations.",
+    "results.undo": "Annuler",
     "results.viewSaved": "Voir les plats sauvegardés",
   },
   de: {
@@ -356,6 +359,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Gespeichert!", "results.loginToSave": "Melde dich an zum Speichern",
     "results.swipeHint": "Rechts wischen zum Speichern, links zum Überspringen",
     "results.allDone": "Das war's!", "results.allDoneSubtitle": "Du hast alle Empfehlungen gesehen.",
+    "results.undo": "Rückgängig",
     "results.viewSaved": "Gespeicherte Gerichte ansehen",
   },
   pt: {
@@ -412,6 +416,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Salvo!", "results.loginToSave": "Entre para salvar",
     "results.swipeHint": "Deslize para a direita para salvar, esquerda para pular",
     "results.allDone": "É isso!", "results.allDoneSubtitle": "Você viu todas as recomendações.",
+    "results.undo": "Desfazer",
     "results.viewSaved": "Ver pratos salvos",
   },
   ar: {
@@ -466,6 +471,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "تم الحفظ!", "results.loginToSave": "سجل دخولك للحفظ",
     "results.swipeHint": "اسحب يميناً للحفظ، يساراً للتخطي",
     "results.allDone": "هذا كل شيء!", "results.allDoneSubtitle": "لقد رأيت كل التوصيات.",
+    "results.undo": "تراجع",
     "results.viewSaved": "عرض الأطباق المحفوظة",
   },
   zh: {
@@ -520,6 +526,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "已保存！", "results.loginToSave": "登录后可保存",
     "results.swipeHint": "右滑保存，左滑跳过",
     "results.allDone": "全部看完了！", "results.allDoneSubtitle": "你已看完所有推荐。",
+    "results.undo": "撤销",
     "results.viewSaved": "查看已保存的菜品",
   },
   ja: {
@@ -574,6 +581,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "保存しました！", "results.loginToSave": "保存するにはログイン",
     "results.swipeHint": "右スワイプで保存、左で次へ",
     "results.allDone": "全部見ました！", "results.allDoneSubtitle": "すべてのおすすめを見ました。",
+    "results.undo": "元に戻す",
     "results.viewSaved": "保存した料理を見る",
   },
   ko: {
@@ -628,6 +636,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "저장됨!", "results.loginToSave": "저장하려면 로그인하세요",
     "results.swipeHint": "오른쪽으로 밀어서 저장, 왼쪽으로 건너뛰기",
     "results.allDone": "다 봤어요!", "results.allDoneSubtitle": "모든 추천을 확인했습니다.",
+    "results.undo": "실행 취소",
     "results.viewSaved": "저장한 요리 보기",
   },
   hi: {
@@ -682,6 +691,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "सहेजा गया!", "results.loginToSave": "सहेजने के लिए साइन इन करें",
     "results.swipeHint": "दाएं स्वाइप करें सहेजने के लिए, बाएं छोड़ने के लिए",
     "results.allDone": "बस इतना!", "results.allDoneSubtitle": "आपने सभी सिफारिशें देख लीं।",
+    "results.undo": "पूर्ववत करें",
     "results.viewSaved": "सहेजे गए व्यंजन देखें",
   },
   tr: {
@@ -736,6 +746,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Kaydedildi!", "results.loginToSave": "Kaydetmek için giriş yap",
     "results.swipeHint": "Kaydetmek için sağa, geçmek için sola kaydır",
     "results.allDone": "Hepsi bu!", "results.allDoneSubtitle": "Tüm önerileri gördün.",
+    "results.undo": "Geri al",
     "results.viewSaved": "Kaydedilen yemekleri gör",
   },
   it: {
@@ -790,6 +801,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Salvato!", "results.loginToSave": "Accedi per salvare",
     "results.swipeHint": "Scorri a destra per salvare, a sinistra per saltare",
     "results.allDone": "È tutto!", "results.allDoneSubtitle": "Hai visto tutte le raccomandazioni.",
+    "results.undo": "Annulla",
     "results.viewSaved": "Vedi piatti salvati",
   },
   nl: {
@@ -844,6 +856,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Opgeslagen!", "results.loginToSave": "Log in om op te slaan",
     "results.swipeHint": "Swipe rechts om op te slaan, links om over te slaan",
     "results.allDone": "Dat was het!", "results.allDoneSubtitle": "Je hebt alle aanbevelingen gezien.",
+    "results.undo": "Ongedaan maken",
     "results.viewSaved": "Opgeslagen gerechten bekijken",
   },
   ru: {
@@ -897,6 +910,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Сохранено!", "results.loginToSave": "Войдите чтобы сохранить",
     "results.swipeHint": "Свайп вправо — сохранить, влево — пропустить",
     "results.allDone": "Это всё!", "results.allDoneSubtitle": "Вы просмотрели все рекомендации.",
+    "results.undo": "Отменить",
     "results.viewSaved": "Посмотреть сохранённые блюда",
   },
 };

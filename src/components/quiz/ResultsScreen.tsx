@@ -1,6 +1,6 @@
 import { useQuiz } from "./QuizContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck } from "lucide-react";
+import { Loader2, RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,6 +35,7 @@ export default function ResultsScreen() {
   const [refineFeedback, setRefineFeedback] = useState("");
   const [refining, setRefining] = useState(false);
   const [allSwiped, setAllSwiped] = useState(false);
+  const [swipeHistory, setSwipeHistory] = useState<{ index: number; action: "left" | "right"; rec: Recommendation }[]>([]);
 
   const fetchImages = (recs: Recommendation[]) => {
     recs.forEach(async (rec) => {
@@ -85,6 +86,7 @@ export default function ResultsScreen() {
   }, [state.craving, state.flavors, state.textures, state.dietary, state.context]);
 
   const handleSwipeRight = async (rec: Recommendation) => {
+    setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "right", rec }]);
     if (user) {
       await supabase.from("saved_recommendations").insert({
         user_id: user.id,
@@ -106,7 +108,29 @@ export default function ResultsScreen() {
   };
 
   const handleSwipeLeft = () => {
+    setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "left", rec: recommendations[currentIndex] }]);
     advance();
+  };
+
+  const handleUndo = async () => {
+    if (swipeHistory.length === 0) return;
+    const last = swipeHistory[swipeHistory.length - 1];
+    setSwipeHistory((prev) => prev.slice(0, -1));
+
+    // If it was a right-swipe (save), remove from DB
+    if (last.action === "right" && user) {
+      await supabase
+        .from("saved_recommendations")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("name", last.rec.name)
+        .order("created_at", { ascending: false })
+        .limit(1);
+    }
+
+    setCurrentIndex(last.index);
+    setAllSwiped(false);
+    toast(t("results.undo") + ": " + last.rec.name);
   };
 
   const advance = () => {
@@ -305,9 +329,21 @@ export default function ResultsScreen() {
             </Button>
           </div>
 
-          <p className="text-muted-foreground text-xs">
-            {currentIndex + 1} / {recommendations.length}
-          </p>
+          <div className="flex items-center gap-3">
+            {swipeHistory.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleUndo}
+                className="rounded-full gap-1.5 text-muted-foreground"
+              >
+                <Undo2 className="w-4 h-4" /> {t("results.undo")}
+              </Button>
+            )}
+            <p className="text-muted-foreground text-xs">
+              {currentIndex + 1} / {recommendations.length}
+            </p>
+          </div>
         </>
       )}
     </motion.div>
