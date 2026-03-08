@@ -76,8 +76,9 @@ export default function ResultsScreen() {
 
     fetchRecommendations();
   }, [state.craving, state.flavors, state.textures, state.dietary]);
-
-
+  const [refineOpen, setRefineOpen] = useState(false);
+  const [refineFeedback, setRefineFeedback] = useState("");
+  const [refining, setRefining] = useState(false);
   const handleDismiss = (index: number) => {
     setRecommendations((prev) => prev.filter((_, i) => i !== index));
   };
