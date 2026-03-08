@@ -82,8 +82,7 @@ export default function ResultsScreen() {
   };
 
   const handleHowToMake = (dishName: string) => {
-    const q = encodeURIComponent(`how to make ${dishName} recipe`);
-    window.open(`https://www.google.com/search?q=${q}`, "_blank");
+    navigate(`/recipe?dish=${encodeURIComponent(dishName)}`);
   };
 
   const handleWhereToBuy = (dishName: string) => {
