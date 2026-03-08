@@ -1,14 +1,14 @@
 import { useQuiz } from "./QuizContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown, XCircle, Send } from "lucide-react";
+import { Loader2, RotateCcw, AlertCircle, Heart, X, XCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/hooks/useAuth";
+import SwipeCard from "./SwipeCard";
+import { toast } from "sonner";
 
 interface Recommendation {
   name: string;
@@ -20,6 +20,7 @@ interface Recommendation {
 export default function ResultsScreen() {
   const { state, reset } = useQuiz();
   const { t, lang } = useI18n();
+  const { user } = useAuth();
 
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,9 +28,23 @@ export default function ResultsScreen() {
   const [imageLoaded, setImageLoaded] = useState<Record<string, boolean>>({});
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [imageCredits, setImageCredits] = useState<Record<string, { name: string; link: string; source?: string }>>({});
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [showRefine, setShowRefine] = useState(false);
   const [refineFeedback, setRefineFeedback] = useState("");
   const [refining, setRefining] = useState(false);
+  const [allSwiped, setAllSwiped] = useState(false);
+
+  const fetchImages = (recs: Recommendation[]) => {
+    recs.forEach(async (rec) => {
+      try {
+        const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
+          body: { query: rec.imageQuery },
+        });
+        if (imgData?.imageUrl) setImageUrls((prev) => ({ ...prev, [rec.name]: imgData.imageUrl }));
+        if (imgData?.credit?.name) setImageCredits((prev) => ({ ...prev, [rec.name]: imgData.credit }));
+      } catch {}
+    });
+  };
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -51,22 +66,11 @@ export default function ResultsScreen() {
         if (fnError) throw new Error(fnError.message);
         if (data?.error) throw new Error(data.error);
 
-        setRecommendations(data.recommendations ?? []);
-
         const recs: Recommendation[] = data.recommendations ?? [];
-        recs.forEach(async (rec: Recommendation) => {
-          try {
-            const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
-              body: { query: rec.imageQuery },
-            });
-            if (imgData?.imageUrl) {
-              setImageUrls((prev) => ({ ...prev, [rec.name]: imgData.imageUrl }));
-            }
-            if (imgData?.credit?.name) {
-              setImageCredits((prev) => ({ ...prev, [rec.name]: imgData.credit }));
-            }
-          } catch {}
-        });
+        setRecommendations(recs);
+        setCurrentIndex(0);
+        setAllSwiped(false);
+        fetchImages(recs);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong");
       } finally {
@@ -77,8 +81,33 @@ export default function ResultsScreen() {
     fetchRecommendations();
   }, [state.craving, state.flavors, state.textures, state.dietary]);
 
-  const handleDismiss = (index: number) => {
-    setRecommendations((prev) => prev.filter((_, i) => i !== index));
+  const handleSwipeRight = async (rec: Recommendation) => {
+    if (user) {
+      await supabase.from("saved_recommendations").insert({
+        user_id: user.id,
+        name: rec.name,
+        description: rec.description,
+        cuisine: rec.cuisine,
+        image_query: rec.imageQuery,
+      });
+      toast.success(t("results.saved"));
+    } else {
+      toast(t("results.loginToSave"));
+    }
+    advance();
+  };
+
+  const handleSwipeLeft = () => {
+    advance();
+  };
+
+  const advance = () => {
+    const next = currentIndex + 1;
+    if (next >= recommendations.length) {
+      setAllSwiped(true);
+    } else {
+      setCurrentIndex(next);
+    }
   };
 
   const handleRefineSearch = async () => {
@@ -108,21 +137,14 @@ export default function ResultsScreen() {
 
       const recs: Recommendation[] = data.recommendations ?? [];
       setRecommendations(recs);
+      setCurrentIndex(0);
+      setAllSwiped(false);
       setImageLoaded({});
       setImageUrls({});
       setImageCredits({});
       setShowRefine(false);
       setRefineFeedback("");
-
-      recs.forEach(async (rec) => {
-        try {
-          const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
-            body: { query: rec.imageQuery },
-          });
-          if (imgData?.imageUrl) setImageUrls((prev) => ({ ...prev, [rec.name]: imgData.imageUrl }));
-          if (imgData?.credit?.name) setImageCredits((prev) => ({ ...prev, [rec.name]: imgData.credit }));
-        } catch {}
-      });
+      fetchImages(recs);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
@@ -130,13 +152,7 @@ export default function ResultsScreen() {
     }
   };
 
-  const handleHowToMake = (dishName: string) => {
-    window.open(`https://www.google.com/search?q=${encodeURIComponent(dishName + " recipe")}`, "_blank");
-  };
-
-  const handleWhereToBuy = (dishName: string) => {
-    window.open(`https://www.google.com/maps/search/${encodeURIComponent(dishName + " near me")}`, "_blank");
-  };
+  const visibleCards = recommendations.slice(currentIndex, currentIndex + 2);
 
   return (
     <motion.div
@@ -163,122 +179,28 @@ export default function ResultsScreen() {
           <AlertCircle className="w-10 h-10 text-destructive" />
           <p className="text-destructive text-sm text-center">{error}</p>
         </>
-      ) : (
+      ) : allSwiped ? (
         <>
           <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
-            {t("results.title")}
+            {t("results.allDone")}
           </h2>
-          <p className="text-muted-foreground text-xs text-center -mt-4 whitespace-pre-line">
-            {t("results.subtitle")}
+          <p className="text-muted-foreground text-sm text-center">
+            {t("results.allDoneSubtitle")}
           </p>
-          <div className="flex flex-col gap-4 w-full">
-            <AnimatePresence>
-              {recommendations.map((rec, i) => (
-                <motion.div
-                  key={rec.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, x: -100, height: 0, marginBottom: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
-                >
-                  <AspectRatio ratio={16 / 9} className="bg-muted relative">
-                    {!imageLoaded[rec.name] && (
-                      <Skeleton className="absolute inset-0 w-full h-full" />
-                    )}
-                    {imageUrls[rec.name] && (
-                      <img
-                        src={imageUrls[rec.name]}
-                        alt={rec.name}
-                        className={`w-full h-full object-cover transition-opacity duration-300 ${
-                          imageLoaded[rec.name] ? "opacity-100" : "opacity-0"
-                        }`}
-                        onLoad={() => setImageLoaded((prev) => ({ ...prev, [rec.name]: true }))}
-                      />
-                    )}
-                    {imageCredits[rec.name] && imageLoaded[rec.name] && imageCredits[rec.name].source !== "AI" && (
-                      <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-black/50 rounded-tl text-[10px] text-white/80">
-                        Photo by{" "}
-                        <a
-                          href={`${imageCredits[rec.name].link}${imageCredits[rec.name].source === "Unsplash" ? "?utm_source=your_app&utm_medium=referral" : ""}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        >
-                          {imageCredits[rec.name].name}
-                        </a>
-                        {imageCredits[rec.name].source === "Unsplash" && (
-                          <>
-                            {" / "}
-                            <a
-                              href="https://unsplash.com/?utm_source=your_app&utm_medium=referral"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="underline"
-                            >
-                              Unsplash
-                            </a>
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </AspectRatio>
-                  <div className="p-3">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-display font-semibold text-foreground text-base">
-                          {rec.name}
-                        </h3>
-                        <Badge variant="secondary" className="text-xs">
-                          {rec.cuisine}
-                        </Badge>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive"
-                        onClick={() => handleDismiss(i)}
-                      >
-                        <ThumbsDown className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                    <p className="text-muted-foreground text-sm mb-3">{rec.description}</p>
 
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-xs gap-1.5 flex-1"
-                        onClick={() => handleWhereToBuy(rec.name)}
-                      >
-                        <MapPin className="w-3.5 h-3.5" /> {t("results.whereToBuy")}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-xs gap-1.5 flex-1"
-                        onClick={() => handleHowToMake(rec.name)}
-                      >
-                        <ChefHat className="w-3.5 h-3.5" /> {t("results.howToMake")}
-                      </Button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        </>
-      )}
-      {!loading && !error && (
-        <div className="flex flex-col items-center gap-3 w-full mt-4">
           {!showRefine ? (
-            <Button
-              variant="outline"
-              onClick={() => setShowRefine(true)}
-              className="rounded-full gap-2"
-            >
-              <XCircle className="w-4 h-4" /> {t("results.dismiss")}
-            </Button>
+            <div className="flex flex-col items-center gap-3 w-full">
+              <Button
+                variant="outline"
+                onClick={() => setShowRefine(true)}
+                className="rounded-full gap-2"
+              >
+                <XCircle className="w-4 h-4" /> {t("results.dismiss")}
+              </Button>
+              <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground">
+                <RotateCcw className="w-4 h-4" /> {t("results.startOver")}
+              </Button>
+            </div>
           ) : (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -311,12 +233,64 @@ export default function ResultsScreen() {
                   {t("results.refineSearch")}
                 </Button>
               </div>
+              <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground w-full">
+                <RotateCcw className="w-4 h-4" /> {t("results.startOver")}
+              </Button>
             </motion.div>
           )}
-          <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground">
-            <RotateCcw className="w-4 h-4" /> {t("results.startOver")}
-          </Button>
-        </div>
+        </>
+      ) : (
+        <>
+          <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
+            {t("results.title")}
+          </h2>
+          <p className="text-muted-foreground text-xs text-center -mt-4 whitespace-pre-line">
+            {t("results.swipeHint")}
+          </p>
+
+          {/* Card stack */}
+          <div className="relative w-full" style={{ height: 420 }}>
+            <AnimatePresence>
+              {visibleCards.map((rec, i) => (
+                <SwipeCard
+                  key={rec.name + currentIndex + i}
+                  rec={rec}
+                  imageUrl={imageUrls[rec.name]}
+                  imageLoaded={!!imageLoaded[rec.name]}
+                  imageCredit={imageCredits[rec.name]}
+                  onImageLoad={() => setImageLoaded((prev) => ({ ...prev, [rec.name]: true }))}
+                  onSwipeLeft={handleSwipeLeft}
+                  onSwipeRight={() => handleSwipeRight(rec)}
+                  isTop={i === 0}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center gap-6 mt-2">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-14 w-14 rounded-full border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              onClick={handleSwipeLeft}
+            >
+              <X className="w-6 h-6" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-14 w-14 rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              onClick={() => handleSwipeRight(recommendations[currentIndex])}
+            >
+              <Heart className="w-6 h-6" />
+            </Button>
+          </div>
+
+          <p className="text-muted-foreground text-xs">
+            {currentIndex + 1} / {recommendations.length}
+          </p>
+        </>
       )}
     </motion.div>
   );
