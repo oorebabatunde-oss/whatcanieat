@@ -47,26 +47,28 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
   }
 }
 
-const FOOD_KEYWORDS = ["food", "dish", "meal", "recipe", "cuisine", "plate", "bowl", "cooking", "ingredient", "dessert", "soup", "salad", "bread", "meat", "vegetable", "fruit", "pastry", "cheese", "rice", "noodle", "pasta", "cake", "pie", "stew", "curry", "sandwich", "drink", "beverage", "cream", "sauce", "roast", "baked", "fried"];
-
-function looksLikeFood(photo: any): boolean {
+function isRelevantPhoto(photo: any, query: string): boolean {
   const text = [
     photo.alt_description || "",
     photo.description || "",
     ...(photo.tags?.map((t: any) => t.title || "") || []),
   ].join(" ").toLowerCase();
-  return FOOD_KEYWORDS.some((kw) => text.includes(kw));
+
+  // Extract meaningful words from the query (2+ chars)
+  const queryWords = query.toLowerCase().split(/\s+/).filter((w) => w.length >= 2);
+  // Photo must mention at least one query keyword
+  return queryWords.some((word) => text.includes(word));
 }
 
-async function searchUnsplash(query: string, accessKey: string) {
-  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=5&orientation=landscape&content_filter=high`;
+async function searchUnsplash(query: string, accessKey: string, originalQuery: string) {
+  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=8&orientation=landscape&content_filter=high`;
   const res = await fetch(url, {
     headers: { Authorization: `Client-ID ${accessKey}` },
   });
   if (!res.ok) return null;
   const data = await res.json();
   const results = data.results || [];
-  return results.find((r: any) => looksLikeFood(r)) || null;
+  return results.find((r: any) => isRelevantPhoto(r, originalQuery)) || null;
 }
 
 async function generateFoodImage(query: string, apiKey: string): Promise<string | null> {
@@ -186,14 +188,13 @@ serve(async (req) => {
     // 1. Try Unsplash first
     if (UNSPLASH_ACCESS_KEY) {
       const unsplashQueries = [
-        `${sanitizedQuery} food dish`,
-        `${sanitizedQuery} food`,
         sanitizedQuery,
+        `${sanitizedQuery} food`,
       ];
       for (const q of unsplashQueries) {
-        const photo = await searchUnsplash(q, UNSPLASH_ACCESS_KEY);
+        const photo = await searchUnsplash(q, UNSPLASH_ACCESS_KEY, sanitizedQuery);
         if (photo) {
-          console.log(`[${requestId}] unsplash-image: found via Unsplash`);
+          console.log(`[${requestId}] unsplash-image: found via Unsplash (query="${q}")`);
           return new Response(
             JSON.stringify({
               imageUrl: photo.urls?.regular || photo.urls?.small,
