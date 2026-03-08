@@ -1,11 +1,39 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+// --- Strict CORS ---
+const ALLOWED_ORIGINS = [
+  "https://whatcanieat.lovable.app",
+  "https://id-preview--505389c9-ce6f-4340-8722-492bcb6e5414.lovable.app",
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("Origin") || "";
+  const isAllowed = ALLOWED_ORIGINS.includes(origin) || origin.endsWith(".lovable.app");
+  return {
+    "Access-Control-Allow-Origin": isAllowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+}
+
+// --- Rate limiter ---
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 60;
+const RATE_WINDOW_MS = 60_000;
+
+function isRateLimited(key: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
 
 const FOOD_KEYWORDS = ["food", "dish", "meal", "recipe", "cuisine", "plate", "bowl", "cooking", "ingredient", "dessert", "soup", "salad", "bread", "meat", "vegetable", "fruit", "pastry", "cheese", "rice", "noodle", "pasta", "cake", "pie", "stew", "curry", "sandwich", "drink", "beverage", "cream", "sauce", "roast", "baked", "fried"];
 
@@ -59,12 +87,33 @@ async function generateFoodImage(query: string, apiKey: string): Promise<string 
 }
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const requestId = crypto.randomUUID();
+
   try {
-    // --- Auth check (soft — allow anon key but verify token is valid) ---
+    // --- Rate limiting ---
+    if (isRateLimited(clientIp)) {
+      console.warn(`[${requestId}] Rate limited: IP=${clientIp}`);
+      return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+      });
+    }
+
+    // --- Auth check ---
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
+      console.warn(`[${requestId}] Missing auth: IP=${clientIp}`);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -80,14 +129,51 @@ serve(async (req) => {
     const token = authHeader.replace("Bearer ", "");
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
     if (claimsError || !claimsData?.claims) {
+      console.warn(`[${requestId}] Invalid token: IP=${clientIp}`);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    const userId = claimsData.claims.sub as string;
+
+    // --- Role check ---
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+
+    const userRoles = (roles || []).map((r: any) => r.role);
+    if (!userRoles.some((r: string) => ["user", "admin"].includes(r))) {
+      console.warn(`[${requestId}] Forbidden: userId=${userId}`);
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Per-user rate limit
+    if (isRateLimited(`user:${userId}`)) {
+      console.warn(`[${requestId}] Rate limited user: userId=${userId}`);
+      return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+      });
+    }
+
     // --- Input validation ---
-    const { query } = await req.json();
+    let body: any;
+    try {
+      body = await req.json();
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { query } = body;
     if (!query || typeof query !== "string" || query.length > 200) {
       return new Response(JSON.stringify({ error: "Invalid query parameter" }), {
         status: 400,
@@ -95,23 +181,35 @@ serve(async (req) => {
       });
     }
 
+    // Sanitize query: strip control characters and limit to safe chars
+    const sanitizedQuery = query.replace(/[^\p{L}\p{N}\s.,'-]/gu, "").trim();
+    if (!sanitizedQuery) {
+      return new Response(JSON.stringify({ error: "Invalid query parameter" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    console.log(`[${requestId}] unsplash-image: userId=${userId} IP=${clientIp} query=${sanitizedQuery}`);
+
     const UNSPLASH_ACCESS_KEY = Deno.env.get("UNSPLASH_ACCESS_KEY");
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     // 1. Try Unsplash first
     if (UNSPLASH_ACCESS_KEY) {
       const unsplashQueries = [
-        `${query} food dish`,
-        `${query} food`,
-        query,
+        `${sanitizedQuery} food dish`,
+        `${sanitizedQuery} food`,
+        sanitizedQuery,
       ];
       for (const q of unsplashQueries) {
         const photo = await searchUnsplash(q, UNSPLASH_ACCESS_KEY);
         if (photo) {
+          console.log(`[${requestId}] unsplash-image: found via Unsplash`);
           return new Response(
             JSON.stringify({
               imageUrl: photo.urls?.regular || photo.urls?.small,
-              alt: photo.alt_description || query,
+              alt: photo.alt_description || sanitizedQuery,
               credit: { name: photo.user?.name, link: photo.user?.links?.html, source: "Unsplash" },
             }),
             { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -122,16 +220,17 @@ serve(async (req) => {
 
     // 2. Fallback: Wikipedia image
     try {
-      const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+      const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(sanitizedQuery)}`;
       const wikiRes = await fetch(wikiUrl, { headers: { "User-Agent": "FoodQuizApp/1.0" } });
       if (wikiRes.ok) {
         const wikiData = await wikiRes.json();
         const wikiImage = wikiData.thumbnail?.source || wikiData.originalimage?.source;
         if (wikiImage) {
+          console.log(`[${requestId}] unsplash-image: found via Wikipedia`);
           return new Response(
             JSON.stringify({
               imageUrl: wikiImage,
-              alt: wikiData.title || query,
+              alt: wikiData.title || sanitizedQuery,
               credit: { name: "Wikipedia", link: wikiData.content_urls?.desktop?.page || null, source: "Wikipedia" },
             }),
             { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -140,14 +239,15 @@ serve(async (req) => {
       }
     } catch { /* skip */ }
 
-    // 3. Fallback: AI-generated food image (last resort)
+    // 3. Fallback: AI-generated food image
     if (LOVABLE_API_KEY) {
-      const aiImage = await generateFoodImage(query, LOVABLE_API_KEY);
+      const aiImage = await generateFoodImage(sanitizedQuery, LOVABLE_API_KEY);
       if (aiImage) {
+        console.log(`[${requestId}] unsplash-image: generated via AI`);
         return new Response(
           JSON.stringify({
             imageUrl: aiImage,
-            alt: query,
+            alt: sanitizedQuery,
             credit: { name: "AI Generated", link: null, source: "AI" },
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -155,13 +255,13 @@ serve(async (req) => {
       }
     }
 
-    return new Response(JSON.stringify({ imageUrl: null, alt: query, credit: null }), {
+    return new Response(JSON.stringify({ imageUrl: null, alt: sanitizedQuery, credit: null }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    console.error("image search error:", e);
+    console.error(`[${requestId}] unsplash-image error:`, e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ error: "An unexpected error occurred" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
