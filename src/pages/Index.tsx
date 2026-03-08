@@ -90,14 +90,14 @@ const Index = () => {
         </motion.button>
       </div>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="text-xs text-muted-foreground mt-14 uppercase tracking-widest">
-        
-        No brands · No ads · Just food ideas
-      </motion.p>
+      
+
+
+
+
+
+
+      
     </div>);
 
 };
