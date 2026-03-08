@@ -62,8 +62,8 @@ export default function Saved() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative">
-      <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+    <div className="min-h-screen bg-background">
+      <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
         <LanguageSwitcher />
         <ThemeToggle />
       </div>

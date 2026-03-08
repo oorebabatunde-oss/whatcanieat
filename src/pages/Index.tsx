@@ -17,7 +17,7 @@ const Index = () => {
   const { user, signOut } = useAuth();
 
   const toolbar = (
-    <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+    <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
       {user && (
         <Link to="/saved">
           <Button variant="ghost" size="icon" className="text-muted-foreground">
@@ -44,7 +44,7 @@ const Index = () => {
   if (mode === "quiz") {
     return (
       <QuizProvider>
-        <div className="min-h-screen bg-background flex flex-col relative">
+        <div className="min-h-screen bg-background flex flex-col">
           {toolbar}
           <header className="pt-6 pb-2 px-4 text-center">
             <button onClick={() => setMode("welcome")} className="inline-block">
@@ -63,7 +63,7 @@ const Index = () => {
 
   if (mode === "scan") {
     return (
-      <div className="relative">
+      <div>
         {toolbar}
         <FridgeScanner onBack={() => setMode("welcome")} />
       </div>
@@ -71,9 +71,10 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-12 relative">
+    <div className="min-h-screen bg-background flex flex-col items-center px-4">
       {toolbar}
 
+      <div className="flex-1 flex flex-col items-center justify-center">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -110,6 +111,7 @@ const Index = () => {
           <span className="text-2xl">📱</span>
           <span className="text-sm font-semibold tracking-wide">{t("home.scanFridge")}</span>
         </motion.button>
+      </div>
       </div>
     </div>
   );
