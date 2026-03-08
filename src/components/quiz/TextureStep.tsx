@@ -46,9 +46,9 @@ export default function TextureStep() {
               transition={{ delay: i * 0.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => toggleTexture(tx.type)}
-              className={`rounded-lg px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
+              className={`rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 ${
                 selected
-                  ? "bg-primary text-primary-foreground shadow-lg scale-105"
+                  ? "bg-primary text-primary-foreground shadow-lg"
                   : "bg-card text-foreground border border-border hover:border-primary/30"
               }`}
             >
