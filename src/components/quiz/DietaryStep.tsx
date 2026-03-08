@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useQuiz, DietaryConstraint } from "./QuizContext";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export default function DietaryStep() {
@@ -77,7 +77,7 @@ export default function DietaryStep() {
         size="lg"
         className="w-full max-w-xs mt-4 rounded-lg font-semibold tracking-wide"
       >
-        {t("quiz.dietary.submit")} <Sparkles className="w-5 h-5 ml-1" />
+        {t("quiz.next")} <ArrowRight className="w-5 h-5 ml-1" />
       </Button>
     </motion.div>
   );
