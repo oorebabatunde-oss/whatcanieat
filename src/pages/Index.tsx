@@ -64,14 +64,14 @@ const Index = () => {
       </motion.div>
 
       {/* Action cards — horizontal */}
-      <div className="flex flex-col gap-4 items-center">
+      <div className="flex flex-col gap-4 w-full max-w-sm">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => setMode("quiz")}
-          className="flex-1 bg-[#80CFA9] text-foreground rounded-lg p-2 flex flex-row items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+          className="w-full bg-[#80CFA9] text-foreground rounded-lg px-4 py-2 flex flex-row items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
         >
           <span className="text-4xl">🍽️</span>
           <div className="text-left">
@@ -86,7 +86,7 @@ const Index = () => {
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => setMode("scan")}
-          className="flex-1 bg-[#80CFA9] text-foreground rounded-lg p-2 flex flex-row items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+          className="w-full bg-[#80CFA9] text-foreground rounded-lg px-4 py-2 flex flex-row items-center gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
         >
           <span className="text-4xl">🧊</span>
           <div className="text-left">
