@@ -691,6 +691,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "सहेजा गया!", "results.loginToSave": "सहेजने के लिए साइन इन करें",
     "results.swipeHint": "दाएं स्वाइप करें सहेजने के लिए, बाएं छोड़ने के लिए",
     "results.allDone": "बस इतना!", "results.allDoneSubtitle": "आपने सभी सिफारिशें देख लीं।",
+    "results.undo": "पूर्ववत करें",
     "results.viewSaved": "सहेजे गए व्यंजन देखें",
   },
   tr: {
