@@ -75,7 +75,7 @@ const Index = () => {
         >
           <span className="text-4xl">🍽️</span>
           <div className="text-left">
-            <span className="text-sm font-display font-bold block">What am I craving?</span>
+            <span className="text-sm font-display font-bold block">Find what I'm craving</span>
             <span className="text-xs opacity-80">Quick quiz</span>
           </div>
         </motion.button>
