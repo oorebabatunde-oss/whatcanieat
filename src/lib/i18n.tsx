@@ -733,6 +733,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Сохранено!", "results.loginToSave": "Войдите чтобы сохранить",
     "results.swipeHint": "Свайп вправо — сохранить, влево — пропустить",
     "results.allDone": "Это всё!", "results.allDoneSubtitle": "Вы просмотрели все рекомендации.",
+    "results.viewSaved": "Посмотреть сохранённые блюда",
   },
 };
 

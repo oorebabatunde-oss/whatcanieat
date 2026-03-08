@@ -197,6 +197,13 @@ export default function ResultsScreen() {
 
           {!showRefine ? (
             <div className="flex flex-col items-center gap-3 w-full">
+              {user && (
+                <Link to="/saved">
+                  <Button variant="default" className="rounded-full gap-2">
+                    <BookmarkCheck className="w-4 h-4" /> {t("results.viewSaved")}
+                  </Button>
+                </Link>
+              )}
               <Button
                 variant="outline"
                 onClick={() => setShowRefine(true)}
