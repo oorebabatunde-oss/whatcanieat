@@ -6,14 +6,27 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const FOOD_KEYWORDS = ["food", "dish", "meal", "recipe", "cuisine", "plate", "bowl", "cooking", "ingredient", "dessert", "soup", "salad", "bread", "meat", "vegetable", "fruit", "pastry", "cheese", "rice", "noodle", "pasta"];
+
+function looksLikeFood(photo: any): boolean {
+  const text = [
+    photo.alt_description || "",
+    photo.description || "",
+    ...(photo.tags?.map((t: any) => t.title || "") || []),
+  ].join(" ").toLowerCase();
+  return FOOD_KEYWORDS.some((kw) => text.includes(kw));
+}
+
 async function searchUnsplash(query: string, accessKey: string) {
-  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`;
+  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=5&orientation=landscape&content_filter=high`;
   const res = await fetch(url, {
     headers: { Authorization: `Client-ID ${accessKey}` },
   });
   if (!res.ok) return null;
   const data = await res.json();
-  return data.results?.[0] || null;
+  const results = data.results || [];
+  // Prefer a result that looks food-related
+  return results.find((r: any) => looksLikeFood(r)) || null;
 }
 
 async function searchWikipediaBySearch(query: string) {
