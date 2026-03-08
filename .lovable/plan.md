@@ -1,36 +1,27 @@
 
 
-## Launch Plan
+## Problem
 
-Based on the current state of the project — a food recommendation app with a quiz flow, fridge scanner, saved recipes, multi-language support, and authentication — here's a concise launch checklist:
+Google Fonts are loaded via CSS `@import` in `src/index.css`, which means the browser must first download the CSS bundle, then discover and fetch the font files. During this time, the browser falls back to the default serif font (Times New Roman), causing a visible flash of unstyled text (FOUT).
 
-### 1. Pre-Launch Checks
-- **Test core flows end-to-end**: Quiz → recommendations → save/dismiss → saved page
-- **Test auth flow**: Sign up, email verification, login, protected routes
-- **Test fridge scanner**: Camera permissions, image upload, ingredient detection
-- **Verify mobile responsiveness** across common screen sizes
-- **Check all 14 language translations** for completeness
+## Fix
 
-### 2. Publish the App
-- Click **Publish** (top-right of editor) to deploy the frontend
-- Backend (edge functions, database) is already live automatically
+1. **Add `<link rel="preconnect">` and `<link>` tags to `index.html`** to load the Google Fonts early (before CSS is parsed), and add `font-display: swap` handling.
 
-### 3. Custom Domain (Optional)
-- Go to **Settings → Domains → Connect Domain**
-- Add your domain and configure DNS (A record → `185.158.133.1`, plus TXT verification)
-- SSL is provisioned automatically once DNS propagates
+2. **Remove the `@import url(...)` line from `src/index.css`** since the fonts will already be loaded via the HTML `<link>`.
 
-### 4. Post-Launch
-- Remove the Lovable badge if desired (Settings → toggle "Hide Lovable Badge")
-- Monitor usage via the backend analytics
-- Gather user feedback and iterate
+3. **Add a fallback font-display strategy** in `index.css` body rule — set `font-family` with system sans-serif fallbacks so the flash shows a sans-serif instead of serif even if fonts haven't loaded yet.
 
-### What's Already in Place
-- Authentication system ✓
-- Database with saved recipes ✓
-- Edge functions for recommendations, scanning, images ✓
-- Multi-language support ✓
-- Theme toggle ✓
+### Changes
 
-No code changes needed — this is purely operational. Would you like to proceed with any specific step?
+**`index.html`** — Add before `</head>`:
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+```
+
+**`src/index.css`** — Remove line 1 (`@import url(...)`) since fonts are now loaded from HTML.
+
+This ensures fonts start downloading immediately on page load rather than waiting for CSS to be parsed, eliminating the serif flash.
 
