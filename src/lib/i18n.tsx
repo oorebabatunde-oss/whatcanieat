@@ -311,6 +311,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Gespeichert!", "results.loginToSave": "Melde dich an zum Speichern",
     "results.swipeHint": "Rechts wischen zum Speichern, links zum Überspringen",
     "results.allDone": "Das war's!", "results.allDoneSubtitle": "Du hast alle Empfehlungen gesehen.",
+    "results.viewSaved": "Gespeicherte Gerichte ansehen",
   },
   pt: {
     "app.title": "O que posso comer?",
