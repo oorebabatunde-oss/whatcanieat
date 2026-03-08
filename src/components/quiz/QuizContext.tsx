@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export type CravingType = "snack" | "meal" | "unknown";
 export type FlavorProfile = "salty" | "sweet" | "savoury" | "spicy" | "sour" | "umami" | "bitter" | "unknown";
-export type TextureProfile = "crunchy" | "chewy" | "mushy" | "gooey" | "crispy" | "creamy" | "smooth" | "unknown";
+export type TextureProfile = "crunchy" | "chewy" | "mushy" | "gooey" | "crispy" | "creamy" | "smooth" | "soupy" | "unknown";
 export type DietaryConstraint = "vegetarian" | "vegan" | "gluten-free" | "dairy-free" | "nut-free" | "halal" | "kosher" | "none";
 
 interface QuizState {

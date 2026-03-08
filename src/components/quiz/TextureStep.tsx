@@ -11,6 +11,7 @@ const textures: { type: TextureProfile; label: string; emoji: string }[] = [
   { type: "crispy", label: "Crispy", emoji: "🥓" },
   { type: "creamy", label: "Creamy", emoji: "🍦" },
   { type: "smooth", label: "Smooth", emoji: "🍫" },
+  { type: "soupy", label: "Soupy", emoji: "🍜" },
 ];
 
 export default function TextureStep() {
