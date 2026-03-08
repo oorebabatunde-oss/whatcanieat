@@ -767,7 +767,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "Perfect eten zoeken...", "results.loading.subtitle": "Aanbevelingen zoeken...",
     "results.title": "Dit kun je eten!", "results.subtitle": "AI-gegenereerde aanbevelingen.\nAfbeeldingen zijn mogelijk niet accuraat.",
     "results.whereToBuy": "Waar kopen", "results.howToMake": "Hoe maken",
-    "results.dismiss": "Wil ik niet", "results.refinePlaceholder": "Vertel meer",
+    "results.dismiss": "Mijn trek verfijnen", "results.refinePlaceholder": "Vertel meer",
     "results.cancel": "Annuleren", "results.refineSearch": "Zoekopdracht Verfijnen", "results.startOver": "Opnieuw Beginnen",
     "scan.title": "Scan je koelkast", "scan.subtitle": "Maak een foto of upload een afbeelding",
     "scan.takePhoto": "Foto Maken", "scan.uploadImage": "Afbeelding Uploaden", "scan.back": "Terug",
