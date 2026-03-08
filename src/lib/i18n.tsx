@@ -355,6 +355,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Salvo!", "results.loginToSave": "Entre para salvar",
     "results.swipeHint": "Deslize para a direita para salvar, esquerda para pular",
     "results.allDone": "É isso!", "results.allDoneSubtitle": "Você viu todas as recomendações.",
+    "results.viewSaved": "Ver pratos salvos",
   },
   ar: {
     "app.title": "ماذا يمكنني أن آكل؟",
