@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { QuizProvider } from "@/components/quiz/QuizContext";
 import QuizFlow from "@/components/quiz/QuizFlow";
+import FridgeScanner from "@/components/scan/FridgeScanner";
 import { useState } from "react";
 
 const Index = () => {
@@ -27,22 +28,7 @@ const Index = () => {
   }
 
   if (mode === "scan") {
-    return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
-        <h1 className="text-xl font-display text-primary mb-6">What Can I Eat?</h1>
-        <div className="bg-card rounded-lg border border-border p-8 text-center max-w-sm w-full shadow-sm">
-          <span className="text-3xl block mb-4">📷</span>
-          <h2 className="text-xl font-display mb-2 text-foreground">Fridge Scanner</h2>
-          <p className="text-muted-foreground text-sm mb-6">
-            Take a photo of your fridge or cupboard and get recipe ideas based on what you have!
-          </p>
-          <p className="text-xs text-muted-foreground uppercase tracking-wide">Coming soon</p>
-        </div>
-        <Button variant="ghost" onClick={() => setMode("welcome")} className="mt-6 text-muted-foreground">
-          ← Back
-        </Button>
-      </div>);
-
+    return <FridgeScanner onBack={() => setMode("welcome")} />;
   }
 
   return (
