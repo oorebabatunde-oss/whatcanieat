@@ -140,7 +140,7 @@ export default function ResultsScreen() {
                   transition={{ delay: i * 0.1 }}
                   className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
                 >
-                  <AspectRatio ratio={16 / 9} className="bg-muted">
+                  <AspectRatio ratio={16 / 9} className="bg-muted relative">
                     {!imageLoaded[i] && (
                       <Skeleton className="absolute inset-0 w-full h-full" />
                     )}
@@ -153,6 +153,28 @@ export default function ResultsScreen() {
                         }`}
                         onLoad={() => setImageLoaded((prev) => ({ ...prev, [i]: true }))}
                       />
+                    )}
+                    {imageCredits[i] && imageLoaded[i] && (
+                      <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-black/50 rounded-tl text-[10px] text-white/80">
+                        Photo by{" "}
+                        <a
+                          href={`${imageCredits[i].link}?utm_source=your_app&utm_medium=referral`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline"
+                        >
+                          {imageCredits[i].name}
+                        </a>
+                        {" / "}
+                        <a
+                          href="https://unsplash.com/?utm_source=your_app&utm_medium=referral"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline"
+                        >
+                          Unsplash
+                        </a>
+                      </div>
                     )}
                   </AspectRatio>
                   <div className="p-3">
