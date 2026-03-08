@@ -115,20 +115,24 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization");
     if (authHeader?.startsWith("Bearer ")) {
       try {
-        const supabase = createClient(
-          Deno.env.get("SUPABASE_URL")!,
-          Deno.env.get("SUPABASE_ANON_KEY")!,
-          { global: { headers: { Authorization: authHeader } } }
-        );
         const token = authHeader.replace("Bearer ", "");
-        const { data: claimsData } = await supabase.auth.getClaims(token);
-        if (claimsData?.claims?.sub) {
-          userId = claimsData.claims.sub as string;
-          if (isRateLimited(`user:${userId}`)) {
-            return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
-              status: 429,
-              headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
-            });
+        // Skip getClaims if this is the anon key (role === "anon")
+        const payload = decodeJwtPayload(token);
+        if (payload && payload.role !== "anon") {
+          const supabase = createClient(
+            Deno.env.get("SUPABASE_URL")!,
+            Deno.env.get("SUPABASE_ANON_KEY")!,
+            { global: { headers: { Authorization: authHeader } } }
+          );
+          const { data: claimsData } = await supabase.auth.getClaims(token);
+          if (claimsData?.claims?.sub) {
+            userId = claimsData.claims.sub as string;
+            if (isRateLimited(`user:${userId}`)) {
+              return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+                status: 429,
+                headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+              });
+            }
           }
         }
       } catch { /* proceed as anonymous */ }
