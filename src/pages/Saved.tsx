@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Trash2, MapPin, ChefHat, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Trash2, MapPin, ChefHat, Loader2, LogOut } from "lucide-react";
+import { Link, Navigate } from "react-router-dom";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -22,7 +22,7 @@ interface SavedRec {
 }
 
 export default function Saved() {
-  const { user } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const { t } = useI18n();
   const [items, setItems] = useState<SavedRec[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,11 +61,25 @@ export default function Saved() {
     setItems((prev) => prev.filter((i) => i.id !== id));
   };
 
+  // Auth guard: redirect to /auth if not logged in
+  if (!authLoading && !user) {
+    return <Navigate to="/auth" replace />;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
+        {user && (
+          <span className="text-xs text-muted-foreground truncate max-w-[140px]">
+            {user.email}
+          </span>
+        )}
+        <div className="flex-1" />
         <LanguageSwitcher />
         <ThemeToggle />
+        <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={signOut}>
+          <LogOut className="w-5 h-5" />
+        </Button>
       </div>
 
       <div className="max-w-sm mx-auto px-4 py-6">
@@ -80,7 +94,7 @@ export default function Saved() {
           </h1>
         </div>
 
-        {loading ? (
+        {loading || authLoading ? (
           <div className="flex justify-center py-12">
             <Loader2 className="w-8 h-8 text-primary animate-spin" />
           </div>
