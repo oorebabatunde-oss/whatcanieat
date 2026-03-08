@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Playpen Sans", "cursive"],
+        display: ["DM Serif Display", "serif"],
         body: ["Manrope", "sans-serif"],
       },
       colors: {
