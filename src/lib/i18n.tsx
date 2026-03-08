@@ -526,6 +526,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "已保存！", "results.loginToSave": "登录后可保存",
     "results.swipeHint": "右滑保存，左滑跳过",
     "results.allDone": "全部看完了！", "results.allDoneSubtitle": "你已看完所有推荐。",
+    "results.undo": "撤销",
     "results.viewSaved": "查看已保存的菜品",
   },
   ja: {
