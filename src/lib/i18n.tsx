@@ -533,6 +533,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "ラベルや商品全体を写す",
     "scan.tryAgain": "別の写真を試す",
     "theme.toggle": "テーマ切替",
+    "auth.signInCta": "おすすめを保存するにはログイン",
     "auth.title": "ログイン", "auth.subtitle": "メールアドレスを入力するとマジックリンクを送ります",
     "auth.emailLabel": "メール", "auth.emailPlaceholder": "you@example.com",
     "auth.sendLink": "マジックリンクを送信", "auth.checkEmail": "メールを確認！",
