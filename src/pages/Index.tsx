@@ -13,7 +13,7 @@ const Index = () => {
         <div className="min-h-screen bg-background flex flex-col">
           <header className="pt-6 pb-2 px-4 text-center">
             <button onClick={() => setMode("welcome")} className="inline-block">
-              <h1 className="text-xl font-display text-primary">
+              <h1 className="text-xl font-display font-bold text-primary">
                 What Can I Eat?
               </h1>
             </button>
