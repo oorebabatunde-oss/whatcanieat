@@ -9,7 +9,7 @@
     --background: 180 10% 96%;
     --foreground: 170 16% 25%;
 
-    --card: 270 30% 92%;
+    --card: 160 14% 96%;
     --card-foreground: 170 16% 25%;
 
     --popover: 0 0% 100%;
@@ -30,8 +30,8 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 270 20% 85%;
-    --input: 270 20% 85%;
+    --border: 160 10% 80%;
+    --input: 160 10% 80%;
     --ring: 170 16% 35%;
 
     --radius: 0.75rem;
