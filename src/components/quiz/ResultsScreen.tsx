@@ -59,7 +59,7 @@ export default function ResultsScreen() {
   }, [state.craving, state.flavors, state.textures, state.dietary]);
 
   const getImageUrl = (query: string) =>
-    `https://source.unsplash.com/400x300/?${encodeURIComponent(query)},food`;
+    `https://loremflickr.com/400/225/${encodeURIComponent(query)},food/all`;
 
   const handleDismiss = (index: number) => {
     if (dismissing[index]) {
