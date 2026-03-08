@@ -74,7 +74,7 @@ export default function TextureStep() {
         size="lg"
         className="w-full max-w-xs mt-4 rounded-lg font-semibold tracking-wide"
       >
-        Show me what I can eat <ArrowRight className="w-5 h-5 ml-1" />
+        Next <ArrowRight className="w-5 h-5 ml-1" />
       </Button>
     </motion.div>
   );
