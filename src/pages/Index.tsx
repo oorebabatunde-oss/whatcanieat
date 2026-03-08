@@ -17,7 +17,7 @@ const Index = () => {
   const { user, signOut } = useAuth();
 
   const toolbar = (
-    <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+    <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
       {user && (
         <Link to="/saved">
           <Button variant="ghost" size="icon" className="text-muted-foreground">
