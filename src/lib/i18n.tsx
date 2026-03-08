@@ -783,6 +783,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "Leg labels of hele artikelen duidelijk vast",
     "scan.tryAgain": "Probeer een Andere Foto",
     "theme.toggle": "Thema wisselen",
+    "auth.signInCta": "Log in om aanbevelingen op te slaan",
     "auth.title": "Inloggen", "auth.subtitle": "Voer je e-mail in en we sturen een magische link",
     "auth.emailLabel": "E-mail", "auth.emailPlaceholder": "jij@voorbeeld.nl",
     "auth.sendLink": "Magische link versturen", "auth.checkEmail": "Check je e-mail!",
