@@ -28,7 +28,7 @@ export default function CravingStep() {
       <p className="text-muted-foreground text-center text-sm">
         Pick one to get started
       </p>
-      <div className="flex flex-row gap-3 w-full">
+      <div className="flex flex-row gap-3 w-full bg-[#F4F4F6] rounded-lg p-3">
         {options.map((opt, i) => (
           <motion.button
             key={opt.type}
