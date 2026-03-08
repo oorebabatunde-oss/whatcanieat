@@ -3,12 +3,14 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 export type CravingType = "snack" | "meal" | "unknown";
 export type FlavorProfile = "salty" | "sweet" | "savoury" | "spicy" | "sour" | "umami" | "bitter" | "unknown";
 export type TextureProfile = "crunchy" | "chewy" | "mushy" | "gooey" | "crispy" | "creamy" | "smooth" | "unknown";
+export type DietaryConstraint = "vegetarian" | "vegan" | "gluten-free" | "dairy-free" | "nut-free" | "halal" | "kosher" | "none";
 
 interface QuizState {
   step: number;
   craving: CravingType | null;
   flavors: FlavorProfile[];
   textures: TextureProfile[];
+  dietary: DietaryConstraint[];
 }
 
 interface QuizContextType {
@@ -16,6 +18,7 @@ interface QuizContextType {
   setCraving: (c: CravingType) => void;
   toggleFlavor: (f: FlavorProfile) => void;
   toggleTexture: (t: TextureProfile) => void;
+  toggleDietary: (d: DietaryConstraint) => void;
   nextStep: () => void;
   prevStep: () => void;
   reset: () => void;
@@ -23,7 +26,7 @@ interface QuizContextType {
 
 const QuizContext = createContext<QuizContextType | null>(null);
 
-const initialState: QuizState = { step: 0, craving: null, flavors: [], textures: [] };
+const initialState: QuizState = { step: 0, craving: null, flavors: [], textures: [], dietary: [] };
 
 export function QuizProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<QuizState>(initialState);
@@ -50,12 +53,22 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       };
     });
 
+  const toggleDietary = (d: DietaryConstraint) =>
+    setState((s) => {
+      if (d === "none") return { ...s, dietary: ["none"] };
+      const without = s.dietary.filter((x) => x !== "none");
+      return {
+        ...s,
+        dietary: without.includes(d) ? without.filter((x) => x !== d) : [...without, d],
+      };
+    });
+
   const nextStep = () => setState((s) => ({ ...s, step: s.step + 1 }));
   const prevStep = () => setState((s) => ({ ...s, step: Math.max(0, s.step - 1) }));
   const reset = () => setState(initialState);
 
   return (
-    <QuizContext.Provider value={{ state, setCraving, toggleFlavor, toggleTexture, nextStep, prevStep, reset }}>
+    <QuizContext.Provider value={{ state, setCraving, toggleFlavor, toggleTexture, toggleDietary, nextStep, prevStep, reset }}>
       {children}
     </QuizContext.Provider>
   );
