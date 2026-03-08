@@ -1,6 +1,7 @@
 import { useQuiz } from "./QuizContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown } from "lucide-react";
+import { Loader2, RotateCcw, AlertCircle, MapPin, ChefHat, ThumbsDown, XCircle } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -75,8 +76,9 @@ export default function ResultsScreen() {
 
     fetchRecommendations();
   }, [state.craving, state.flavors, state.textures, state.dietary]);
-
-
+  const [refineOpen, setRefineOpen] = useState(false);
+  const [refineFeedback, setRefineFeedback] = useState("");
+  const [refining, setRefining] = useState(false);
   const handleDismiss = (index: number) => {
     setRecommendations((prev) => prev.filter((_, i) => i !== index));
   };
@@ -197,7 +199,9 @@ export default function ResultsScreen() {
                       </Button>
                     </div>
                     <p className="text-muted-foreground text-sm mb-3">{rec.description}</p>
-
+  const [refineOpen, setRefineOpen] = useState(false);
+  const [refineFeedback, setRefineFeedback] = useState("");
+  const [refining, setRefining] = useState(false);
 
 
 
