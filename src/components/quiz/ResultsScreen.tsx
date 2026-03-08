@@ -49,6 +49,21 @@ export default function ResultsScreen() {
         if (data?.error) throw new Error(data.error);
 
         setRecommendations(data.recommendations ?? []);
+
+        // Fetch Unsplash images for each recommendation
+        const recs: Recommendation[] = data.recommendations ?? [];
+        recs.forEach(async (rec: Recommendation, i: number) => {
+          try {
+            const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
+              body: { query: rec.imageQuery },
+            });
+            if (imgData?.imageUrl) {
+              setImageUrls((prev) => ({ ...prev, [i]: imgData.imageUrl }));
+            }
+          } catch {
+            // fallback: no image
+          }
+        });
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong");
       } finally {
