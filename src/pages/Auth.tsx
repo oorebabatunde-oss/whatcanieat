@@ -44,7 +44,7 @@ export default function Auth() {
     const { error } = await supabase.auth.verifyOtp({
       email,
       token: otpCode,
-      type: "magiclink",
+      type: "email",
     });
     if (error) {
       setError(error.message);
@@ -107,6 +107,13 @@ export default function Auth() {
                 <p className="text-muted-foreground text-sm">
                   {t("auth.otpInstruction")}
                 </p>
+                <button
+                  type="button"
+                  onClick={() => { setSent(false); setOtpCode(""); setError(null); }}
+                  className="text-primary text-sm underline underline-offset-2 hover:opacity-80"
+                >
+                  {email} — {t("auth.changeEmail")}
+                </button>
               </div>
 
               <div className="flex flex-col items-center gap-4">
