@@ -69,12 +69,12 @@ export default function Saved() {
   return (
     <div className="min-h-screen bg-background">
       <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
+        <div className="flex-1" />
         {user && (
           <span className="text-xs text-muted-foreground truncate max-w-[140px]">
             {user.email}
           </span>
         )}
-        <div className="flex-1" />
         <LanguageSwitcher />
         <ThemeToggle />
         <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={signOut}>

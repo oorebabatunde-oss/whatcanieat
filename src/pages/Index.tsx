@@ -134,7 +134,7 @@ const Index = () => {
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => changeMode("scan")}
-          className="bg-primary text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg transition-all hover:scale-[1.01]"
+          className="bg-primary text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg"
         >
           <span className="text-2xl">📱</span>
           <span className="text-sm font-semibold tracking-wide">{t("home.scanFridge")}</span>

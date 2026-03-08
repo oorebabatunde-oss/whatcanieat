@@ -78,7 +78,7 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="flex-1 flex flex-col">
       <header className="pt-6 pb-2 px-4 text-center">
         <button onClick={onBack} className="inline-block">
           <h1 className="text-xl font-display font-bold text-primary">{t("app.title")}</h1>
