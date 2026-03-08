@@ -139,7 +139,7 @@ export default function ResultsScreen() {
   };
 
   const handleWhereToBuy = (dishName: string) => {
-    navigate(`/where-to-buy?dish=${encodeURIComponent(dishName)}`);
+    window.open(`https://www.google.com/maps/search/${encodeURIComponent(dishName + " near me")}`, "_blank");
   };
 
   return (
