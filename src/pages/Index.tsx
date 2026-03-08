@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { QuizProvider } from "@/components/quiz/QuizContext";
 import QuizFlow from "@/components/quiz/QuizFlow";
+import FridgeScanner from "@/components/scan/FridgeScanner";
 import { useState } from "react";
 
 const Index = () => {
