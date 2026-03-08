@@ -94,7 +94,12 @@ export default function ResultsScreen() {
       });
       toast.success(t("results.saved"));
     } else {
-      toast(t("results.loginToSave"));
+      toast(t("results.loginToSave"), {
+        action: {
+          label: t("auth.title"),
+          onClick: () => navigate("/auth"),
+        },
+      });
     }
     advance();
   };
