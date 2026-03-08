@@ -175,6 +175,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.swipeHint": "Desliza derecha para guardar, izquierda para saltar",
     "results.allDone": "¡Eso es todo!",
     "results.allDoneSubtitle": "Has visto todas las recomendaciones.",
+    "results.viewSaved": "Ver platos guardados",
   },
   fr: {
     "app.title": "Qu'est-ce que je mange ?",
