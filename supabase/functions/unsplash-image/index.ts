@@ -6,7 +6,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const FOOD_KEYWORDS = ["food", "dish", "meal", "recipe", "cuisine", "plate", "bowl", "cooking", "ingredient", "dessert", "soup", "salad", "bread", "meat", "vegetable", "fruit", "pastry", "cheese", "rice", "noodle", "pasta"];
+const FOOD_KEYWORDS = ["food", "dish", "meal", "recipe", "cuisine", "plate", "bowl", "cooking", "ingredient", "dessert", "soup", "salad", "bread", "meat", "vegetable", "fruit", "pastry", "cheese", "rice", "noodle", "pasta", "cake", "pie", "stew", "curry", "sandwich", "drink", "beverage", "cream", "sauce", "roast", "baked", "fried"];
 
 function looksLikeFood(photo: any): boolean {
   const text = [
@@ -25,37 +25,33 @@ async function searchUnsplash(query: string, accessKey: string) {
   if (!res.ok) return null;
   const data = await res.json();
   const results = data.results || [];
-  // Prefer a result that looks food-related
   return results.find((r: any) => looksLikeFood(r)) || null;
 }
 
-async function searchWikipediaBySearch(query: string) {
+async function generateFoodImage(query: string, apiKey: string): Promise<string | null> {
   try {
-    const searchUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query)}&limit=5&namespace=0&format=json`;
-    const searchRes = await fetch(searchUrl);
-    if (!searchRes.ok) return null;
-    const searchData = await searchRes.json();
-    const titles: string[] = searchData[1] || [];
-    if (titles.length === 0) return null;
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash-image",
+        messages: [
+          {
+            role: "user",
+            content: `Generate a beautiful, appetizing food photography image of "${query}". The dish should be plated nicely on a clean background, shot from a slightly elevated angle with warm, natural lighting. Make it look like a professional food magazine photo.`,
+          },
+        ],
+        modalities: ["image", "text"],
+      }),
+    });
 
-    for (const title of titles) {
-      const imgUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=800&redirects=1`;
-      const imgRes = await fetch(imgUrl);
-      if (!imgRes.ok) continue;
-      const imgData = await imgRes.json();
-      const pages = imgData.query?.pages;
-      if (!pages) continue;
-      for (const page of Object.values(pages) as any[]) {
-        if (page.thumbnail?.source) {
-          return {
-            url: page.thumbnail.source,
-            title: page.title || title,
-            link: `https://en.wikipedia.org/wiki/${encodeURIComponent(page.title || title)}`,
-          };
-        }
-      }
-    }
-    return null;
+    if (!response.ok) return null;
+    const data = await response.json();
+    const imageUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+    return imageUrl || null;
   } catch {
     return null;
   }
@@ -69,13 +65,14 @@ serve(async (req) => {
     if (!query) throw new Error("Missing query parameter");
 
     const UNSPLASH_ACCESS_KEY = Deno.env.get("UNSPLASH_ACCESS_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     // 1. Try Unsplash first
     if (UNSPLASH_ACCESS_KEY) {
       const unsplashQueries = [
+        `${query} food dish`,
         `${query} food`,
         query,
-        `${query.split(" ").slice(0, 2).join(" ")} dish`,
       ];
       for (const q of unsplashQueries) {
         const photo = await searchUnsplash(q, UNSPLASH_ACCESS_KEY);
@@ -92,22 +89,15 @@ serve(async (req) => {
       }
     }
 
-    // 2. Fallback to Wikipedia opensearch
-    const wikiQueries = [
-      query,
-      query.replace(/with|and|on|in/gi, " ").trim(),
-      query.split(" ").slice(0, 2).join(" "),
-      query.split(" ")[0],
-    ];
-    for (const q of wikiQueries) {
-      if (!q.trim()) continue;
-      const result = await searchWikipediaBySearch(q);
-      if (result) {
+    // 2. Fallback: AI-generated food image
+    if (LOVABLE_API_KEY) {
+      const aiImage = await generateFoodImage(query, LOVABLE_API_KEY);
+      if (aiImage) {
         return new Response(
           JSON.stringify({
-            imageUrl: result.url,
+            imageUrl: aiImage,
             alt: query,
-            credit: { name: "Wikipedia", link: result.link, source: "Wikipedia" },
+            credit: { name: "AI Generated", link: null, source: "AI" },
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
