@@ -202,7 +202,7 @@ export default function ResultsScreen() {
                         onLoad={() => setImageLoaded((prev) => ({ ...prev, [rec.name]: true }))}
                       />
                     )}
-                    {imageCredits[rec.name] && imageLoaded[rec.name] && (
+                    {imageCredits[rec.name] && imageLoaded[rec.name] && imageCredits[rec.name].source !== "AI" && (
                       <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-black/50 rounded-tl text-[10px] text-white/80">
                         Photo by{" "}
                         <a
@@ -226,7 +226,6 @@ export default function ResultsScreen() {
                             </a>
                           </>
                         )}
-                        {imageCredits[rec.name].source === "Wikipedia" && " / Wikipedia"}
                       </div>
                     )}
                   </AspectRatio>
