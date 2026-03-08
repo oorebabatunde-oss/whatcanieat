@@ -40,7 +40,7 @@ export default function CravingStep() {
             transition={{ delay: i * 0.1 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => handleSelect(opt.type)}
-            className={`flex-1 bg-primary text-primary-foreground rounded-lg p-4 flex flex-col items-center gap-2 shadow-md hover:shadow-lg transition-all ${
+            className={`flex-1 bg-primary text-primary-foreground rounded-lg p-4 flex flex-col items-center gap-2 shadow-md hover:shadow-lg ${
               state.craving === opt.type ? "ring-2 ring-foreground/20" : ""
             }`}
           >

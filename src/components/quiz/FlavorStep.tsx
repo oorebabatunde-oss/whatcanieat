@@ -41,13 +41,13 @@ export default function FlavorStep() {
             <motion.button
               key={f.type}
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              animate={{ opacity: 1, scale: selected ? 1.05 : 1 }}
               transition={{ delay: i * 0.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => toggleFlavor(f.type)}
-              className={`rounded-lg px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
+              className={`rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 ${
                 selected
-                  ? `${f.hue} text-white shadow-lg scale-105`
+                  ? `${f.hue} text-white shadow-lg`
                   : "bg-card text-foreground border border-border hover:border-primary/30"
               }`}
             >
@@ -62,7 +62,7 @@ export default function FlavorStep() {
           transition={{ delay: 0.4 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => toggleFlavor("unknown")}
-          className={`rounded-lg px-5 py-3 text-sm font-semibold transition-all flex items-center gap-2 ${
+          className={`rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 ${
             isUnknown
               ? "bg-[hsl(var(--mystery))] text-[hsl(var(--mystery-foreground))] shadow-lg"
               : "bg-card text-foreground border border-border hover:border-accent/30"
