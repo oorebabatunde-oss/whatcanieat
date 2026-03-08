@@ -188,14 +188,13 @@ serve(async (req) => {
     // 1. Try Unsplash first
     if (UNSPLASH_ACCESS_KEY) {
       const unsplashQueries = [
-        `${sanitizedQuery} food dish`,
-        `${sanitizedQuery} food`,
         sanitizedQuery,
+        `${sanitizedQuery} food`,
       ];
       for (const q of unsplashQueries) {
-        const photo = await searchUnsplash(q, UNSPLASH_ACCESS_KEY);
+        const photo = await searchUnsplash(q, UNSPLASH_ACCESS_KEY, sanitizedQuery);
         if (photo) {
-          console.log(`[${requestId}] unsplash-image: found via Unsplash`);
+          console.log(`[${requestId}] unsplash-image: found via Unsplash (query="${q}")`);
           return new Response(
             JSON.stringify({
               imageUrl: photo.urls?.regular || photo.urls?.small,
