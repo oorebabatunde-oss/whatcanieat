@@ -801,6 +801,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Salvato!", "results.loginToSave": "Accedi per salvare",
     "results.swipeHint": "Scorri a destra per salvare, a sinistra per saltare",
     "results.allDone": "È tutto!", "results.allDoneSubtitle": "Hai visto tutte le raccomandazioni.",
+    "results.undo": "Annulla",
     "results.viewSaved": "Vedi piatti salvati",
   },
   nl: {
