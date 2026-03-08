@@ -196,41 +196,8 @@ export default function ResultsScreen() {
                     </div>
                     <p className="text-muted-foreground text-sm mb-3">{rec.description}</p>
 
-                    <AnimatePresence>
-                      {dismissing[i] && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mb-3 overflow-hidden"
-                        >
-                          <Textarea
-                            placeholder="Tell us why (optional)"
-                            value={feedback[i] || ""}
-                            onChange={(e) => setFeedback((prev) => ({ ...prev, [i]: e.target.value }))}
-                            className="text-sm min-h-[60px] mb-2"
-                          />
-                          <div className="flex gap-2">
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="text-xs"
-                              onClick={() => handleDismiss(i)}
-                            >
-                              Remove
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-xs"
-                              onClick={() => setDismissing((prev) => { const n = { ...prev }; delete n[i]; return n; })}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+
+
 
                     <div className="flex gap-2">
                       <Button
