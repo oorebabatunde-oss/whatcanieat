@@ -64,7 +64,7 @@ const Index = () => {
       </motion.div>
 
       {/* Action cards — horizontal */}
-      <div className="flex flex-col gap-4 w-full max-w-sm">
+      <div className="flex flex-col gap-4 items-center">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
