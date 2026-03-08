@@ -41,7 +41,7 @@ export default function FlavorStep() {
             <motion.button
               key={f.type}
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              animate={{ opacity: 1, scale: selected ? 1.05 : 1 }}
               transition={{ delay: i * 0.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => toggleFlavor(f.type)}
@@ -50,7 +50,6 @@ export default function FlavorStep() {
                   ? `${f.hue} text-white shadow-lg`
                   : "bg-card text-foreground border border-border hover:border-primary/30"
               }`}
-              animate={{ opacity: 1, scale: selected ? 1.05 : 1 }}
             >
               <span>{f.emoji}</span>
               {f.label}
