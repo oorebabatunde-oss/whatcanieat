@@ -257,6 +257,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Sauvegardé !", "results.loginToSave": "Connectez-vous pour sauvegarder",
     "results.swipeHint": "Glissez à droite pour sauvegarder, à gauche pour passer",
     "results.allDone": "C'est tout !", "results.allDoneSubtitle": "Vous avez vu toutes les recommandations.",
+    "results.viewSaved": "Voir les plats sauvegardés",
   },
   de: {
     "app.title": "Was kann ich essen?",
