@@ -88,6 +88,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.swipeHint": "Swipe right to save, left to skip",
     "results.allDone": "That's all!",
     "results.allDoneSubtitle": "You've seen all recommendations. Refine your search or start over.",
+    "results.viewSaved": "View Saved Dishes",
   },
   es: {
     "app.title": "¿Qué puedo comer?",
