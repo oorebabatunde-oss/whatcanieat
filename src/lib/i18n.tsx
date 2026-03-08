@@ -856,6 +856,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.saved": "Opgeslagen!", "results.loginToSave": "Log in om op te slaan",
     "results.swipeHint": "Swipe rechts om op te slaan, links om over te slaan",
     "results.allDone": "Dat was het!", "results.allDoneSubtitle": "Je hebt alle aanbevelingen gezien.",
+    "results.undo": "Ongedaan maken",
     "results.viewSaved": "Opgeslagen gerechten bekijken",
   },
   ru: {
