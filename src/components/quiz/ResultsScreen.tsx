@@ -20,7 +20,7 @@ interface Recommendation {
 
 export default function ResultsScreen() {
   const { state, reset } = useQuiz();
-  const navigate = useNavigate();
+  
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
