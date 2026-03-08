@@ -263,7 +263,7 @@ export default function ResultsScreen() {
           </p>
 
           {/* Card stack */}
-          <div className="relative w-full min-h-[420px]">
+          <div className="relative w-full overflow-hidden" style={{ minHeight: 420 }}>
             <AnimatePresence>
               {visibleCards.map((rec, i) => (
                 <SwipeCard
