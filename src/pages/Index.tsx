@@ -83,7 +83,7 @@ const Index = () => {
     return (
       <div>
         {toolbar}
-        <FridgeScanner onBack={() => setMode("welcome")} />
+        <FridgeScanner onBack={goWelcome} />
       </div>
     );
   }
