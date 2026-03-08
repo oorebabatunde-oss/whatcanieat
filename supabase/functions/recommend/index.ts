@@ -39,6 +39,18 @@ function isRateLimited(key: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
+// Decode JWT payload without verification (just to check role claim)
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
 // --- Input validation ---
 const VALID_FLAVORS = ["sweet", "salty", "sour", "bitter", "umami", "spicy", "smoky", "fresh", "rich", "tangy", "mild", "herby"];
 const VALID_TEXTURES = ["crispy", "creamy", "chewy", "crunchy", "soft", "flaky", "tender", "smooth", "juicy", "light", "dense", "silky"];
