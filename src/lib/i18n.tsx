@@ -1021,6 +1021,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "Это всё!", "results.allDoneSubtitle": "Вы просмотрели все рекомендации.",
     "results.undo": "Отменить",
     "results.viewSaved": "Посмотреть сохранённые блюда",
+    "saved.guestWarning": "Ваши сохранённые блюда хранятся локально и будут потеряны при очистке данных браузера.",
+    "saved.signInToKeep": "Войдите, чтобы сохранить навсегда",
   },
 };
 
