@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Trash2, MapPin, ChefHat, Loader2, LogOut } from "lucide-react";
-import { Link, Navigate } from "react-router-dom";
+import { ArrowLeft, Trash2, MapPin, ChefHat, Loader2, LogOut, AlertTriangle } from "lucide-react";
+import { Link } from "react-router-dom";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -21,6 +21,8 @@ interface SavedRec {
   created_at: string;
 }
 
+const GUEST_KEY = "guest_saved_recommendations";
+
 export default function Saved() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { t } = useI18n();
@@ -30,41 +32,54 @@ export default function Saved() {
   const [imageLoaded, setImageLoaded] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    if (!user) return;
+    if (authLoading) return;
+
     const fetchSaved = async () => {
-      const { data } = await supabase
-        .from("saved_recommendations")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (data) {
-        setItems(data as SavedRec[]);
-        data.forEach(async (item: SavedRec) => {
-          if (item.image_query) {
-            try {
-              const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
-                body: { query: item.image_query },
-              });
-              if (imgData?.imageUrl) {
-                setImageUrls((prev) => ({ ...prev, [item.id]: imgData.imageUrl }));
-              }
-            } catch {}
-          }
-        });
+      if (user) {
+        const { data } = await supabase
+          .from("saved_recommendations")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (data) {
+          setItems(data as SavedRec[]);
+          fetchImagesForItems(data as SavedRec[]);
+        }
+      } else {
+        // Load from localStorage for guests
+        const stored = JSON.parse(localStorage.getItem(GUEST_KEY) || "[]") as SavedRec[];
+        setItems(stored.reverse());
+        fetchImagesForItems(stored);
       }
       setLoading(false);
     };
-    fetchSaved();
-  }, [user]);
 
-  const handleDelete = async (id: string) => {
-    await supabase.from("saved_recommendations").delete().eq("id", id);
-    setItems((prev) => prev.filter((i) => i.id !== id));
+    fetchSaved();
+  }, [user, authLoading]);
+
+  const fetchImagesForItems = (data: SavedRec[]) => {
+    data.forEach(async (item) => {
+      if (item.image_query) {
+        try {
+          const { data: imgData } = await supabase.functions.invoke("unsplash-image", {
+            body: { query: item.image_query },
+          });
+          if (imgData?.imageUrl) {
+            setImageUrls((prev) => ({ ...prev, [item.id]: imgData.imageUrl }));
+          }
+        } catch {}
+      }
+    });
   };
 
-  // Auth guard: redirect to /auth if not logged in
-  if (!authLoading && !user) {
-    return <Navigate to="/auth" replace />;
-  }
+  const handleDelete = async (id: string) => {
+    if (user) {
+      await supabase.from("saved_recommendations").delete().eq("id", id);
+    } else {
+      const stored = JSON.parse(localStorage.getItem(GUEST_KEY) || "[]") as SavedRec[];
+      localStorage.setItem(GUEST_KEY, JSON.stringify(stored.filter((i) => i.id !== id)));
+    }
+    setItems((prev) => prev.filter((i) => i.id !== id));
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -77,9 +92,11 @@ export default function Saved() {
         )}
         <LanguageSwitcher />
         <ThemeToggle />
-        <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={signOut}>
-          <LogOut className="w-5 h-5" />
-        </Button>
+        {user && (
+          <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={signOut}>
+            <LogOut className="w-5 h-5" />
+          </Button>
+        )}
       </div>
 
       <div className="max-w-sm mx-auto px-4 py-6">
@@ -93,6 +110,23 @@ export default function Saved() {
             {t("saved.title")}
           </h1>
         </div>
+
+        {/* Guest warning banner */}
+        {!authLoading && !user && (
+          <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 flex flex-col gap-2">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+              <p className="text-sm text-foreground">
+                {t("saved.guestWarning")}
+              </p>
+            </div>
+            <Link to="/auth">
+              <Button size="sm" variant="outline" className="w-full text-xs">
+                {t("saved.signInToKeep")}
+              </Button>
+            </Link>
+          </div>
+        )}
 
         {loading || authLoading ? (
           <div className="flex justify-center py-12">

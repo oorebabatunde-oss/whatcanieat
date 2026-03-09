@@ -107,6 +107,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDoneSubtitle": "You've seen all recommendations. Refine your search or start over.",
     "results.undo": "Undo",
     "results.viewSaved": "View Saved Dishes",
+    "saved.guestWarning": "Your saved dishes are stored locally and will be lost when you clear your browser data.",
+    "saved.signInToKeep": "Sign in to keep them forever",
   },
   es: {
     "app.title": "¿Qué puedo comer?",
@@ -212,6 +214,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDoneSubtitle": "Has visto todas las recomendaciones.",
     "results.undo": "Deshacer",
     "results.viewSaved": "Ver platos guardados",
+    "saved.guestWarning": "Tus platos guardados se almacenan localmente y se perderán si borras los datos del navegador.",
+    "saved.signInToKeep": "Inicia sesión para conservarlos",
   },
   fr: {
     "app.title": "Qu'est-ce que je mange ?",
@@ -312,6 +316,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "C'est tout !", "results.allDoneSubtitle": "Vous avez vu toutes les recommandations.",
     "results.undo": "Annuler",
     "results.viewSaved": "Voir les plats sauvegardés",
+    "saved.guestWarning": "Vos plats sauvegardés sont stockés localement et seront perdus si vous effacez les données du navigateur.",
+    "saved.signInToKeep": "Connectez-vous pour les conserver",
   },
   de: {
     "app.title": "Was kann ich essen?",
@@ -385,6 +391,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "Das war's!", "results.allDoneSubtitle": "Du hast alle Empfehlungen gesehen.",
     "results.undo": "Rückgängig",
     "results.viewSaved": "Gespeicherte Gerichte ansehen",
+    "saved.guestWarning": "Deine gespeicherten Gerichte werden lokal gespeichert und gehen verloren, wenn du die Browserdaten löschst.",
+    "saved.signInToKeep": "Melde dich an, um sie zu behalten",
   },
   pt: {
     "app.title": "O que posso comer?",
@@ -448,6 +456,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "É isso!", "results.allDoneSubtitle": "Você viu todas as recomendações.",
     "results.undo": "Desfazer",
     "results.viewSaved": "Ver pratos salvos",
+    "saved.guestWarning": "Seus pratos salvos são armazenados localmente e serão perdidos se você limpar os dados do navegador.",
+    "saved.signInToKeep": "Entre para mantê-los para sempre",
   },
   ar: {
     "app.title": "ماذا يمكنني أن آكل؟",
@@ -509,6 +519,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "هذا كل شيء!", "results.allDoneSubtitle": "لقد رأيت كل التوصيات.",
     "results.undo": "تراجع",
     "results.viewSaved": "عرض الأطباق المحفوظة",
+    "saved.guestWarning": "أطباقك المحفوظة مخزنة محلياً وستُفقد إذا مسحت بيانات المتصفح.",
+    "saved.signInToKeep": "سجّل الدخول للاحتفاظ بها",
   },
   zh: {
     "app.title": "我能吃什么？",
@@ -570,6 +582,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "全部看完了！", "results.allDoneSubtitle": "你已看完所有推荐。",
     "results.undo": "撤销",
     "results.viewSaved": "查看已保存的菜品",
+    "saved.guestWarning": "您保存的菜品存储在本地，清除浏览器数据后将丢失。",
+    "saved.signInToKeep": "登录以永久保存",
   },
   ja: {
     "app.title": "何が食べられる？",
@@ -631,6 +645,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "全部見ました！", "results.allDoneSubtitle": "すべてのおすすめを見ました。",
     "results.undo": "元に戻す",
     "results.viewSaved": "保存した料理を見る",
+    "saved.guestWarning": "保存した料理はローカルに保存され、ブラウザのデータを消去すると失われます。",
+    "saved.signInToKeep": "ログインして永久に保存",
   },
   ko: {
     "app.title": "뭘 먹을 수 있을까?",
@@ -692,6 +708,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "다 봤어요!", "results.allDoneSubtitle": "모든 추천을 확인했습니다.",
     "results.undo": "실행 취소",
     "results.viewSaved": "저장한 요리 보기",
+    "saved.guestWarning": "저장한 요리는 로컬에 저장되며, 브라우저 데이터를 지우면 삭제됩니다.",
+    "saved.signInToKeep": "로그인하여 영구 보관",
   },
   hi: {
     "app.title": "मैं क्या खा सकता हूँ?",
@@ -753,6 +771,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "बस इतना!", "results.allDoneSubtitle": "आपने सभी सिफारिशें देख लीं।",
     "results.undo": "पूर्ववत करें",
     "results.viewSaved": "सहेजे गए व्यंजन देखें",
+    "saved.guestWarning": "आपके सहेजे गए व्यंजन स्थानीय रूप से संग्रहीत हैं और ब्राउज़र डेटा साफ़ करने पर खो जाएंगे।",
+    "saved.signInToKeep": "उन्हें हमेशा रखने के लिए साइन इन करें",
   },
   tr: {
     "app.title": "Ne Yiyebilirim?",
@@ -814,6 +834,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "Hepsi bu!", "results.allDoneSubtitle": "Tüm önerileri gördün.",
     "results.undo": "Geri al",
     "results.viewSaved": "Kaydedilen yemekleri gör",
+    "saved.guestWarning": "Kaydedilen yemekleriniz yerel olarak saklanır ve tarayıcı verilerini temizlerseniz kaybolur.",
+    "saved.signInToKeep": "Kalıcı olarak saklamak için giriş yap",
   },
   it: {
     "app.title": "Cosa posso mangiare?",
@@ -875,6 +897,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "È tutto!", "results.allDoneSubtitle": "Hai visto tutte le raccomandazioni.",
     "results.undo": "Annulla",
     "results.viewSaved": "Vedi piatti salvati",
+    "saved.guestWarning": "I tuoi piatti salvati sono archiviati localmente e andranno persi se cancelli i dati del browser.",
+    "saved.signInToKeep": "Accedi per conservarli per sempre",
   },
   nl: {
     "app.title": "Wat kan ik eten?",
@@ -936,6 +960,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "Dat was het!", "results.allDoneSubtitle": "Je hebt alle aanbevelingen gezien.",
     "results.undo": "Ongedaan maken",
     "results.viewSaved": "Opgeslagen gerechten bekijken",
+    "saved.guestWarning": "Je opgeslagen gerechten worden lokaal opgeslagen en gaan verloren als je browsergegevens wist.",
+    "saved.signInToKeep": "Log in om ze te bewaren",
   },
   ru: {
     "app.title": "Что мне поесть?",
@@ -996,6 +1022,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "Это всё!", "results.allDoneSubtitle": "Вы просмотрели все рекомендации.",
     "results.undo": "Отменить",
     "results.viewSaved": "Посмотреть сохранённые блюда",
+    "saved.guestWarning": "Ваши сохранённые блюда хранятся локально и будут потеряны при очистке данных браузера.",
+    "saved.signInToKeep": "Войдите, чтобы сохранить навсегда",
   },
 };
 

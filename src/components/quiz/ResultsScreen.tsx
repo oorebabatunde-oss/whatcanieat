@@ -95,15 +95,21 @@ export default function ResultsScreen() {
         cuisine: rec.cuisine,
         image_query: rec.imageQuery,
       });
-      toast.success(t("results.saved"));
     } else {
-      toast(t("results.loginToSave"), {
-        action: {
-          label: t("auth.title"),
-          onClick: () => navigate("/auth"),
-        },
+      // Save to localStorage for guests
+      const key = "guest_saved_recommendations";
+      const existing = JSON.parse(localStorage.getItem(key) || "[]");
+      existing.push({
+        id: crypto.randomUUID(),
+        name: rec.name,
+        description: rec.description,
+        cuisine: rec.cuisine,
+        image_query: rec.imageQuery,
+        created_at: new Date().toISOString(),
       });
+      localStorage.setItem(key, JSON.stringify(existing));
     }
+    toast.success(t("results.saved"));
     advance();
   };
 
@@ -117,15 +123,24 @@ export default function ResultsScreen() {
     const last = swipeHistory[swipeHistory.length - 1];
     setSwipeHistory((prev) => prev.slice(0, -1));
 
-    // If it was a right-swipe (save), remove from DB
-    if (last.action === "right" && user) {
-      await supabase
-        .from("saved_recommendations")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("name", last.rec.name)
-        .order("created_at", { ascending: false })
-        .limit(1);
+    // If it was a right-swipe (save), remove from DB or localStorage
+    if (last.action === "right") {
+      if (user) {
+        await supabase
+          .from("saved_recommendations")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("name", last.rec.name)
+          .order("created_at", { ascending: false })
+          .limit(1);
+      } else {
+        const key = "guest_saved_recommendations";
+        const existing = JSON.parse(localStorage.getItem(key) || "[]");
+        // Remove the last one with this name
+        const idx = existing.findLastIndex((item: any) => item.name === last.rec.name);
+        if (idx !== -1) existing.splice(idx, 1);
+        localStorage.setItem(key, JSON.stringify(existing));
+      }
     }
 
     setCurrentIndex(last.index);
