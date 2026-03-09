@@ -214,6 +214,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDoneSubtitle": "Has visto todas las recomendaciones.",
     "results.undo": "Deshacer",
     "results.viewSaved": "Ver platos guardados",
+    "saved.guestWarning": "Tus platos guardados se almacenan localmente y se perderán si borras los datos del navegador.",
+    "saved.signInToKeep": "Inicia sesión para conservarlos",
   },
   fr: {
     "app.title": "Qu'est-ce que je mange ?",
