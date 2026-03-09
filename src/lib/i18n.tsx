@@ -833,6 +833,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "Hepsi bu!", "results.allDoneSubtitle": "Tüm önerileri gördün.",
     "results.undo": "Geri al",
     "results.viewSaved": "Kaydedilen yemekleri gör",
+    "saved.guestWarning": "Kaydedilen yemekleriniz yerel olarak saklanır ve tarayıcı verilerini temizlerseniz kaybolur.",
+    "saved.signInToKeep": "Kalıcı olarak saklamak için giriş yap",
   },
   it: {
     "app.title": "Cosa posso mangiare?",
