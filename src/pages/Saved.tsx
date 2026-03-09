@@ -102,11 +102,13 @@ export default function Saved() {
 
       <div className="max-w-sm mx-auto px-4 py-6">
         <div className="flex items-center gap-3 mb-6">
-          <Link to="/">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
+          <Button variant="ghost" size="icon" onClick={() => {
+            sessionStorage.removeItem("quiz-state");
+            sessionStorage.removeItem("app-mode");
+            navigate("/");
+          }}>
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
           <h1 className="text-2xl font-display font-bold text-foreground">
             {t("saved.title")}
           </h1>
