@@ -4,6 +4,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // --- Strict CORS: only allow known origins ---
 const ALLOWED_ORIGINS = [
   "https://whatcanieat.lovable.app",
+  "https://whatcanieat.food",
+  "https://www.whatcanieat.food",
   "https://id-preview--505389c9-ce6f-4340-8722-492bcb6e5414.lovable.app",
 ];
 
