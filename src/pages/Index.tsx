@@ -39,14 +39,12 @@ const Index = () => {
 
   const toolbar = (
     <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
-      {user && (
-        <Link to="/saved">
-          <Button variant="ghost" size="sm" className="text-muted-foreground gap-1.5">
-            <Heart className="w-4 h-4" />
-            <span className="text-xs">{t("results.viewSaved")}</span>
-          </Button>
-        </Link>
-      )}
+      <Link to="/saved">
+        <Button variant="ghost" size="sm" className="text-muted-foreground gap-1.5">
+          <Heart className="w-4 h-4" />
+          <span className="text-xs">{t("results.viewSaved")}</span>
+        </Button>
+      </Link>
       <div className="flex-1" />
       {user && (
         <span className="text-xs text-muted-foreground truncate max-w-[140px]">
