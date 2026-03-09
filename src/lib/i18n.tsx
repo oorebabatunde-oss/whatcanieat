@@ -316,6 +316,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "C'est tout !", "results.allDoneSubtitle": "Vous avez vu toutes les recommandations.",
     "results.undo": "Annuler",
     "results.viewSaved": "Voir les plats sauvegardés",
+    "saved.guestWarning": "Vos plats sauvegardés sont stockés localement et seront perdus si vous effacez les données du navigateur.",
+    "saved.signInToKeep": "Connectez-vous pour les conserver",
   },
   de: {
     "app.title": "Was kann ich essen?",
