@@ -518,6 +518,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "هذا كل شيء!", "results.allDoneSubtitle": "لقد رأيت كل التوصيات.",
     "results.undo": "تراجع",
     "results.viewSaved": "عرض الأطباق المحفوظة",
+    "saved.guestWarning": "أطباقك المحفوظة مخزنة محلياً وستُفقد إذا مسحت بيانات المتصفح.",
+    "saved.signInToKeep": "سجّل الدخول للاحتفاظ بها",
   },
   zh: {
     "app.title": "我能吃什么？",
