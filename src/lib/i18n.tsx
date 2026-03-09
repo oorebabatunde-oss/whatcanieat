@@ -651,6 +651,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.dietary.vegetarian": "채식", "quiz.dietary.vegan": "비건",
     "quiz.dietary.glutenFree": "글루텐프리", "quiz.dietary.dairyFree": "유제품프리",
     "quiz.dietary.nutFree": "견과류프리", "quiz.dietary.halal": "할랄", "quiz.dietary.kosher": "코셔",
+    "quiz.dietary.pescatarian": "페스코",
     "quiz.dietary.none": "제한 없음", "quiz.dietary.submit": "뭘 먹을 수 있는지 보여줘",
     "quiz.context.title": "다른 것이 있나요?",
     "quiz.context.subtitle": "선택사항 — 추가 정보 입력",
