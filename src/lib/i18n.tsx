@@ -581,6 +581,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "全部看完了！", "results.allDoneSubtitle": "你已看完所有推荐。",
     "results.undo": "撤销",
     "results.viewSaved": "查看已保存的菜品",
+    "saved.guestWarning": "您保存的菜品存储在本地，清除浏览器数据后将丢失。",
+    "saved.signInToKeep": "登录以永久保存",
   },
   ja: {
     "app.title": "何が食べられる？",
