@@ -406,6 +406,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.dietary.vegetarian": "Vegetariano", "quiz.dietary.vegan": "Vegano",
     "quiz.dietary.glutenFree": "Sem Glúten", "quiz.dietary.dairyFree": "Sem Lactose",
     "quiz.dietary.nutFree": "Sem Nozes", "quiz.dietary.halal": "Halal", "quiz.dietary.kosher": "Kosher",
+    "quiz.dietary.pescatarian": "Pescatariano",
     "quiz.dietary.none": "Sem Restrições", "quiz.dietary.submit": "Mostre o que posso comer",
     "quiz.context.title": "Mais alguma coisa?",
     "quiz.context.subtitle": "Opcional — adicione contexto",
