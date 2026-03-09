@@ -1,0 +1,45 @@
+# What Can I Eat?
+
+> A free web app that helps people decide what to eat — through a quick interactive quiz or by scanning a photo of their fridge.
+
+## Purpose
+
+What Can I Eat? solves the universal "what should I eat?" problem. It provides personalized food and meal recommendations without ads, brand promotions, or sponsored content.
+
+## Features
+
+### Quiz-Based Recommendations
+Users answer a short series of questions about their current mood, cravings, flavor preferences, texture preferences, and dietary restrictions. The app then recommends specific dishes and meals tailored to their answers.
+
+### Fridge Photo Scanner
+Users can take or upload a photo of their fridge or pantry. The app identifies visible ingredients and suggests recipes and meals that can be made with what's available.
+
+### Dietary Filters
+Supports a wide range of dietary preferences and restrictions:
+- Vegan, Vegetarian, Pescatarian
+- Gluten-free, Dairy-free, Nut-free
+- Halal, Kosher
+- Low-carb, Keto
+
+### Meal Context
+Recommendations adapt based on the type of meal: breakfast, lunch, dinner, snack, dessert, or drink.
+
+### Save Favorites
+Users can create an account to save recommended dishes for future reference.
+
+### Multilingual
+Available in English, French, Spanish, German, Japanese, Chinese, and Arabic.
+
+## Use Cases
+
+- "I don't know what to eat" — take the quiz
+- "What can I make with what I have?" — scan your fridge
+- "I want something sweet and crunchy" — set flavor and texture preferences
+- "I need a vegan dinner idea" — apply dietary filters
+- "What should I eat for a late-night snack?" — set the meal context
+
+## Access
+
+- URL: https://whatcanieat.lovable.app
+- Free to use, no account required for recommendations
+- Works on desktop and mobile browsers
