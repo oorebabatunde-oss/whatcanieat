@@ -85,7 +85,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.tip3": "Try to capture labels or whole items clearly",
     "scan.tryAgain": "Try a Different Photo",
     "theme.toggle": "Toggle theme",
-    "auth.signInCta": "Sign in to save recommendations",
+    "auth.signInCta": "Sign in",
     "auth.title": "Sign In",
     "auth.subtitle": "Enter your email and we'll send you a magic link",
     "auth.emailLabel": "Email",
