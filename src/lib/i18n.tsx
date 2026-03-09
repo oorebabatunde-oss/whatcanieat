@@ -468,6 +468,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.dietary.vegetarian": "نباتي", "quiz.dietary.vegan": "نباتي صرف",
     "quiz.dietary.glutenFree": "خالي من الغلوتين", "quiz.dietary.dairyFree": "خالي من الألبان",
     "quiz.dietary.nutFree": "خالي من المكسرات", "quiz.dietary.halal": "حلال", "quiz.dietary.kosher": "كوشر",
+    "quiz.dietary.pescatarian": "بيسكاتاري",
     "quiz.dietary.none": "لا قيود", "quiz.dietary.submit": "أرني ماذا آكل",
     "quiz.context.title": "شيء آخر؟",
     "quiz.context.subtitle": "اختياري — أضف سياقاً إضافياً",
