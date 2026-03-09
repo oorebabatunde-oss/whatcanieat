@@ -18,6 +18,7 @@ export default function DietaryStep() {
     { type: "nut-free", label: t("quiz.dietary.nutFree"), emoji: "🥜" },
     { type: "halal", label: t("quiz.dietary.halal"), emoji: "☪️" },
     { type: "kosher", label: t("quiz.dietary.kosher"), emoji: "✡️" },
+    { type: "pescatarian", label: t("quiz.dietary.pescatarian"), emoji: "🐟" },
   ];
 
   return (
