@@ -590,6 +590,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.dietary.vegetarian": "ベジタリアン", "quiz.dietary.vegan": "ビーガン",
     "quiz.dietary.glutenFree": "グルテンフリー", "quiz.dietary.dairyFree": "乳製品なし",
     "quiz.dietary.nutFree": "ナッツフリー", "quiz.dietary.halal": "ハラール", "quiz.dietary.kosher": "コーシャ",
+    "quiz.dietary.pescatarian": "ペスカタリアン",
     "quiz.dietary.none": "制限なし", "quiz.dietary.submit": "食べられるものを見せて",
     "quiz.context.title": "他に何かありますか？",
     "quiz.context.subtitle": "任意 — 追加情報を入力",
