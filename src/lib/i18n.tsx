@@ -896,6 +896,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "È tutto!", "results.allDoneSubtitle": "Hai visto tutte le raccomandazioni.",
     "results.undo": "Annulla",
     "results.viewSaved": "Vedi piatti salvati",
+    "saved.guestWarning": "I tuoi piatti salvati sono archiviati localmente e andranno persi se cancelli i dati del browser.",
+    "saved.signInToKeep": "Accedi per conservarli per sempre",
   },
   nl: {
     "app.title": "Wat kan ik eten?",
