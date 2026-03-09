@@ -707,6 +707,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "다 봤어요!", "results.allDoneSubtitle": "모든 추천을 확인했습니다.",
     "results.undo": "실행 취소",
     "results.viewSaved": "저장한 요리 보기",
+    "saved.guestWarning": "저장한 요리는 로컬에 저장되며, 브라우저 데이터를 지우면 삭제됩니다.",
+    "saved.signInToKeep": "로그인하여 영구 보관",
   },
   hi: {
     "app.title": "मैं क्या खा सकता हूँ?",
