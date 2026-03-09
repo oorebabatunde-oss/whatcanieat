@@ -459,6 +459,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "saved.guestWarning": "Seus pratos salvos são armazenados localmente e serão perdidos se você limpar os dados do navegador.",
     "saved.signInToKeep": "Entre para mantê-los para sempre",
   },
+  ar: {
     "app.title": "ماذا يمكنني أن آكل؟",
     "home.findCraving": "اعثر على ما أشتهيه",
     "home.scanFridge": "امسح ثلاجتي أو خزانتي",
