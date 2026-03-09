@@ -456,8 +456,9 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "É isso!", "results.allDoneSubtitle": "Você viu todas as recomendações.",
     "results.undo": "Desfazer",
     "results.viewSaved": "Ver pratos salvos",
+    "saved.guestWarning": "Seus pratos salvos são armazenados localmente e serão perdidos se você limpar os dados do navegador.",
+    "saved.signInToKeep": "Entre para mantê-los para sempre",
   },
-  ar: {
     "app.title": "ماذا يمكنني أن آكل؟",
     "home.findCraving": "اعثر على ما أشتهيه",
     "home.scanFridge": "امسح ثلاجتي أو خزانتي",
