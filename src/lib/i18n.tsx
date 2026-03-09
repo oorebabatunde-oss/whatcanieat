@@ -959,6 +959,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "Dat was het!", "results.allDoneSubtitle": "Je hebt alle aanbevelingen gezien.",
     "results.undo": "Ongedaan maken",
     "results.viewSaved": "Opgeslagen gerechten bekijken",
+    "saved.guestWarning": "Je opgeslagen gerechten worden lokaal opgeslagen en gaan verloren als je browsergegevens wist.",
+    "saved.signInToKeep": "Log in om ze te bewaren",
   },
   ru: {
     "app.title": "Что мне поесть?",
