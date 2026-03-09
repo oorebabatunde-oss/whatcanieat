@@ -26,6 +26,7 @@ const GUEST_KEY = "guest_saved_recommendations";
 export default function Saved() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { t } = useI18n();
+  const navigate = useNavigate();
   const [items, setItems] = useState<SavedRec[]>([]);
   const [loading, setLoading] = useState(true);
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
