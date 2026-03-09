@@ -108,7 +108,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.undo": "Undo",
     "results.viewSaved": "View Saved Dishes",
     "saved.guestWarning": "Your saved dishes are stored locally and will be lost when you clear your browser data.",
-    "saved.signInToKeep": "Sign in to keep them forever",
+    "saved.signInToKeep": "Sign in to keep them longer",
   },
   es: {
     "app.title": "¿Qué puedo comer?",
