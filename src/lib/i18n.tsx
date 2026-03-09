@@ -391,6 +391,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "Das war's!", "results.allDoneSubtitle": "Du hast alle Empfehlungen gesehen.",
     "results.undo": "Rückgängig",
     "results.viewSaved": "Gespeicherte Gerichte ansehen",
+    "saved.guestWarning": "Deine gespeicherten Gerichte werden lokal gespeichert und gehen verloren, wenn du die Browserdaten löschst.",
+    "saved.signInToKeep": "Melde dich an, um sie zu behalten",
   },
   pt: {
     "app.title": "O que posso comer?",
