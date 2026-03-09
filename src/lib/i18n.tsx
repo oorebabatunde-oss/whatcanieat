@@ -773,6 +773,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.dietary.vegetarian": "Vejetaryen", "quiz.dietary.vegan": "Vegan",
     "quiz.dietary.glutenFree": "Glutensiz", "quiz.dietary.dairyFree": "Süt Ürünsüz",
     "quiz.dietary.nutFree": "Fındıksız", "quiz.dietary.halal": "Helal", "quiz.dietary.kosher": "Koşer",
+    "quiz.dietary.pescatarian": "Pesketaryen",
     "quiz.dietary.none": "Kısıtlama Yok", "quiz.dietary.submit": "Ne yiyebileceğimi göster",
     "quiz.context.title": "Başka bir şey?",
     "quiz.context.subtitle": "İsteğe bağlı — ek bilgi ekleyin",
