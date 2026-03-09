@@ -770,6 +770,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "बस इतना!", "results.allDoneSubtitle": "आपने सभी सिफारिशें देख लीं।",
     "results.undo": "पूर्ववत करें",
     "results.viewSaved": "सहेजे गए व्यंजन देखें",
+    "saved.guestWarning": "आपके सहेजे गए व्यंजन स्थानीय रूप से संग्रहीत हैं और ब्राउज़र डेटा साफ़ करने पर खो जाएंगे।",
+    "saved.signInToKeep": "उन्हें हमेशा रखने के लिए साइन इन करें",
   },
   tr: {
     "app.title": "Ne Yiyebilirim?",
