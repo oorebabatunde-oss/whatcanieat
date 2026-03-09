@@ -644,6 +644,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.allDone": "全部見ました！", "results.allDoneSubtitle": "すべてのおすすめを見ました。",
     "results.undo": "元に戻す",
     "results.viewSaved": "保存した料理を見る",
+    "saved.guestWarning": "保存した料理はローカルに保存され、ブラウザのデータを消去すると失われます。",
+    "saved.signInToKeep": "ログインして永久に保存",
   },
   ko: {
     "app.title": "뭘 먹을 수 있을까?",
