@@ -529,6 +529,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.dietary.vegetarian": "素食", "quiz.dietary.vegan": "纯素",
     "quiz.dietary.glutenFree": "无麸质", "quiz.dietary.dairyFree": "无乳制品",
     "quiz.dietary.nutFree": "无坚果", "quiz.dietary.halal": "清真", "quiz.dietary.kosher": "犹太洁食",
+    "quiz.dietary.pescatarian": "鱼素",
     "quiz.dietary.none": "无限制", "quiz.dietary.submit": "告诉我能吃什么",
     "quiz.context.title": "还有什么？",
     "quiz.context.subtitle": "可选 — 添加额外信息",
