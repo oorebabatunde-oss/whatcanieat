@@ -95,15 +95,21 @@ export default function ResultsScreen() {
         cuisine: rec.cuisine,
         image_query: rec.imageQuery,
       });
-      toast.success(t("results.saved"));
     } else {
-      toast(t("results.loginToSave"), {
-        action: {
-          label: t("auth.title"),
-          onClick: () => navigate("/auth"),
-        },
+      // Save to localStorage for guests
+      const key = "guest_saved_recommendations";
+      const existing = JSON.parse(localStorage.getItem(key) || "[]");
+      existing.push({
+        id: crypto.randomUUID(),
+        name: rec.name,
+        description: rec.description,
+        cuisine: rec.cuisine,
+        image_query: rec.imageQuery,
+        created_at: new Date().toISOString(),
       });
+      localStorage.setItem(key, JSON.stringify(existing));
     }
+    toast.success(t("results.saved"));
     advance();
   };
 
