@@ -121,31 +121,31 @@ const Index = () => {
         </h1>
       </motion.div>
 
-      <div className="flex flex-row items-stretch gap-2.5 w-full max-w-[18rem]">
+      <div className="flex flex-row items-stretch gap-3 w-full max-w-[18rem]">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          whileTap={{ scale: 0.97 }}
+          whileTap={{ scale: 0.96 }}
           onClick={() => changeMode("quiz")}
-          className="bg-primary/20 backdrop-blur-md border border-primary/30 rounded-2xl px-3 py-5 flex flex-col items-center gap-1.5 shadow-md hover:shadow-lg hover:bg-primary/30 hover:border-primary/40 flex-1 text-center transition-all"
+          className="group bg-card border border-border rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
         >
-          <span className="text-lg">🍽️</span>
-          <span className="text-xs font-bold leading-snug text-primary">{t("home.findCraving")}</span>
-          <span className="text-[10px] text-muted-foreground font-normal leading-tight mt-0.5">{t("home.findCravingSubtext")}</span>
+          <span className="text-2xl group-hover:scale-110 transition-transform">🍽️</span>
+          <span className="text-xs font-bold leading-snug text-foreground">{t("home.findCraving")}</span>
+          <span className="text-[10px] text-muted-foreground font-normal leading-tight">{t("home.findCravingSubtext")}</span>
         </motion.button>
 
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 }}
-          whileTap={{ scale: 0.97 }}
+          whileTap={{ scale: 0.96 }}
           onClick={() => changeMode("scan")}
-          className="bg-primary/20 backdrop-blur-md border border-primary/30 rounded-2xl px-3 py-5 flex flex-col items-center gap-1.5 shadow-md hover:shadow-lg hover:bg-primary/30 hover:border-primary/40 flex-1 text-center transition-all"
+          className="group bg-card border border-border rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
         >
-          <span className="text-lg">🥘</span>
-          <span className="text-xs font-bold leading-snug text-primary">{t("home.scanFridge")}</span>
-          <span className="text-[10px] text-muted-foreground font-normal leading-tight mt-0.5">{t("home.scanFridgeSubtext")}</span>
+          <span className="text-2xl group-hover:scale-110 transition-transform">🥘</span>
+          <span className="text-xs font-bold leading-snug text-foreground">{t("home.scanFridge")}</span>
+          <span className="text-[10px] text-muted-foreground font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
         </motion.button>
       </div>
       </div>
