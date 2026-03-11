@@ -1022,7 +1022,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.title": "Nog iets?",
     "quiz.context.subtitle": "Optioneel — voeg extra context toe",
     "quiz.context.placeholder": "bijv. Ik kook voor een peuter, alleen Koreaans, budgetvriendelijk...",
-    "quiz.context.skip": "Overslaan",
+    "quiz.context.skip": "Verder niets",
     "results.loading.title": "Perfect eten zoeken...", "results.loading.subtitle": "Aanbevelingen zoeken...",
     "results.title": "Dit kun je eten!", "results.subtitle": "AI-gegenereerde aanbevelingen.\nAfbeeldingen zijn mogelijk niet accuraat.",
     "results.whereToBuy": "Waar kopen", "results.howToMake": "Hoe maken",
