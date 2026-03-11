@@ -797,7 +797,9 @@ const translations: Record<Lang, Record<string, string>> = {
   tr: {
     "app.title": "Ne Yiyebilirim?",
     "home.findCraving": "Canımın çektiğini bul",
-    "home.scanFridge": "Buzdolabımı tara",
+    "home.scanFridge": "Elimdekilerle ne yiyebilirim?",
+    "home.findCravingSubtext": "Birkaç soruya cevap ver, sana mükemmel yemeği önerelim",
+    "home.scanFridgeSubtext": "Fotoğraf çek veya elindeki malzemeleri yaz, tarif fikirleri al",
     "quiz.craving.title": "Ne canın çekiyor?", "quiz.craving.subtitle": "Başlamak için birini seç",
     "quiz.craving.snack": "Atıştırmalık", "quiz.craving.meal": "Yemek", "quiz.craving.unknown": "Sürpriz",
     "quiz.flavor.title": "Hangi tatlar?", "quiz.flavor.subtitle": "İstediğin kadar seç",
