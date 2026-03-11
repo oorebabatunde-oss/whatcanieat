@@ -137,7 +137,7 @@ const Index = () => {
         >
           <span className="text-lg">🥘</span>
           <span className="text-xs font-semibold leading-snug">{t("home.scanFridge")}</span>
-          <span className="text-[10px] opacity-70 font-normal leading-tight mt-0.5">{t("home.scanFridgeSubtext")}</span>
+          <span className="text-[10px] text-muted-foreground font-normal leading-tight mt-0.5">{t("home.scanFridgeSubtext")}</span>
         </motion.button>
       </div>
       </div>
