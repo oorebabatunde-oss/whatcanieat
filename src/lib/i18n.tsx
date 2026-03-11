@@ -732,7 +732,9 @@ const translations: Record<Lang, Record<string, string>> = {
   hi: {
     "app.title": "मैं क्या खा सकता हूँ?",
     "home.findCraving": "मुझे जो खाना है वो खोजो",
-    "home.scanFridge": "मेरा फ्रिज स्कैन करो",
+    "home.scanFridge": "जो मेरे पास है उससे क्या बना सकता हूँ?",
+    "home.findCravingSubtext": "कुछ सवालों के जवाब दें और हम सही डिश सुझाएंगे",
+    "home.scanFridgeSubtext": "फोटो लें या लिखें कि आपके पास क्या है और रेसिपी पाएं",
     "quiz.craving.title": "आपको क्या खाने का मन है?", "quiz.craving.subtitle": "एक चुनें",
     "quiz.craving.snack": "स्नैक", "quiz.craving.meal": "भोजन", "quiz.craving.unknown": "कुछ भी",
     "quiz.flavor.title": "कौन सा स्वाद चाहिए?", "quiz.flavor.subtitle": "जितने चाहें चुनें",
