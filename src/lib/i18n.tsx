@@ -525,7 +525,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.title": "شيء آخر؟",
     "quiz.context.subtitle": "اختياري — أضف سياقاً إضافياً",
     "quiz.context.placeholder": "مثلاً: أطبخ لطفل صغير، أطباق كورية فقط، اقتصادي...",
-    "quiz.context.skip": "تخطي",
+    "quiz.context.skip": "لا شيء آخر",
     "results.loading.title": "جاري البحث عن طعامك المثالي...", "results.loading.subtitle": "جاري البحث...",
     "results.title": "إليك ما يمكنك أكله!", "results.subtitle": "توصيات مولدة بالذكاء الاصطناعي.\nقد لا تكون الصور دقيقة.",
     "results.whereToBuy": "أين تشتري", "results.howToMake": "كيف تصنع",
