@@ -113,20 +113,18 @@ const Index = () => {
         </h1>
       </motion.div>
 
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-row items-stretch gap-3 w-full max-w-[19rem]">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => changeMode("quiz")}
-          className="bg-primary text-primary-foreground rounded-xl px-6 py-4 flex items-center gap-4 shadow-md hover:shadow-lg w-full max-w-sm text-left"
+          className="bg-primary text-primary-foreground rounded-xl px-4 py-4 flex flex-col items-center gap-2 shadow-md hover:shadow-lg flex-1 text-center"
         >
           <span className="text-2xl">🍽️</span>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold tracking-wide">{t("home.findCraving")}</span>
-            <span className="text-xs opacity-80 font-normal">{t("home.findCravingSubtext")}</span>
-          </div>
+          <span className="text-sm font-semibold tracking-wide">{t("home.findCraving")}</span>
+          <span className="text-[11px] opacity-80 font-normal leading-tight">{t("home.findCravingSubtext")}</span>
         </motion.button>
 
         <motion.button
@@ -135,15 +133,12 @@ const Index = () => {
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => changeMode("scan")}
-          className="bg-primary text-primary-foreground rounded-xl px-6 py-4 flex items-center gap-4 shadow-md hover:shadow-lg w-full max-w-sm text-left"
+          className="bg-primary text-primary-foreground rounded-xl px-4 py-4 flex flex-col items-center gap-2 shadow-md hover:shadow-lg flex-1 text-center"
         >
           <span className="text-2xl">🥘</span>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold tracking-wide">{t("home.scanFridge")}</span>
-            <span className="text-xs opacity-80 font-normal">{t("home.scanFridgeSubtext")}</span>
-          </div>
+          <span className="text-sm font-semibold tracking-wide">{t("home.scanFridge")}</span>
+          <span className="text-[11px] opacity-80 font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
         </motion.button>
-
       </div>
       </div>
     </div>
