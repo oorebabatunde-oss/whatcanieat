@@ -992,7 +992,9 @@ const translations: Record<Lang, Record<string, string>> = {
   ru: {
     "app.title": "Что мне поесть?",
     "home.findCraving": "Найти то, что хочется",
-    "home.scanFridge": "Сканировать холодильник",
+    "home.scanFridge": "Что можно приготовить из того, что уже есть?",
+    "home.findCravingSubtext": "Ответьте на несколько вопросов и мы предложим идеальное блюдо",
+    "home.scanFridgeSubtext": "Сделайте фото или введите продукты для идей рецептов",
     "quiz.craving.title": "Чего хочется?", "quiz.craving.subtitle": "Выберите один вариант",
     "quiz.craving.snack": "Перекус", "quiz.craving.meal": "Обед", "quiz.craving.unknown": "Удиви меня",
     "quiz.flavor.title": "Какие вкусы?", "quiz.flavor.subtitle": "Выберите сколько хотите",
