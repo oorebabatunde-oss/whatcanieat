@@ -667,7 +667,9 @@ const translations: Record<Lang, Record<string, string>> = {
   ko: {
     "app.title": "뭘 먹을 수 있을까?",
     "home.findCraving": "먹고 싶은 것 찾기",
-    "home.scanFridge": "냉장고 스캔하기",
+    "home.scanFridge": "이미 있는 재료로 뭘 만들 수 있을까?",
+    "home.findCravingSubtext": "몇 가지 질문에 답하면 완벽한 요리를 추천해 드립니다",
+    "home.scanFridgeSubtext": "사진을 찍거나 가진 재료를 입력하여 레시피 아이디어를 얻으세요",
     "quiz.craving.title": "뭐가 먹고 싶어?", "quiz.craving.subtitle": "하나를 선택하세요",
     "quiz.craving.snack": "간식", "quiz.craving.meal": "식사", "quiz.craving.unknown": "아무거나",
     "quiz.flavor.title": "어떤 맛이 좋아?", "quiz.flavor.subtitle": "원하는 만큼 선택하세요",
