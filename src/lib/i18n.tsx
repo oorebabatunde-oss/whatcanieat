@@ -596,7 +596,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.title": "还有什么？",
     "quiz.context.subtitle": "可选 — 添加额外信息",
     "quiz.context.placeholder": "例如：给小孩做饭、只要韩国菜、经济实惠...",
-    "quiz.context.skip": "跳过",
+    "quiz.context.skip": "没有其他了",
     "results.loading.title": "正在寻找完美食物...", "results.loading.subtitle": "正在查找推荐...",
     "results.title": "你可以吃这些！", "results.subtitle": "AI生成的推荐。\n图片可能不准确。",
     "results.whereToBuy": "去哪买", "results.howToMake": "怎么做",
