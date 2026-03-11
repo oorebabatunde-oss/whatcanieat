@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.scan-ingredients]
 verify_jwt = false
+
+[functions.ingredients-to-recipes]
+verify_jwt = false
