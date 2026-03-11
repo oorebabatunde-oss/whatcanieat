@@ -862,7 +862,9 @@ const translations: Record<Lang, Record<string, string>> = {
   it: {
     "app.title": "Cosa posso mangiare?",
     "home.findCraving": "Trova quello che desidero",
-    "home.scanFridge": "Scansiona il mio frigo",
+    "home.scanFridge": "Cosa posso mangiare con quello che ho già?",
+    "home.findCravingSubtext": "Rispondi a qualche domanda e ti suggeriremo il piatto perfetto",
+    "home.scanFridgeSubtext": "Scatta una foto o scrivi cosa hai per ottenere idee di ricette",
     "quiz.craving.title": "Cosa desideri?", "quiz.craving.subtitle": "Scegli uno per iniziare",
     "quiz.craving.snack": "Uno Snack", "quiz.craving.meal": "Un Pasto", "quiz.craving.unknown": "Sorprendimi",
     "quiz.flavor.title": "Quali sapori ti attirano?", "quiz.flavor.subtitle": "Scegli quanti ne vuoi",
