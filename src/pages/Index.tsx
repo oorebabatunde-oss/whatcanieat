@@ -128,7 +128,7 @@ const Index = () => {
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => changeMode("quiz")}
-          className="group bg-card/90 backdrop-blur-sm border border-border rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
+          className="group bg-card/90 backdrop-blur-sm border border-border rounded-2xl px-3 py-3 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
         >
           <span className="text-2xl group-hover:scale-110 transition-transform">🍽️</span>
           <span className="text-sm font-bold leading-snug text-foreground">{t("home.findCraving")}</span>
