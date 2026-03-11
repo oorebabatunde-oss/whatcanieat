@@ -667,7 +667,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.title": "他に何かありますか？",
     "quiz.context.subtitle": "任意 — 追加情報を入力",
     "quiz.context.placeholder": "例：幼児向け、韓国料理のみ、予算を抑えたい...",
-    "quiz.context.skip": "スキップ",
+    "quiz.context.skip": "他にはありません",
     "results.loading.title": "ぴったりの食べ物を探し中...", "results.loading.subtitle": "おすすめを検索中...",
     "results.title": "これが食べられます！", "results.subtitle": "AIによるおすすめです。\n画像は正確でない場合があります。",
     "results.whereToBuy": "どこで買う", "results.howToMake": "作り方",
