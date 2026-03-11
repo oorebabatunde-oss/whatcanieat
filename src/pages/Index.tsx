@@ -97,7 +97,15 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center px-4">
+    <div className="min-h-screen bg-background flex flex-col items-center px-4 relative overflow-hidden">
+      {/* Emoji texture background */}
+      <div className="absolute inset-0 pointer-events-none select-none opacity-[0.06] text-[2.5rem] leading-[3rem] tracking-widest overflow-hidden" aria-hidden="true">
+        <div className="absolute -left-4 -top-4 -right-4 -bottom-4 flex flex-wrap gap-x-4 gap-y-2 rotate-[-8deg] scale-110">
+          {Array.from({ length: 80 }).map((_, i) => (
+            <span key={i}>{["🍽️", "🥘", "🍳", "🥗", "🍲", "🧀", "🥑", "🍕"][i % 8]}</span>
+          ))}
+        </div>
+      </div>
       {toolbar}
 
       <div className="flex-1 flex flex-col items-center justify-center">
