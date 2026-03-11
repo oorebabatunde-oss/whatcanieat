@@ -113,7 +113,7 @@ const Index = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-14"
+        className="text-center mb-6"
       >
         <h1 className="text-5xl md:text-6xl font-display font-bold text-foreground mb-4 leading-tight">
           {t("app.title").split(" ").slice(0, -1).join(" ")}<br />
