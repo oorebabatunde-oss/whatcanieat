@@ -120,10 +120,13 @@ const Index = () => {
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => changeMode("quiz")}
-          className="bg-primary text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg"
+          className="bg-primary text-primary-foreground rounded-xl px-6 py-4 flex items-center gap-4 shadow-md hover:shadow-lg w-full max-w-sm text-left"
         >
           <span className="text-2xl">🍽️</span>
-          <span className="text-sm font-semibold tracking-wide">{t("home.findCraving")}</span>
+          <div className="flex flex-col gap-0.5">
+            <span className="text-sm font-semibold tracking-wide">{t("home.findCraving")}</span>
+            <span className="text-xs opacity-80 font-normal">{t("home.findCravingSubtext")}</span>
+          </div>
         </motion.button>
 
         <motion.button
@@ -132,10 +135,13 @@ const Index = () => {
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => changeMode("scan")}
-          className="bg-primary text-primary-foreground rounded-lg px-6 py-3 flex items-center gap-3 shadow-md hover:shadow-lg"
+          className="bg-primary text-primary-foreground rounded-xl px-6 py-4 flex items-center gap-4 shadow-md hover:shadow-lg w-full max-w-sm text-left"
         >
-          <span className="text-2xl">📱</span>
-          <span className="text-sm font-semibold tracking-wide">{t("home.scanFridge")}</span>
+          <span className="text-2xl">🥘</span>
+          <div className="flex flex-col gap-0.5">
+            <span className="text-sm font-semibold tracking-wide">{t("home.scanFridge")}</span>
+            <span className="text-xs opacity-80 font-normal">{t("home.scanFridgeSubtext")}</span>
+          </div>
         </motion.button>
 
       </div>
