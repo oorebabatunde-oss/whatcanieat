@@ -121,37 +121,31 @@ const Index = () => {
         </h1>
       </motion.div>
 
-      <div className="flex flex-col gap-3 w-full max-w-xs">
+      <div className="flex flex-row items-stretch gap-3 w-full max-w-[18rem]">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          whileTap={{ scale: 0.95 }}
-          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.96 }}
           onClick={() => changeMode("quiz")}
-          className="group bg-primary text-primary-foreground rounded-2xl px-5 py-4 flex items-center gap-4 shadow-md hover:shadow-lg text-left transition-shadow"
+          className="group bg-card border border-border rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
         >
-          <span className="text-3xl">🍽️</span>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-bold leading-snug">{t("home.findCraving")}</span>
-            <span className="text-xs opacity-80 font-normal leading-tight">{t("home.findCravingSubtext")}</span>
-          </div>
+          <span className="text-2xl group-hover:scale-110 transition-transform">🍽️</span>
+          <span className="text-xs font-bold leading-snug text-foreground">{t("home.findCraving")}</span>
+          <span className="text-[10px] text-muted-foreground font-normal leading-tight">{t("home.findCravingSubtext")}</span>
         </motion.button>
 
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 }}
-          whileTap={{ scale: 0.95 }}
-          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.96 }}
           onClick={() => changeMode("scan")}
-          className="group bg-secondary text-secondary-foreground rounded-2xl px-5 py-4 flex items-center gap-4 shadow-md hover:shadow-lg text-left transition-shadow"
+          className="group bg-card border border-border rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
         >
-          <span className="text-3xl">🥘</span>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-bold leading-snug">{t("home.scanFridge")}</span>
-            <span className="text-xs opacity-80 font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
-          </div>
+          <span className="text-2xl group-hover:scale-110 transition-transform">🥘</span>
+          <span className="text-xs font-bold leading-snug text-foreground">{t("home.scanFridge")}</span>
+          <span className="text-[10px] text-muted-foreground font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
         </motion.button>
       </div>
       </div>
