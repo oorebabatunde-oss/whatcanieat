@@ -128,7 +128,7 @@ const Index = () => {
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => changeMode("quiz")}
-          className="group rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md flex-1 text-center transition-all border border-primary/30 hover:border-primary/60" style={{ backgroundColor: "rgba(251, 255, 253, 0.8)" }}
+          className="group bg-primary/15 border border-primary/25 rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:bg-primary/25 hover:border-primary/40 flex-1 text-center transition-all"
         >
           <span className="text-2xl group-hover:scale-110 transition-transform">🍽️</span>
           <span className="text-xs font-bold leading-snug text-foreground">{t("home.findCraving")}</span>
@@ -141,7 +141,7 @@ const Index = () => {
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => changeMode("scan")}
-          className="group rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md flex-1 text-center transition-all border border-primary/30 hover:border-primary/60" style={{ backgroundColor: "rgba(251, 255, 253, 0.8)" }}
+          className="group bg-primary/15 border border-primary/25 rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:bg-primary/25 hover:border-primary/40 flex-1 text-center transition-all"
         >
           <span className="text-2xl group-hover:scale-110 transition-transform">🥘</span>
           <span className="text-xs font-bold leading-snug text-foreground">{t("home.scanFridge")}</span>
