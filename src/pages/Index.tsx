@@ -120,10 +120,10 @@ const Index = () => {
           transition={{ delay: 0.3 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => changeMode("quiz")}
-          className="bg-primary/10 backdrop-blur-md border border-primary/20 text-foreground rounded-2xl px-3 py-5 flex flex-col items-center gap-1.5 shadow-sm hover:shadow-md hover:bg-primary/15 flex-1 text-center transition-all"
+          className="bg-primary/20 backdrop-blur-md border border-primary/30 rounded-2xl px-3 py-5 flex flex-col items-center gap-1.5 shadow-md hover:shadow-lg hover:bg-primary/30 hover:border-primary/40 flex-1 text-center transition-all"
         >
           <span className="text-lg">🍽️</span>
-          <span className="text-xs font-semibold leading-snug">{t("home.findCraving")}</span>
+          <span className="text-xs font-bold leading-snug text-primary">{t("home.findCraving")}</span>
           <span className="text-[10px] text-muted-foreground font-normal leading-tight mt-0.5">{t("home.findCravingSubtext")}</span>
         </motion.button>
 
@@ -133,10 +133,10 @@ const Index = () => {
           transition={{ delay: 0.45 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => changeMode("scan")}
-          className="bg-primary/10 backdrop-blur-md border border-primary/20 text-foreground rounded-2xl px-3 py-5 flex flex-col items-center gap-1.5 shadow-sm hover:shadow-md hover:bg-primary/15 flex-1 text-center transition-all"
+          className="bg-primary/20 backdrop-blur-md border border-primary/30 rounded-2xl px-3 py-5 flex flex-col items-center gap-1.5 shadow-md hover:shadow-lg hover:bg-primary/30 hover:border-primary/40 flex-1 text-center transition-all"
         >
           <span className="text-lg">🥘</span>
-          <span className="text-xs font-semibold leading-snug">{t("home.scanFridge")}</span>
+          <span className="text-xs font-bold leading-snug text-primary">{t("home.scanFridge")}</span>
           <span className="text-[10px] text-muted-foreground font-normal leading-tight mt-0.5">{t("home.scanFridgeSubtext")}</span>
         </motion.button>
       </div>
