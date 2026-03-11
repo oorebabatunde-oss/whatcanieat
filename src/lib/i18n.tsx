@@ -6,7 +6,9 @@ const translations: Record<Lang, Record<string, string>> = {
   en: {
     "app.title": "What Can I Eat?",
     "home.findCraving": "Find what I'm craving",
-    "home.scanFridge": "Scan my fridge or cupboard",
+    "home.scanFridge": "What can I eat that I already have",
+    "home.findCravingSubtext": "Answer a few questions and we'll suggest the perfect dish",
+    "home.scanFridgeSubtext": "Snap a photo or type what you have to get recipe ideas",
     "quiz.craving.title": "What are you craving?",
     "quiz.craving.subtitle": "Pick one to get started",
     "quiz.craving.snack": "A Snack",
