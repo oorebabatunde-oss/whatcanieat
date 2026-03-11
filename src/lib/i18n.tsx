@@ -602,7 +602,9 @@ const translations: Record<Lang, Record<string, string>> = {
   ja: {
     "app.title": "何が食べられる？",
     "home.findCraving": "食べたいものを探す",
-    "home.scanFridge": "冷蔵庫をスキャン",
+    "home.scanFridge": "今ある食材で何が作れる？",
+    "home.findCravingSubtext": "いくつかの質問に答えるとぴったりの料理を提案します",
+    "home.scanFridgeSubtext": "写真を撮るか食材を入力してレシピのアイデアを見つけよう",
     "quiz.craving.title": "何が食べたい？", "quiz.craving.subtitle": "一つ選んでください",
     "quiz.craving.snack": "おやつ", "quiz.craving.meal": "食事", "quiz.craving.unknown": "おまかせ",
     "quiz.flavor.title": "どんな味が好き？", "quiz.flavor.subtitle": "いくつでも選べます",
