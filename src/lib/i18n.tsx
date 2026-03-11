@@ -51,7 +51,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.title": "Anything else?",
     "quiz.context.subtitle": "Optional — add extra context",
     "quiz.context.placeholder": "e.g. I'm cooking for a toddler, only Korean dishes, budget-friendly...",
-    "quiz.context.skip": "Skip",
+    "quiz.context.skip": "Nothing else",
     "results.loading.title": "Finding your perfect food...",
     "results.loading.subtitle": "Finding recommendations...",
     "results.title": "Here's what you could eat!",
