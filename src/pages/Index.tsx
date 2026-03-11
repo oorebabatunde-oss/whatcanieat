@@ -144,8 +144,8 @@ const Index = () => {
           className="group bg-card/90 backdrop-blur-sm border border-border rounded-2xl px-3 py-5 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
         >
           <span className="text-2xl group-hover:scale-110 transition-transform">🥘</span>
-          <span className="text-xs font-bold leading-snug text-foreground">{t("home.scanFridge")}</span>
-          <span className="text-[10px] text-muted-foreground font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
+          <span className="text-sm font-bold leading-snug text-foreground">{t("home.scanFridge")}</span>
+          <span className="text-xs text-muted-foreground font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
         </motion.button>
       </div>
       </div>
