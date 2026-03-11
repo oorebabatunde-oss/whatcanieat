@@ -124,7 +124,7 @@ const Index = () => {
         >
           <span className="text-lg">🍽️</span>
           <span className="text-xs font-semibold leading-snug">{t("home.findCraving")}</span>
-          <span className="text-[10px] opacity-70 font-normal leading-tight mt-0.5">{t("home.findCravingSubtext")}</span>
+          <span className="text-[10px] text-muted-foreground font-normal leading-tight mt-0.5">{t("home.findCravingSubtext")}</span>
         </motion.button>
 
         <motion.button
