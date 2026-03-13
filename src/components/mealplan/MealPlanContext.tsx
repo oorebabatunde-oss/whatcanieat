@@ -88,6 +88,7 @@ const initialState: MealPlanState = {
   duration: 3,
   planData: null,
   error: null,
+  progressMessage: null,
 };
 
 function loadState(): MealPlanState {
