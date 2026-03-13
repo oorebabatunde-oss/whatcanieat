@@ -11,7 +11,7 @@ interface PlateLoaderProps {
 export default function PlateLoader({ message }: PlateLoaderProps) {
   const { t } = useI18n();
   const [foodIndex, setFoodIndex] = useState(0);
-  const [showAlmost, setShowAlmost] = useState(false);
+  const [delayPhase, setDelayPhase] = useState<0 | 1 | 2>(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,8 +21,9 @@ export default function PlateLoader({ message }: PlateLoaderProps) {
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setShowAlmost(true), 5000);
-    return () => clearTimeout(timeout);
+    const t1 = setTimeout(() => setDelayPhase(1), 5000);
+    const t2 = setTimeout(() => setDelayPhase(2), 15000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
   return (
@@ -50,15 +51,17 @@ export default function PlateLoader({ message }: PlateLoaderProps) {
         <p className="text-muted-foreground text-sm text-center">{message}</p>
       )}
 
-      <AnimatePresence>
-        {showAlmost && (
+      <AnimatePresence mode="wait">
+        {delayPhase >= 1 && (
           <motion.p
+            key={delayPhase}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.4 }}
             className="text-muted-foreground/70 text-xs text-center italic"
           >
-            {t("loading.almostThere")}
+            {delayPhase === 1 ? t("loading.almostThere") : t("loading.notLongNow")}
           </motion.p>
         )}
       </AnimatePresence>
