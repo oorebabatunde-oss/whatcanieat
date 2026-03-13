@@ -11,7 +11,7 @@ interface PlateLoaderProps {
 export default function PlateLoader({ message }: PlateLoaderProps) {
   const { t } = useI18n();
   const [foodIndex, setFoodIndex] = useState(0);
-  const [showAlmost, setShowAlmost] = useState(false);
+  const [delayPhase, setDelayPhase] = useState<0 | 1 | 2>(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,8 +21,9 @@ export default function PlateLoader({ message }: PlateLoaderProps) {
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setShowAlmost(true), 5000);
-    return () => clearTimeout(timeout);
+    const t1 = setTimeout(() => setDelayPhase(1), 5000);
+    const t2 = setTimeout(() => setDelayPhase(2), 15000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
   return (
