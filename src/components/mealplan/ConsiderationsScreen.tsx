@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, ShieldCheck, Wrench, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
 
 const SAFETY_OPTIONS = [
   "Nut allergy", "Egg allergy", "Shellfish allergy", "Soy allergy",
