@@ -124,6 +124,11 @@ export default function ConsiderationsScreen() {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md mx-auto flex flex-col gap-4 px-5"
     >
+      {hasPlan && (
+        <Button variant="ghost" size="sm" onClick={goBackToResults} className="self-start gap-1.5 text-xs text-muted-foreground -mb-2">
+          <ArrowLeft className="w-3.5 h-3.5" /> {t("mealplan.backToPlan")}
+        </Button>
+      )}
       <div className="text-center mb-2">
         <h2 className="text-display-2 font-display text-foreground">{t("mealplan.title")}</h2>
         <p className="text-body-xs text-muted-foreground mt-1">{t("mealplan.subtitle")}</p>
