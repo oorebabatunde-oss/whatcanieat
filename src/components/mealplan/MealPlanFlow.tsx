@@ -5,11 +5,11 @@ import { useI18n } from "@/lib/i18n";
 import PlateLoader from "@/components/ui/PlateLoader";
 
 function MealPlanInner() {
-  const { state } = useMealPlan();
+  const { state, progressMessage } = useMealPlan();
   const { t } = useI18n();
 
   if (state.step === "loading") {
-    return <PlateLoader message={t("mealplan.generating")} />;
+    return <PlateLoader message={t("mealplan.generating")} progressMessage={progressMessage} />;
   }
 
   if (state.step === "results" && state.planData) {

@@ -53,6 +53,21 @@ export default function PlateLoader({ message, progressMessage }: PlateLoaderPro
       )}
 
       <AnimatePresence mode="wait">
+        {progressMessage && (
+          <motion.p
+            key={progressMessage}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.3 }}
+            className="text-primary text-xs font-medium text-center"
+          >
+            {progressMessage}
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence mode="wait">
         {delayPhase >= 1 && (
           <motion.p
             key={delayPhase}
