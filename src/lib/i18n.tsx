@@ -1239,6 +1239,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.placeholder": "напр. Готовлю для малыша, только корейская кухня, бюджетно...",
     "quiz.context.skip": "Больше ничего",
     "results.loading.title": "Ищем идеальную еду...", "results.loading.subtitle": "Поиск рекомендаций...",
+    "loading.almostThere": "Почти готово. Ещё работаем.",
     "results.title": "Вот что можно съесть!", "results.subtitle": "Рекомендации от ИИ.\nИзображения могут быть неточными.",
     "results.whereToBuy": "Где купить", "results.howToMake": "Как готовить",
     "results.dismiss": "Уточнить желание", "results.refinePlaceholder": "Расскажите подробнее",
