@@ -18,7 +18,7 @@ const MODE_KEY = "app-mode";
 function loadMode(): AppMode {
   try {
     const stored = sessionStorage.getItem(MODE_KEY);
-    if (stored === "quiz" || stored === "scan") return stored;
+    if (stored === "quiz" || stored === "scan" || stored === "mealplan") return stored;
   } catch {}
   return "welcome";
 }
