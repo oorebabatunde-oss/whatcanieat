@@ -5,7 +5,7 @@ import { toast } from "@/hooks/use-toast";
 export interface Considerations {
   safety: string[];
   practical: {
-    budget?: { amount: number; currency: string };
+    budget?: { amount: number; currency: string; period: "day" | "week" | "month" };
     maxPrepTime?: number;
     mealsPerDay?: number;
     cookingSkill?: "beginner" | "simple" | "comfortable";

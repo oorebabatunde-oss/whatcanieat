@@ -163,10 +163,11 @@ export default function ConsiderationsScreen() {
                         ...prev,
                         practical: {
                           ...prev.practical,
-                          budget: {
-                            amount: prev.practical.budget?.amount || 0,
-                            currency: prev.practical.budget?.currency === c ? "" : c,
-                          },
+                            budget: {
+                              amount: prev.practical.budget?.amount || 0,
+                              currency: prev.practical.budget?.currency === c ? "" : c,
+                              period: prev.practical.budget?.period || "week",
+                            },
                         },
                       }))
                     }
@@ -176,7 +177,7 @@ export default function ConsiderationsScreen() {
               <Input
                 type="number"
                 min={0}
-                placeholder="Total budget"
+                placeholder="Amount"
                 value={local.practical.budget?.amount || ""}
                 onChange={(e) =>
                   setLocal((prev) => ({
@@ -186,12 +187,34 @@ export default function ConsiderationsScreen() {
                       budget: {
                         amount: Number(e.target.value) || 0,
                         currency: prev.practical.budget?.currency || "£",
+                        period: prev.practical.budget?.period || "week",
                       },
                     },
                   }))
                 }
                 className="h-8 w-28 text-sm"
               />
+              <span className="text-xs text-muted-foreground">{t("mealplan.budget.per")}</span>
+              {(["day", "week", "month"] as const).map((p) => (
+                <Chip
+                  key={p}
+                  label={t(`mealplan.budget.${p}`)}
+                  selected={( local.practical.budget?.period || "week") === p}
+                  onClick={() =>
+                    setLocal((prev) => ({
+                      ...prev,
+                      practical: {
+                        ...prev.practical,
+                        budget: {
+                          amount: prev.practical.budget?.amount || 0,
+                          currency: prev.practical.budget?.currency || "£",
+                          period: p,
+                        },
+                      },
+                    }))
+                  }
+                />
+              ))}
             </div>
           </div>
 
