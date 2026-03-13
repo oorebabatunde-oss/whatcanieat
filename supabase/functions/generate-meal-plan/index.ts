@@ -562,58 +562,92 @@ serve(async (req) => {
         return new Response(JSON.stringify({ error: `Failed: ${lastError}` }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
     } else {
-      // Chunked generation for 30-day plans
-      const CHUNK_SIZE = 5; // 5 days per chunk = 6 chunks for 30 days
-      const chunks: any[] = [];
-      const usedMealNames: string[] = [];
+      // Chunked generation for 30-day plans — stream progress via SSE
+      const CHUNK_SIZE = 5;
+      const encoder = new TextEncoder();
 
-      for (let startDay = 1; startDay <= validDuration; startDay += CHUNK_SIZE) {
-        const chunkDays = Math.min(CHUNK_SIZE, validDuration - startDay + 1);
-        console.log(`[${requestId}] Generating chunk: days ${startDay}-${startDay + chunkDays - 1}`);
+      const stream = new ReadableStream({
+        async start(controller) {
+          const sendEvent = (event: string, data: any) => {
+            controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));
+          };
 
-        try {
-          const chunk = await generateChunk(
-            requestId,
-            LOVABLE_API_KEY,
-            considerations,
-            chunkDays,
-            startDay,
-            validDuration,
-            undefined,
-            usedMealNames.length > 0 ? usedMealNames : undefined,
-          );
-          chunks.push(chunk);
+          const chunks: any[] = [];
+          const usedMealNames: string[] = [];
+          const totalChunks = Math.ceil(validDuration / CHUNK_SIZE);
 
-          // Track used meal names to avoid repetition
-          for (const day of chunk.days || []) {
-            for (const meal of day.meals || []) {
-              if (meal.name) usedMealNames.push(meal.name);
+          for (let startDay = 1; startDay <= validDuration; startDay += CHUNK_SIZE) {
+            const chunkDays = Math.min(CHUNK_SIZE, validDuration - startDay + 1);
+            const chunkIndex = Math.floor((startDay - 1) / CHUNK_SIZE) + 1;
+            const endDay = startDay + chunkDays - 1;
+
+            sendEvent("progress", {
+              chunk: chunkIndex,
+              totalChunks,
+              startDay,
+              endDay,
+              message: `Generating days ${startDay}–${endDay}...`,
+            });
+
+            console.log(`[${requestId}] Generating chunk ${chunkIndex}/${totalChunks}: days ${startDay}-${endDay}`);
+
+            try {
+              const chunk = await generateChunk(
+                requestId,
+                LOVABLE_API_KEY,
+                considerations,
+                chunkDays,
+                startDay,
+                validDuration,
+                undefined,
+                usedMealNames.length > 0 ? usedMealNames : undefined,
+              );
+              chunks.push(chunk);
+
+              for (const day of chunk.days || []) {
+                for (const meal of day.meals || []) {
+                  if (meal.name) usedMealNames.push(meal.name);
+                }
+              }
+            } catch (e: any) {
+              if (e.status === 429 || e.status === 402) {
+                sendEvent("error", { error: e.message });
+                controller.close();
+                return;
+              }
+              console.error(`[${requestId}] Chunk failed at day ${startDay}:`, e.message);
+              if (chunks.length === 0) {
+                sendEvent("error", { error: "Failed to generate meal plan" });
+                controller.close();
+                return;
+              }
+              break;
             }
           }
-        } catch (e: any) {
-          if (e.status === 429 || e.status === 402) {
-            return new Response(JSON.stringify({ error: e.message }), {
-              status: e.status,
-              headers: { ...corsHeaders, "Content-Type": "application/json" },
-            });
-          }
-          console.error(`[${requestId}] Chunk failed at day ${startDay}:`, e.message);
-          // If we have some chunks, continue with what we have
-          if (chunks.length === 0) {
-            return new Response(JSON.stringify({ error: "Failed to generate meal plan" }), {
-              status: 500,
-              headers: { ...corsHeaders, "Content-Type": "application/json" },
-            });
-          }
-          break;
-        }
-      }
 
-      plan = mergeChunks(chunks, validDuration);
-      console.log(`[${requestId}] Merged ${chunks.length} chunks: ${plan.days.length} days total`);
+          sendEvent("progress", { message: "Assembling your plan..." });
+
+          const finalPlan = mergeChunks(chunks, validDuration);
+          finalPlan.days = finalPlan.days.map((day: any, idx: number) => ({ ...day, dayNumber: idx + 1 }));
+
+          console.log(`[${requestId}] Merged ${chunks.length} chunks: ${finalPlan.days.length} days total`);
+
+          sendEvent("complete", { plan: finalPlan });
+          controller.close();
+        },
+      });
+
+      return new Response(stream, {
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          "Connection": "keep-alive",
+        },
+      });
     }
 
-    // Final renumber
+    // Final renumber (single-shot path)
     plan.days = plan.days.map((day: any, idx: number) => ({ ...day, dayNumber: idx + 1 }));
 
     console.log(`[${requestId}] generate-meal-plan: final result ${plan.days.length} days (requested ${validDuration})`);

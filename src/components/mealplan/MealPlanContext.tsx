@@ -68,6 +68,7 @@ interface MealPlanContextType {
   adjustConstraints: () => void;
   goBackToResults: () => void;
   reset: () => void;
+  progressMessage: string | null;
 }
 
 const MealPlanContext = createContext<MealPlanContextType | null>(null);
