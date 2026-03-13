@@ -9,7 +9,7 @@ interface PlateLoaderProps {
   progressMessage?: string | null;
 }
 
-export default function PlateLoader({ message }: PlateLoaderProps) {
+export default function PlateLoader({ message, progressMessage }: PlateLoaderProps) {
   const { t } = useI18n();
   const [foodIndex, setFoodIndex] = useState(0);
   const [delayPhase, setDelayPhase] = useState<0 | 1 | 2>(0);
