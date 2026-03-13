@@ -368,7 +368,13 @@ serve(async (req) => {
       });
     }
 
-    console.log(`[${requestId}] generate-meal-plan: success, ${plan.days?.length || 0} days`);
+    // Validate: trim days to match requested duration
+    if (Array.isArray(plan.days) && plan.days.length > validDuration) {
+      console.log(`[${requestId}] Trimming ${plan.days.length} days to ${validDuration}`);
+      plan.days = plan.days.slice(0, validDuration);
+    }
+
+    console.log(`[${requestId}] generate-meal-plan: success, ${plan.days?.length || 0} days (requested ${validDuration})`);
 
     return new Response(JSON.stringify({ plan }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
