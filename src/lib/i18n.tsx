@@ -984,6 +984,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "Kaydedilen yemekleri gör",
     "saved.guestWarning": "Kaydedilen yemekleriniz yerel olarak saklanır ve tarayıcı verilerini temizlerseniz kaybolur.",
     "saved.signInToKeep": "Kalıcı olarak saklamak için giriş yap",
+    "saved.tabs.recommendations": "Yemekler",
+    "saved.tabs.mealPlans": "Yemek planları",
+    "saved.emptyPlans": "Henüz kayıtlı yemek planı yok.",
+    "saved.planDuration": "günlük plan",
+    "saved.planSaved": "Plan kaydedildi!",
+    "saved.viewPlan": "Planı gör",
   },
   it: {
     "app.title": "Cosa posso mangiare?",
