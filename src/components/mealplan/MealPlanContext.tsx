@@ -64,7 +64,7 @@ interface MealPlanContextType {
   state: MealPlanState;
   setConsiderations: (c: Considerations) => void;
   setDuration: (d: 1 | 3 | 7 | 30) => void;
-  generatePlan: () => Promise<void>;
+  generatePlan: (duration: 1 | 3 | 7 | 30, considerations: Considerations) => Promise<void>;
   swapMeal: (mealId: string, mealName: string, type: string, removeIngredient?: string) => Promise<void>;
   regenerate: () => Promise<void>;
   adjustConstraints: () => void;
