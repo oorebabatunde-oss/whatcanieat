@@ -5,7 +5,7 @@ import { useMealPlan } from "./MealPlanContext";
 import { useSaveMealPlan } from "@/hooks/useSaveMealPlan";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft } from "lucide-react";
+import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft, RotateCcw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import SwapDialog from "./SwapDialog";
 
