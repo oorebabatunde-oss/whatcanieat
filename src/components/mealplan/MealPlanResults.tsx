@@ -5,7 +5,7 @@ import { useMealPlan } from "./MealPlanContext";
 import { useSaveMealPlan } from "@/hooks/useSaveMealPlan";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft } from "lucide-react";
+import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft, RotateCcw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import SwapDialog from "./SwapDialog";
 
@@ -72,8 +72,11 @@ export default function MealPlanResults() {
         <Button variant="outline" size="sm" onClick={adjustConstraints} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <Sliders className="w-3.5 h-3.5" /> {t("mealplan.adjust")}
         </Button>
-        <Button variant="outline" size="sm" onClick={handleSave} disabled={saved} className="gap-1.5 text-xs min-h-[44px] rounded-xl ml-auto">
+        <Button variant="outline" size="sm" onClick={handleSave} disabled={saved} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <Save className="w-3.5 h-3.5" /> {saved ? t("saved.planSaved") : t("mealplan.save")}
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => { sessionStorage.clear(); window.location.reload(); }} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
+          <RotateCcw className="w-3.5 h-3.5" /> {t("mealplan.newPlan")}
         </Button>
       </div>
 
