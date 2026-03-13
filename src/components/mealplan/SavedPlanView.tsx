@@ -207,7 +207,7 @@ export default function SavedPlanView({ planData, planName, onBack }: SavedPlanV
                     <div className="min-w-0">
                       <span className="text-foreground">{item.name}</span>
                       <span className="text-muted-foreground text-xs ml-1">
-                        {item.totalQuantity} {item.unit}
+                        {item.totalQuantity}{item.unit && !item.totalQuantity.toLowerCase().includes(item.unit.toLowerCase()) ? ` ${item.unit}` : ""}
                       </span>
                       {item.recipesUsedIn.length > 0 && (
                         <p className="text-[10px] text-muted-foreground truncate">

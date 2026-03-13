@@ -63,6 +63,10 @@ PRIORITY ORDER (never violate higher priority for lower):
 CAPSULE MEALS:
 Capsule meals are quick, portable, minimal-prep meals (yogurt bowls, wraps, smoothies, snack plates, salads). Mark them with isCapsule: true.
 
+RECIPE NAMING:
+- Use simple, descriptive meal names (e.g. "Akara and Pap", "Grilled Chicken Salad", "Moin Moin Breakfast")
+- Never use narrative or story-like names. No "stories", "tales", or filler words in names.
+
 RECIPE INSTRUCTIONS:
 - Use clear, step-based, simple language
 - Each step should be one action, max 3 steps per recipe
@@ -190,7 +194,7 @@ const FULL_TOOL_SCHEMA = {
               unit: { type: "string" },
               estimatedPrice: { type: "number" },
               aisle: { type: "string", enum: ["Produce", "Protein", "Dairy", "Pantry", "Frozen", "Spices", "Other"] },
-              recipesUsedIn: { type: "array", items: { type: "string" } },
+              recipesUsedIn: { type: "array", items: { type: "string" }, description: "Array of meal names this ingredient is used in. Use exact meal names from the days array." },
             },
             required: ["name", "totalQuantity", "unit", "estimatedPrice", "aisle", "recipesUsedIn"],
           },
@@ -380,7 +384,7 @@ ${ingredientSummary.join("\n")}`;
                 unit: { type: "string" },
                 estimatedPrice: { type: "number" },
                 aisle: { type: "string", enum: ["Produce", "Protein", "Dairy", "Pantry", "Frozen", "Spices", "Other"] },
-                recipesUsedIn: { type: "array", items: { type: "string" } },
+                recipesUsedIn: { type: "array", items: { type: "string" }, description: "Array of meal names this ingredient is used in. Use exact meal names from the days array." },
               },
               required: ["name", "totalQuantity", "unit", "estimatedPrice", "aisle", "recipesUsedIn"],
             },
