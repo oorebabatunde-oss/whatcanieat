@@ -89,7 +89,7 @@ export default function MealPlanResults() {
 
       {activeTab === "meals" && (
         <div className="flex flex-col gap-4">
-          {plan.days.map((day) => (
+          {days.map((day) => (
             <div key={day.dayNumber} className="flex flex-col gap-2">
               <h3 className="text-body-xs font-semibold text-muted-foreground uppercase tracking-wide">
                 {t("mealplan.dayLabel")} {day.dayNumber}
