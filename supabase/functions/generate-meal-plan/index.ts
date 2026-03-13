@@ -321,6 +321,7 @@ serve(async (req) => {
         },
         body: JSON.stringify({
           model: "google/gemini-2.5-flash",
+          max_tokens: validDuration >= 7 ? 16384 : 8192,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: attemptPrompt },
@@ -350,6 +351,12 @@ serve(async (req) => {
       }
 
       const data = await response.json();
+      const finishReason = data.choices?.[0]?.finish_reason;
+      if (finishReason === "length") {
+        console.warn(`[${requestId}] Attempt ${attempt}: Output truncated (finish_reason=length)`);
+        lastError = "Output was truncated — plan too large";
+        continue;
+      }
 
       // Extract tool call result
       const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
