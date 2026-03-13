@@ -52,7 +52,7 @@ type MealPlanStep = "considerations" | "loading" | "results";
 interface MealPlanState {
   step: MealPlanStep;
   considerations: Considerations;
-  duration: 1 | 3 | 7;
+  duration: 1 | 3 | 7 | 30;
   planData: PlanData | null;
   error: string | null;
 }
@@ -60,7 +60,7 @@ interface MealPlanState {
 interface MealPlanContextType {
   state: MealPlanState;
   setConsiderations: (c: Considerations) => void;
-  setDuration: (d: 1 | 3 | 7) => void;
+  setDuration: (d: 1 | 3 | 7 | 30) => void;
   generatePlan: () => Promise<void>;
   swapMeal: (mealId: string, mealName: string, type: string, removeIngredient?: string) => Promise<void>;
   regenerate: () => Promise<void>;

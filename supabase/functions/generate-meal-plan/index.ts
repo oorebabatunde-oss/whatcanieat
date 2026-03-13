@@ -271,7 +271,7 @@ serve(async (req) => {
     }
 
     const { considerations = {}, duration = 3, swap } = body;
-    const validDuration = [1, 3, 7].includes(duration) ? duration : 3;
+    const validDuration = [1, 3, 7, 30].includes(duration) ? duration : 3;
 
     console.log(`[${requestId}] generate-meal-plan: duration=${validDuration} swap=${!!swap}`);
 

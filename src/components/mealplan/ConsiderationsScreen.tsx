@@ -77,7 +77,7 @@ export default function ConsiderationsScreen() {
   const { t } = useI18n();
   const { state, setConsiderations, setDuration, generatePlan } = useMealPlan();
   const [local, setLocal] = useState<Considerations>(state.considerations);
-  const [dur, setDur] = useState<1 | 3 | 7>(state.duration);
+  const [dur, setDur] = useState<1 | 3 | 7 | 30>(state.duration);
 
   const toggleSafety = (item: string) => {
     setLocal((c) => ({
@@ -266,7 +266,7 @@ export default function ConsiderationsScreen() {
 
       {/* Duration toggle */}
       <div className="flex items-center justify-center gap-2">
-        {([1, 3, 7] as const).map((d) => (
+        {([1, 3, 7, 30] as const).map((d) => (
           <button
             key={d}
             onClick={() => setDur(d)}
@@ -277,7 +277,7 @@ export default function ConsiderationsScreen() {
                 : "bg-card text-foreground border-border hover:border-primary/40"
             )}
           >
-            {d} {d === 1 ? "day" : t("mealplan.days")}
+            {d === 30 ? "1 month" : `${d} ${d === 1 ? "day" : t("mealplan.days")}`}
           </button>
         ))}
       </div>
