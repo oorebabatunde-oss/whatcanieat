@@ -55,6 +55,7 @@ interface MealPlanState {
   duration: 1 | 3 | 7 | 30;
   planData: PlanData | null;
   error: string | null;
+  progressMessage: string | null;
 }
 
 interface MealPlanContextType {
