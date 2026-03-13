@@ -693,6 +693,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.placeholder": "例如：给小孩做饭、只要韩国菜、经济实惠...",
     "quiz.context.skip": "没有其他了",
     "results.loading.title": "正在寻找完美食物...", "results.loading.subtitle": "正在查找推荐...",
+    "loading.almostThere": "快好了，还在努力中。",
     "results.title": "你可以吃这些！", "results.subtitle": "AI生成的推荐。\n图片可能不准确。",
     "results.whereToBuy": "去哪买", "results.howToMake": "怎么做",
     "results.dismiss": "细化我的口味", "results.refinePlaceholder": "告诉我们更多",
