@@ -270,8 +270,16 @@ serve(async (req) => {
       });
     }
 
-    const { considerations = {}, duration = 3, swap } = body;
-    const validDuration = [1, 3, 7, 30].includes(duration) ? duration : 3;
+    const { considerations = {}, swap } = body;
+    const rawDuration = Number(body.duration);
+    const ALLOWED_DURATIONS = [1, 3, 7, 30];
+    if (!ALLOWED_DURATIONS.includes(rawDuration)) {
+      return new Response(JSON.stringify({ error: `Invalid duration. Must be one of: ${ALLOWED_DURATIONS.join(", ")}` }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const validDuration = rawDuration;
 
     console.log(`[${requestId}] generate-meal-plan: duration=${validDuration} swap=${!!swap}`);
 
