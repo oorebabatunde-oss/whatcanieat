@@ -522,6 +522,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "Ver pratos salvos",
     "saved.guestWarning": "Seus pratos salvos são armazenados localmente e serão perdidos se você limpar os dados do navegador.",
     "saved.signInToKeep": "Entre para mantê-los para sempre",
+    "saved.tabs.recommendations": "Pratos",
+    "saved.tabs.mealPlans": "Planos de refeição",
+    "saved.emptyPlans": "Nenhum plano de refeição salvo.",
+    "saved.planDuration": "dias",
+    "saved.planSaved": "Plano salvo!",
+    "saved.viewPlan": "Ver plano",
   },
   ar: {
     "app.title": "ماذا يمكنني أن آكل؟",
