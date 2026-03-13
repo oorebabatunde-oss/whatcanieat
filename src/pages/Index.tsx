@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { QuizProvider } from "@/components/quiz/QuizContext";
 import QuizFlow from "@/components/quiz/QuizFlow";
 import FridgeScanner from "@/components/scan/FridgeScanner";
+import MealPlanFlow from "@/components/mealplan/MealPlanFlow";
 import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -11,13 +12,13 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Heart, LogIn, LogOut } from "lucide-react";
 
-type AppMode = "welcome" | "quiz" | "scan";
+type AppMode = "welcome" | "quiz" | "scan" | "mealplan";
 const MODE_KEY = "app-mode";
 
 function loadMode(): AppMode {
   try {
     const stored = sessionStorage.getItem(MODE_KEY);
-    if (stored === "quiz" || stored === "scan") return stored;
+    if (stored === "quiz" || stored === "scan" || stored === "mealplan") return stored;
   } catch {}
   return "welcome";
 }
@@ -96,6 +97,24 @@ const Index = () => {
     );
   }
 
+  if (mode === "mealplan") {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        {toolbar}
+        <header className="pt-6 pb-2 px-4 text-center">
+          <button onClick={goWelcome} className="inline-block">
+            <h1 className="text-xl font-display font-bold text-primary">
+              {t("app.title")}
+            </h1>
+          </button>
+        </header>
+        <main className="flex-1 flex items-start justify-center pt-4 pb-8">
+          <MealPlanFlow />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-4 relative overflow-hidden">
       {/* Emoji texture background */}
@@ -121,7 +140,7 @@ const Index = () => {
         </h1>
       </motion.div>
 
-      <div className="flex flex-row items-stretch gap-3 w-full max-w-[18rem]">
+      <div className="flex flex-row items-stretch gap-3 w-full max-w-[28rem]">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -146,6 +165,19 @@ const Index = () => {
           <span className="text-2xl group-hover:scale-110 transition-transform">🥘</span>
           <span className="text-sm font-bold leading-snug text-foreground">{t("home.scanFridge")}</span>
           <span className="text-xs text-muted-foreground font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
+        </motion.button>
+
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => changeMode("mealplan")}
+          className="group bg-card/90 backdrop-blur-sm border border-border rounded-2xl px-3 py-3 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
+        >
+          <span className="text-2xl group-hover:scale-110 transition-transform">📋</span>
+          <span className="text-sm font-bold leading-snug text-foreground">{t("home.planMeals")}</span>
+          <span className="text-xs text-muted-foreground font-normal leading-tight">{t("home.planMealsSubtext")}</span>
         </motion.button>
       </div>
       </div>
