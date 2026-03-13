@@ -172,6 +172,12 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, step: "considerations" }));
   };
 
+  const goBackToResults = () => {
+    if (state.planData) {
+      setState((s) => ({ ...s, step: "results" }));
+    }
+  };
+
   const reset = () => {
     sessionStorage.removeItem(STORAGE_KEY);
     setState(initialState);
