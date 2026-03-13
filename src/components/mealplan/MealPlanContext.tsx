@@ -264,7 +264,7 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <MealPlanContext.Provider value={{ state, setConsiderations, setDuration, generatePlan, swapMeal, regenerate, adjustConstraints, goBackToResults, reset }}>
+    <MealPlanContext.Provider value={{ state, setConsiderations, setDuration, generatePlan, swapMeal, regenerate, adjustConstraints, goBackToResults, reset, progressMessage: state.progressMessage }}>
       {children}
     </MealPlanContext.Provider>
   );
