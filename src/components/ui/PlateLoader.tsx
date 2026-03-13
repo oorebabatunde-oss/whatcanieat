@@ -1,11 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
 import { Bell, BellOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-
-const FOODS = ["🥗", "🍕", "🍜", "🧁", "🥑", "🍔", "🌮", "🥘", "🍣", "🍝", "🥙", "🍛"];
 
 const ESTIMATED_SECONDS: Record<number, number> = {
   1: 20,
@@ -23,20 +20,12 @@ interface PlateLoaderProps {
 
 export default function PlateLoader({ message, progressMessage, duration = 3, onNotifyReady }: PlateLoaderProps) {
   const { t } = useI18n();
-  const [foodIndex, setFoodIndex] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [notifyEnabled, setNotifyEnabled] = useState(() => {
     try { return localStorage.getItem("mealplan-notify") === "true"; } catch { return false; }
   });
 
   const estimated = ESTIMATED_SECONDS[duration] || 35;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFoodIndex((prev) => (prev + 1) % FOODS.length);
-    }, 800);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -81,19 +70,10 @@ export default function PlateLoader({ message, progressMessage, duration = 3, on
   return (
     <div className="flex flex-col items-center gap-4 py-8 px-5 w-full max-w-sm mx-auto">
       <div className="relative flex flex-col items-center" style={{ height: 120 }}>
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={foodIndex}
-            initial={{ opacity: 0, scale: 0.3, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.5, y: 16 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
-            className="text-5xl absolute top-0"
-          >
-            {FOODS[foodIndex]}
-          </motion.span>
-        </AnimatePresence>
-        <span className="text-6xl mt-auto">🍽️</span>
+      <div className="relative flex items-center justify-center w-24 h-24">
+        <div className="absolute inset-0 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+        <span className="text-4xl">🍽️</span>
+      </div>
       </div>
 
       {message && (
