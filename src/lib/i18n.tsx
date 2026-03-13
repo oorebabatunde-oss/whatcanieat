@@ -354,6 +354,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "Recherche du plat parfait...",
     "results.loading.subtitle": "Recherche de recommandations...",
     "loading.almostThere": "Presque prêt. Encore un moment.",
+    "loading.notLongNow": "Plus pour longtemps. On peaufine les résultats.",
     "results.title": "Voici ce que vous pourriez manger !",
     "results.subtitle": "Ce sont des recommandations générées par IA.\nLes images peuvent ne pas être exactes.",
     "results.whereToBuy": "Où acheter",
