@@ -6,6 +6,7 @@ const FOODS = ["🥗", "🍕", "🍜", "🧁", "🥑", "🍔", "🌮", "🥘", "
 
 interface PlateLoaderProps {
   message?: string;
+  progressMessage?: string | null;
 }
 
 export default function PlateLoader({ message }: PlateLoaderProps) {
