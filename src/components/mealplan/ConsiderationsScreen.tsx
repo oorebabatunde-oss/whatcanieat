@@ -56,7 +56,6 @@ const Section = React.forwardRef<
 >(function Section({ icon, title, subtitle, defaultOpen, children }, ref) {
   const [open, setOpen] = useState(defaultOpen ?? false);
   return (
-    <div ref={ref}>
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
         <button type="button" className="w-full flex items-center gap-2.5 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg">
@@ -73,7 +72,7 @@ const Section = React.forwardRef<
       </CollapsibleContent>
     </Collapsible>
   );
-}
+});
 
 export default function ConsiderationsScreen() {
   const { t } = useI18n();
