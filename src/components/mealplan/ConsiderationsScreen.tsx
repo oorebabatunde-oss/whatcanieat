@@ -77,7 +77,7 @@ export default function ConsiderationsScreen() {
   const { t } = useI18n();
   const { state, setConsiderations, setDuration, generatePlan } = useMealPlan();
   const [local, setLocal] = useState<Considerations>(state.considerations);
-  const [dur, setDur] = useState<1 | 3 | 7>(state.duration);
+  const [dur, setDur] = useState<1 | 3 | 7 | 30>(state.duration);
 
   const toggleSafety = (item: string) => {
     setLocal((c) => ({
