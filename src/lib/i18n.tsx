@@ -779,6 +779,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.skip": "他にはありません",
     "results.loading.title": "ぴったりの食べ物を探し中...", "results.loading.subtitle": "おすすめを検索中...",
     "loading.almostThere": "もう少しです。まだ作業中。",
+    "loading.notLongNow": "もうすぐです。完璧な結果を確認中。",
     "results.title": "これが食べられます！", "results.subtitle": "AIによるおすすめです。\n画像は正確でない場合があります。",
     "results.whereToBuy": "どこで買う", "results.howToMake": "作り方",
     "results.dismiss": "好みを絞り込む", "results.refinePlaceholder": "もっと教えてください",
