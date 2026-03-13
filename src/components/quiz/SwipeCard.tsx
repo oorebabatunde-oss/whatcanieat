@@ -70,7 +70,7 @@ export default function SwipeCard({
       exit={{ x: 300, opacity: 0, transition: { duration: 0.2 } }}
       className="absolute w-full cursor-grab active:cursor-grabbing"
     >
-      <div className="bg-card rounded-xl overflow-hidden shadow-md">
+      <div className="glass-card rounded-xl overflow-hidden shadow-md">
         {/* Swipe indicators — softer treatment */}
         {isTop && (
           <>

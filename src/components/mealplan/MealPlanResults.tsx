@@ -90,7 +90,7 @@ export default function MealPlanResults() {
                 {t("mealplan.dayLabel")} {day.dayNumber}
               </h3>
               {day.meals.map((meal) => (
-                <motion.div key={meal.id} className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                <motion.div key={meal.id} className="glass-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
                   <button onClick={() => toggleMeal(meal.id)} className="w-full p-3.5 flex items-center justify-between text-left min-h-[52px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="font-medium text-foreground text-sm truncate">{meal.name}</span>
@@ -167,7 +167,7 @@ export default function MealPlanResults() {
           {Object.entries(groupedGrocery).map(([aisle, items]) => (
             <div key={aisle}>
               <h4 className="text-body-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">{aisle}</h4>
-              <div className="bg-card rounded-xl overflow-hidden shadow-sm">
+              <div className="glass-card rounded-xl overflow-hidden shadow-sm">
                 {items.map((item, i) => (
                   <div key={i} className={`px-3.5 py-2.5 flex items-center justify-between text-sm ${i > 0 ? "border-t border-border/50" : ""}`}>
                     <div className="min-w-0">
