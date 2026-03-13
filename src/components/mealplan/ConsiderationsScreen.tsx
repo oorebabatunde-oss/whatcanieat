@@ -163,10 +163,11 @@ export default function ConsiderationsScreen() {
                         ...prev,
                         practical: {
                           ...prev.practical,
-                          budget: {
-                            amount: prev.practical.budget?.amount || 0,
-                            currency: prev.practical.budget?.currency === c ? "" : c,
-                          },
+                            budget: {
+                              amount: prev.practical.budget?.amount || 0,
+                              currency: prev.practical.budget?.currency === c ? "" : c,
+                              period: prev.practical.budget?.period || "week",
+                            },
                         },
                       }))
                     }
