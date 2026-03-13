@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "@/hooks/use-toast";
+import { sendCompletionNotification } from "@/components/ui/PlateLoader";
+import { useI18n } from "@/lib/i18n";
 
 export interface Considerations {
   safety: string[];
@@ -55,6 +57,7 @@ interface MealPlanState {
   planData: PlanData | null;
   error: string | null;
   progressMessage: string | null;
+  isComplete: boolean; // true when grocery list is ready
 }
 
 interface MealPlanContextType {
@@ -88,6 +91,7 @@ const initialState: MealPlanState = {
   planData: null,
   error: null,
   progressMessage: null,
+  isComplete: false,
 };
 
 function loadState(): MealPlanState {
@@ -106,12 +110,15 @@ function loadState(): MealPlanState {
   return initialState;
 }
 
-// Unified SSE fetch for all durations — no supabase.functions.invoke
+// Unified SSE fetch for all durations
 async function callGeneratePlan(
   considerations: Considerations,
   duration: number,
-  swap?: any,
-  onProgress?: (msg: string) => void,
+  swap: any | undefined,
+  onProgress: (msg: string) => void,
+  onChunkReady: (days: PlanData["days"]) => void,
+  onComplete: (plan: PlanData) => void,
+  tFn: (key: string) => string,
 ): Promise<PlanData> {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -161,9 +168,12 @@ async function callGeneratePlan(
           try {
             const data = JSON.parse(line.slice(6));
             if (currentEvent === "progress" && data.message) {
-              onProgress?.(data.message);
+              onProgress(data.message);
+            } else if (currentEvent === "chunk_ready" && data.days) {
+              onChunkReady(data.days);
             } else if (currentEvent === "complete" && data.plan) {
               plan = data.plan;
+              onComplete(data.plan);
             } else if (currentEvent === "error") {
               throw new Error(data.error || "Generation failed");
             }
@@ -179,17 +189,27 @@ async function callGeneratePlan(
     }
 
     if (!plan) throw new Error("No plan received");
+
+    // Send browser notification
+    try {
+      if (localStorage.getItem("mealplan-notify") === "true") {
+        sendCompletionNotification(tFn);
+      }
+    } catch {}
+
     return plan;
   }
 
   // Fallback: regular JSON response
   const data = await response.json();
   if (data.error) throw new Error(data.error);
+  onComplete(data.plan);
   return data.plan;
 }
 
 export function MealPlanProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<MealPlanState>(loadState);
+  const { t } = useI18n();
 
   useEffect(() => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -199,18 +219,34 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
   const setDuration = (d: 1 | 3 | 7 | 30) => setState((s) => ({ ...s, duration: d }));
 
   const generatePlan = async () => {
-    setState((s) => ({ ...s, step: "loading", error: null, progressMessage: null }));
+    setState((s) => ({ ...s, step: "loading", error: null, progressMessage: null, planData: null, isComplete: false }));
     try {
       const plan = await callGeneratePlan(
         state.considerations,
         state.duration,
         undefined,
         (msg) => setState((s) => ({ ...s, progressMessage: msg })),
+        (days) => {
+          // Progressive: show results as soon as first chunk arrives
+          setState((s) => {
+            const existingDays = s.planData?.days || [];
+            const newPlan: PlanData = {
+              days: [...existingDays, ...days],
+              groceryList: [],
+              costSummary: { total: 0, perDay: 0 },
+            };
+            return { ...s, step: "results", planData: newPlan, isComplete: false };
+          });
+        },
+        (completePlan) => {
+          setState((s) => ({ ...s, step: "results", planData: completePlan, isComplete: true, progressMessage: null }));
+        },
+        t,
       );
       if (plan.days && plan.days.length > state.duration) {
         plan.days = plan.days.slice(0, state.duration);
       }
-      setState((s) => ({ ...s, step: "results", planData: plan, error: null, progressMessage: null }));
+      setState((s) => ({ ...s, step: "results", planData: plan, error: null, progressMessage: null, isComplete: true }));
     } catch (e: any) {
       const msg = e?.message || "Something went wrong";
       setState((s) => ({ ...s, step: "considerations", error: msg, progressMessage: null }));
@@ -220,16 +256,18 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
 
   const swapMeal = async (mealId: string, mealName: string, type: string, removeIngredient?: string) => {
     if (!state.planData) return;
-    setState((s) => ({ ...s, step: "loading", error: null }));
+    setState((s) => ({ ...s, step: "loading", error: null, isComplete: false }));
     try {
-      const plan = await callGeneratePlan(state.considerations, state.duration, {
-        mealId,
-        mealName,
-        type,
-        removeIngredient,
-        currentPlan: state.planData,
-      });
-      setState((s) => ({ ...s, step: "results", planData: plan, error: null }));
+      const plan = await callGeneratePlan(
+        state.considerations,
+        state.duration,
+        { mealId, mealName, type, removeIngredient, currentPlan: state.planData },
+        (msg) => setState((s) => ({ ...s, progressMessage: msg })),
+        () => {},
+        () => {},
+        t,
+      );
+      setState((s) => ({ ...s, step: "results", planData: plan, error: null, isComplete: true }));
     } catch (e: any) {
       const msg = e?.message || "Something went wrong";
       setState((s) => ({ ...s, step: "results", error: msg }));

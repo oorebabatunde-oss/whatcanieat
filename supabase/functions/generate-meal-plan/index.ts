@@ -722,12 +722,19 @@ ${constraintsBlock}`;
                   usedMealNames.length > 0 ? usedMealNames : undefined,
                 );
 
-                for (const day of chunk.days || []) {
+              const chunkDays = (chunk.days || []).map((d: any, idx: number) => ({
+                  ...d,
+                  dayNumber: currentStartDay + idx,
+                }));
+                for (const day of chunkDays) {
                   allChunkDays.push(day);
                   for (const meal of day.meals || []) {
                     if (meal.name) usedMealNames.push(meal.name);
                   }
                 }
+
+                // Send chunk_ready so client can show partial results immediately
+                sendEvent("chunk_ready", { days: chunkDays });
               } catch (e: any) {
                 if (e.status === 429 || e.status === 402) {
                   sendEvent("error", { error: e.message });
