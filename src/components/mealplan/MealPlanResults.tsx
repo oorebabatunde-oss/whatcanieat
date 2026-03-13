@@ -189,9 +189,9 @@ export default function MealPlanResults() {
             </div>
           ))}
 
-          {plan.costSummary && (
+          {costSummary && (
             <div className="bg-muted/50 rounded-xl p-3.5 text-xs text-foreground font-semibold">
-              Total: ~£{plan.costSummary.total.toFixed(2)}
+              Total: ~£{costSummary.total.toFixed(2)}
             </div>
           )}
         </div>
