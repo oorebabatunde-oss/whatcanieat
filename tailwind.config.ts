@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         display: ["Inter", "sans-serif"],
         body: ["Manrope", "sans-serif"],
+        logo: ["'Playpen Sans'", "cursive"],
       },
       fontSize: {
         "display-1": ["2rem", { lineHeight: "1.15", fontWeight: "700" }],

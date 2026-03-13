@@ -39,7 +39,7 @@ const Index = () => {
   const goWelcome = () => changeMode("welcome");
 
   const toolbar = (
-    <div className="flex items-center justify-end gap-2 px-5 pt-4 pb-2 w-full">
+    <div className="flex items-center justify-end gap-2 px-5 pt-4 pb-2 w-full relative z-10">
       <Link to="/saved">
         <Button variant="ghost" size="sm" className="text-muted-foreground gap-1.5">
           <Heart className="w-4 h-4" />
@@ -115,64 +115,75 @@ const Index = () => {
     );
   }
 
+  const emojis = "🍕🥑🍜🧁🥗🍔🌮🥘🍣🥐🍩🫕🧀🍝🥙🍱🥞🫐🍓🥦🍗🌽🥚🍰🧇🫓🍚🥥🍋🫑";
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-5 relative overflow-hidden">
-      {toolbar}
+      {/* Emoji background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
+        <div className="absolute inset-0 text-[2rem] leading-[2.5rem] tracking-widest opacity-[0.06] dark:opacity-[0.04] break-all whitespace-pre-wrap p-4">
+          {emojis.repeat(20)}
+        </div>
+      </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center mb-10"
-        >
-          <h1 className="text-display-1 md:text-5xl font-display font-bold text-foreground mb-2 leading-tight">
-            {t("app.title")}
-          </h1>
-          <p className="text-muted-foreground text-body-sm">
-            Figure out what to eat — no stress.
-          </p>
-        </motion.div>
+      <div className="relative z-10 w-full flex flex-col items-center flex-1">
+        {toolbar}
 
-        <div className="flex flex-col items-stretch gap-3 w-full max-w-[28rem]">
-          <motion.button
-            initial={{ opacity: 0, y: 16 }}
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => changeMode("quiz")}
-            className="group bg-card rounded-xl px-4 py-4 flex flex-col items-center gap-2.5 shadow-sm hover:shadow-md flex-1 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="text-center mb-10"
           >
-            <span className="text-2xl group-hover:scale-110 transition-transform duration-200">🍽️</span>
-            <span className="text-sm font-semibold leading-snug text-foreground">{t("home.findCraving")}</span>
-            <span className="text-body-xs text-muted-foreground font-normal leading-tight">{t("home.findCravingSubtext")}</span>
-          </motion.button>
+            <h1 className="text-display-1 md:text-5xl font-bold text-foreground mb-2 leading-tight" style={{ fontFamily: "'Playpen Sans', cursive" }}>
+              {t("app.title")}
+            </h1>
+            <p className="text-muted-foreground text-body-sm">
+              Figure out what to eat — no stress.
+            </p>
+          </motion.div>
 
-          <motion.button
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.4 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => changeMode("scan")}
-            className="group bg-card rounded-xl px-4 py-4 flex flex-col items-center gap-2.5 shadow-sm hover:shadow-md flex-1 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
-            <span className="text-2xl group-hover:scale-110 transition-transform duration-200">🥘</span>
-            <span className="text-sm font-semibold leading-snug text-foreground">{t("home.scanFridge")}</span>
-            <span className="text-body-xs text-muted-foreground font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
-          </motion.button>
+          <div className="flex flex-col items-stretch gap-3 w-full max-w-[28rem]">
+            <motion.button
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => changeMode("quiz")}
+              className="group glass-card rounded-xl px-4 py-4 flex flex-col items-center gap-2.5 shadow-sm hover:shadow-md flex-1 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <span className="text-2xl group-hover:scale-110 transition-transform duration-200">🍽️</span>
+              <span className="text-sm font-semibold leading-snug text-foreground">{t("home.findCraving")}</span>
+              <span className="text-body-xs text-muted-foreground font-normal leading-tight">{t("home.findCravingSubtext")}</span>
+            </motion.button>
 
-          <motion.button
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.4 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => changeMode("mealplan")}
-            className="group bg-card rounded-xl px-4 py-4 flex flex-col items-center gap-2.5 shadow-sm hover:shadow-md flex-1 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
-            <span className="text-2xl group-hover:scale-110 transition-transform duration-200">📋</span>
-            <span className="text-sm font-semibold leading-snug text-foreground">{t("home.planMeals")}</span>
-            <span className="text-body-xs text-muted-foreground font-normal leading-tight">{t("home.planMealsSubtext")}</span>
-          </motion.button>
+            <motion.button
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => changeMode("scan")}
+              className="group glass-card rounded-xl px-4 py-4 flex flex-col items-center gap-2.5 shadow-sm hover:shadow-md flex-1 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <span className="text-2xl group-hover:scale-110 transition-transform duration-200">🥘</span>
+              <span className="text-sm font-semibold leading-snug text-foreground">{t("home.scanFridge")}</span>
+              <span className="text-body-xs text-muted-foreground font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
+            </motion.button>
+
+            <motion.button
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.4 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => changeMode("mealplan")}
+              className="group glass-card rounded-xl px-4 py-4 flex flex-col items-center gap-2.5 shadow-sm hover:shadow-md flex-1 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <span className="text-2xl group-hover:scale-110 transition-transform duration-200">📋</span>
+              <span className="text-sm font-semibold leading-snug text-foreground">{t("home.planMeals")}</span>
+              <span className="text-body-xs text-muted-foreground font-normal leading-tight">{t("home.planMealsSubtext")}</span>
+            </motion.button>
+          </div>
         </div>
       </div>
     </div>
