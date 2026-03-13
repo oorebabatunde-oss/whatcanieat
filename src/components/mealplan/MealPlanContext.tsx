@@ -269,7 +269,7 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const regenerate = async () => { await generatePlan(); };
+  const regenerate = async () => { await generatePlan(state.duration, state.considerations); };
   const adjustConstraints = () => { setState((s) => ({ ...s, step: "considerations" })); };
   const goBackToResults = () => { if (state.planData) setState((s) => ({ ...s, step: "results" })); };
   const reset = () => { sessionStorage.removeItem(STORAGE_KEY); setState(initialState); };
