@@ -90,7 +90,7 @@ export default function MealPlanResults() {
                 {t("mealplan.dayLabel")} {day.dayNumber}
               </h3>
               {day.meals.map((meal) => (
-                <motion.div key={meal.id} className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                <motion.div key={meal.id} className="glass-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
                   <button onClick={() => toggleMeal(meal.id)} className="w-full p-3.5 flex items-center justify-between text-left min-h-[52px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="font-medium text-foreground text-sm truncate">{meal.name}</span>
