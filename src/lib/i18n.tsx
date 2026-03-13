@@ -927,6 +927,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.placeholder": "जैसे: छोटे बच्चे के लिए, सिर्फ कोरियन, बजट में...",
     "quiz.context.skip": "और कुछ नहीं",
     "results.loading.title": "सही खाना खोज रहे हैं...", "results.loading.subtitle": "सिफारिशें खोज रहे हैं...",
+    "loading.almostThere": "लगभग हो गया। अभी भी काम कर रहे हैं।",
     "results.title": "यह खा सकते हैं!", "results.subtitle": "AI द्वारा सुझाव।\nचित्र सटीक नहीं हो सकते।",
     "results.whereToBuy": "कहाँ से खरीदें", "results.howToMake": "कैसे बनाएं",
     "results.dismiss": "पसंद को और स्पष्ट करें", "results.refinePlaceholder": "और बताइए",
