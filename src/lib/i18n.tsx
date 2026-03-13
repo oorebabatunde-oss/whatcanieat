@@ -453,6 +453,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.skip": "Nichts weiter",
     "results.loading.title": "Suche dein perfektes Essen...",
     "results.loading.subtitle": "Empfehlungen werden gesucht...",
+    "loading.almostThere": "Fast fertig. Arbeite noch daran.",
     "results.title": "Das könntest du essen!",
     "results.subtitle": "KI-generierte Empfehlungen.\nBilder können ungenau sein.",
     "results.whereToBuy": "Wo kaufen", "results.howToMake": "Wie zubereiten",
