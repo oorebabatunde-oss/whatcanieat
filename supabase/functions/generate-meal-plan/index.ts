@@ -280,17 +280,30 @@ serve(async (req) => {
 
     const userPrompt = buildUserPrompt(considerations, validDuration, swap);
 
+    // Use longer timeout for bigger plans
+    const timeoutMs = validDuration >= 7 ? 180_000 : 120_000;
+
+    // For long plans, add conciseness instructions to system prompt
+    let systemPrompt = SYSTEM_PROMPT;
+    if (validDuration >= 7) {
+      systemPrompt += `\n\nIMPORTANT FOR LONG PLANS (${validDuration} days):
+- Keep recipe steps concise: maximum 4 short steps per recipe
+- Do NOT include substitutions (omit the substitutions field entirely)
+- Keep ingredient lists tight — prefer fewer, multi-use ingredients
+- Grocery list should be consolidated aggressively`;
+    }
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
-      signal: AbortSignal.timeout(120_000),
+      signal: AbortSignal.timeout(timeoutMs),
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
         tools: [TOOL_SCHEMA],

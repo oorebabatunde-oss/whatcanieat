@@ -42,21 +42,21 @@ function Chip({ label, selected, onClick }: { label: string; selected: boolean; 
   );
 }
 
-function Section({
-  icon,
-  title,
-  subtitle,
-  defaultOpen,
-  children,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-}) {
+import React from "react";
+
+const Section = React.forwardRef<
+  HTMLDivElement,
+  {
+    icon: React.ReactNode;
+    title: string;
+    subtitle: string;
+    defaultOpen?: boolean;
+    children: React.ReactNode;
+  }
+>(function Section({ icon, title, subtitle, defaultOpen, children }, ref) {
   const [open, setOpen] = useState(defaultOpen ?? false);
   return (
+    <div ref={ref}>
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
         <button type="button" className="w-full flex items-center gap-2.5 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg">
