@@ -3,7 +3,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { MapPin, ChefHat, Heart, X } from "lucide-react";
+import { MapPin, ChefHat } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 interface Recommendation {
@@ -70,19 +70,19 @@ export default function SwipeCard({
       exit={{ x: 300, opacity: 0, transition: { duration: 0.2 } }}
       className="absolute w-full cursor-grab active:cursor-grabbing"
     >
-      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-lg">
-        {/* Swipe indicators */}
+      <div className="bg-card rounded-xl overflow-hidden shadow-md">
+        {/* Swipe indicators — softer treatment */}
         {isTop && (
           <>
             <motion.div
               style={{ opacity: likeOpacity }}
-              className="absolute top-4 left-4 z-20 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-display font-bold text-lg rotate-[-12deg] border-2 border-primary"
+              className="absolute top-4 left-4 z-20 bg-success/90 text-success-foreground px-3 py-1.5 rounded-lg font-display font-semibold text-sm rotate-[-12deg]"
             >
               ❤️ SAVE
             </motion.div>
             <motion.div
               style={{ opacity: nopeOpacity }}
-              className="absolute top-4 right-4 z-20 bg-destructive text-destructive-foreground px-4 py-2 rounded-lg font-display font-bold text-lg rotate-[12deg] border-2 border-destructive"
+              className="absolute top-4 right-4 z-20 bg-destructive/80 text-destructive-foreground px-3 py-1.5 rounded-lg font-display font-semibold text-sm rotate-[12deg]"
             >
               ✕ NOPE
             </motion.div>
@@ -105,7 +105,7 @@ export default function SwipeCard({
             />
           )}
           {imageCredit && imageLoaded && imageCredit.source !== "AI" && (
-            <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-black/50 rounded-tl text-[10px] text-white/80">
+            <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-foreground/40 rounded-tl text-[10px] text-background/80">
               Photo by{" "}
               <a
                 href={`${imageCredit.link}${imageCredit.source === "Unsplash" ? "?utm_source=your_app&utm_medium=referral" : ""}`}
@@ -147,7 +147,7 @@ export default function SwipeCard({
             <Button
               variant="outline"
               size="sm"
-              className="text-xs gap-1.5 flex-1"
+              className="text-xs gap-1.5 flex-1 min-h-[44px]"
               onClick={handleWhereToBuy}
             >
               <MapPin className="w-3.5 h-3.5" /> {t("results.whereToBuy")}
@@ -155,7 +155,7 @@ export default function SwipeCard({
             <Button
               variant="outline"
               size="sm"
-              className="text-xs gap-1.5 flex-1"
+              className="text-xs gap-1.5 flex-1 min-h-[44px]"
               onClick={handleHowToMake}
             >
               <ChefHat className="w-3.5 h-3.5" /> {t("results.howToMake")}

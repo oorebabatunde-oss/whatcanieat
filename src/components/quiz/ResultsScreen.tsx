@@ -96,7 +96,6 @@ export default function ResultsScreen() {
         image_query: rec.imageQuery,
       });
     } else {
-      // Save to localStorage for guests
       const key = "guest_saved_recommendations";
       const existing = JSON.parse(localStorage.getItem(key) || "[]");
       existing.push({
@@ -123,7 +122,6 @@ export default function ResultsScreen() {
     const last = swipeHistory[swipeHistory.length - 1];
     setSwipeHistory((prev) => prev.slice(0, -1));
 
-    // If it was a right-swipe (save), remove from DB or localStorage
     if (last.action === "right") {
       if (user) {
         await supabase
@@ -136,7 +134,6 @@ export default function ResultsScreen() {
       } else {
         const key = "guest_saved_recommendations";
         const existing = JSON.parse(localStorage.getItem(key) || "[]");
-        // Remove the last one with this name
         const idx = existing.findLastIndex((item: any) => item.name === last.rec.name);
         if (idx !== -1) existing.splice(idx, 1);
         localStorage.setItem(key, JSON.stringify(existing));
@@ -211,7 +208,7 @@ export default function ResultsScreen() {
     >
       {loading ? (
         <>
-          <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
+          <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
             {t("results.loading.title")}
           </h2>
           <div className="flex flex-col items-center gap-3 py-8">
@@ -228,7 +225,7 @@ export default function ResultsScreen() {
         </>
       ) : allSwiped ? (
         <>
-          <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
+          <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
             {t("results.allDone")}
           </h2>
           <p className="text-muted-foreground text-sm text-center">
@@ -263,7 +260,7 @@ export default function ResultsScreen() {
                 placeholder={t("results.refinePlaceholder")}
                 value={refineFeedback}
                 onChange={(e) => setRefineFeedback(e.target.value)}
-                className="resize-none text-sm"
+                className="resize-none text-sm rounded-xl"
                 rows={3}
               />
               <div className="flex gap-2">
@@ -271,7 +268,7 @@ export default function ResultsScreen() {
                   variant="outline"
                   size="sm"
                   onClick={() => { setShowRefine(false); setRefineFeedback(""); }}
-                  className="flex-1"
+                  className="flex-1 min-h-[44px]"
                 >
                   {t("results.cancel")}
                 </Button>
@@ -279,7 +276,7 @@ export default function ResultsScreen() {
                   size="sm"
                   onClick={handleRefineSearch}
                   disabled={!refineFeedback.trim() || refining}
-                  className="flex-1 gap-1.5"
+                  className="flex-1 gap-1.5 min-h-[44px]"
                 >
                   {refining ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                   {t("results.refineSearch")}
@@ -293,13 +290,13 @@ export default function ResultsScreen() {
         </>
       ) : (
         <>
-          <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
+          <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
             {t("results.title")}
           </h2>
-          <p className="text-muted-foreground text-xs text-center -mt-4 whitespace-pre-line">
+          <p className="text-muted-foreground text-body-xs text-center -mt-4 whitespace-pre-line">
             {t("results.swipeHint")}
           </p>
-          <p className="text-muted-foreground/70 text-[10px] text-center -mt-4 whitespace-pre-line italic">
+          <p className="text-muted-foreground/60 text-[11px] text-center -mt-4 whitespace-pre-line italic">
             {t("results.subtitle")}
           </p>
 
@@ -327,16 +324,18 @@ export default function ResultsScreen() {
             <Button
               variant="outline"
               size="icon"
-              className="h-14 w-14 rounded-full border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              className="h-14 w-14 rounded-full border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors"
               onClick={handleSwipeLeft}
+              aria-label="Skip"
             >
               <X className="w-6 h-6" />
             </Button>
             <Button
               variant="outline"
               size="icon"
-              className="h-14 w-14 rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              className="h-14 w-14 rounded-full border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
               onClick={() => handleSwipeRight(recommendations[currentIndex])}
+              aria-label="Save"
             >
               <Heart className="w-6 h-6" />
             </Button>

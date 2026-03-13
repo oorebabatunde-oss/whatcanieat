@@ -33,10 +33,10 @@ export default function SwapDialog({ mealId, mealName, ingredients, onClose }: S
 
   return (
     <Dialog open onOpenChange={() => onClose()}>
-      <DialogContent className="max-w-sm">
+      <DialogContent className="max-w-sm rounded-xl">
         <DialogHeader>
           <DialogTitle className="text-sm">{t("mealplan.swap")}</DialogTitle>
-          <DialogDescription className="text-xs">{mealName}</DialogDescription>
+          <DialogDescription className="text-body-xs">{mealName}</DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-2">
@@ -45,10 +45,10 @@ export default function SwapDialog({ mealId, mealName, ingredients, onClose }: S
               key={type.value}
               onClick={() => { setSelected(type.value); setRemoveIngredient(null); }}
               className={cn(
-                "flex items-center gap-2 p-2.5 rounded-lg border text-left text-sm transition-all",
+                "flex items-center gap-2 p-3 rounded-xl text-left text-sm min-h-[48px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 selected === type.value
-                  ? "border-primary bg-primary/5"
-                  : "border-border hover:border-primary/40"
+                  ? "bg-primary/10 text-primary shadow-sm"
+                  : "bg-card shadow-sm hover:shadow-md"
               )}
             >
               <span>{type.emoji}</span>
@@ -64,10 +64,10 @@ export default function SwapDialog({ mealId, mealName, ingredients, onClose }: S
                 key={ing}
                 onClick={() => setRemoveIngredient(ing)}
                 className={cn(
-                  "px-2.5 py-1 rounded-full text-xs border transition-all",
+                  "px-3 py-1.5 rounded-full text-xs min-h-[36px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                   removeIngredient === ing
-                    ? "bg-destructive/10 border-destructive text-destructive"
-                    : "border-border text-foreground hover:border-destructive/40"
+                    ? "bg-destructive/10 text-destructive shadow-sm"
+                    : "bg-card text-foreground shadow-sm hover:shadow-md"
                 )}
               >
                 {ing}
@@ -79,7 +79,7 @@ export default function SwapDialog({ mealId, mealName, ingredients, onClose }: S
         <Button
           onClick={handleSwap}
           disabled={!selected || (selected === "remove-ingredient" && !removeIngredient)}
-          className="w-full text-sm mt-2"
+          className="w-full text-sm mt-2 rounded-xl"
         >
           {t("mealplan.swapConfirm")}
         </Button>

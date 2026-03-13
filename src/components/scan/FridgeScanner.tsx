@@ -31,9 +31,9 @@ const CATEGORY_EMOJI: Record<string, string> = {
 };
 
 const DIFFICULTY_COLOR: Record<string, string> = {
-  easy: "bg-green-500/10 text-green-700 dark:text-green-400",
-  medium: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
-  hard: "bg-red-500/10 text-red-700 dark:text-red-400",
+  easy: "bg-success/10 text-success",
+  medium: "bg-caution/10 text-caution",
+  hard: "bg-destructive/10 text-destructive",
 };
 
 type InputMode = "choose" | "type";
@@ -107,7 +107,6 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
     window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(name + " recipe")}`, "_blank");
   };
 
-  // Results view (shared between photo scan and text input)
   const resultsView = result && (
     <motion.div key="results" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col gap-6 w-full">
       {result.ingredients.length === 0 && result.recipes.length === 0 ? (
@@ -148,10 +147,10 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
 
           <div>
             <h2 className="text-xl font-display text-foreground mb-3">{t("scan.recipeIdeas")}</h2>
-            <p className="text-muted-foreground text-xs -mt-2 mb-3">{t("scan.recipeSubtitle")}</p>
+            <p className="text-muted-foreground text-body-xs -mt-2 mb-3">{t("scan.recipeSubtitle")}</p>
             <div className="flex flex-col gap-3">
               {result.recipes.map((recipe, i) => (
-                <motion.div key={recipe.name} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-card border border-border rounded-xl p-4 shadow-sm">
+                <motion.div key={recipe.name} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-card rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h3 className="font-display font-semibold text-foreground text-base">{recipe.name}</h3>
                     <Badge className={`text-[10px] px-1.5 py-0 ${DIFFICULTY_COLOR[recipe.difficulty]}`}>{recipe.difficulty}</Badge>
@@ -167,10 +166,10 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
                     ))}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="text-xs gap-1.5 flex-1" onClick={() => openRecipeSearch(recipe.name)}>
+                    <Button variant="outline" size="sm" className="text-xs gap-1.5 flex-1 min-h-[44px] rounded-xl" onClick={() => openRecipeSearch(recipe.name)}>
                       <ExternalLink className="w-3.5 h-3.5" /> {t("scan.recipe")}
                     </Button>
-                    <Button variant="outline" size="sm" className="text-xs gap-1.5 flex-1" onClick={() => openYouTube(recipe.name)}>
+                    <Button variant="outline" size="sm" className="text-xs gap-1.5 flex-1 min-h-[44px] rounded-xl" onClick={() => openYouTube(recipe.name)}>
                       <Youtube className="w-3.5 h-3.5" /> {t("scan.video")}
                     </Button>
                   </div>
@@ -194,9 +193,9 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="flex-1 flex flex-col">
-      <header className="pt-6 pb-2 px-4 text-center">
+      <header className="pt-6 pb-2 px-5 text-center">
         <button onClick={onBack} className="inline-block">
-          <h1 className="text-xl font-display font-bold text-primary">{t("app.title")}</h1>
+          <h1 className="text-xl font-display font-semibold text-primary">{t("app.title")}</h1>
         </button>
       </header>
 
@@ -205,15 +204,14 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
           {result ? (
             resultsView
           ) : inputMode === "type" ? (
-            /* Text input mode */
             <motion.div key="text-input" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col items-center gap-4 w-full">
-              <h2 className="text-2xl font-display text-center text-foreground">{t("scan.typeTitle")}</h2>
+              <h2 className="text-display-2 font-display text-center text-foreground">{t("scan.typeTitle")}</h2>
               <p className="text-muted-foreground text-sm text-center -mt-3">{t("scan.typeSubtitle")}</p>
               <textarea
                 value={ingredientText}
                 onChange={(e) => setIngredientText(e.target.value)}
                 placeholder={t("scan.ingredientsPlaceholder")}
-                className="w-full h-32 rounded-xl border border-border bg-background text-foreground p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted-foreground"
+                className="w-full h-32 rounded-xl bg-card text-foreground p-3 text-base resize-none focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground shadow-sm"
                 autoFocus
               />
               {loading ? (
@@ -223,12 +221,12 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
                 </div>
               ) : (
                 <div className="flex gap-2 w-full">
-                  <Button variant="outline" onClick={() => { setInputMode("choose"); setIngredientText(""); }} className="flex-1">
+                  <Button variant="outline" onClick={() => { setInputMode("choose"); setIngredientText(""); }} className="flex-1 min-h-[44px] rounded-xl">
                     {t("scan.back")}
                   </Button>
                   <Button
                     onClick={handleTextSubmit}
-                    className="flex-1 gap-2"
+                    className="flex-1 gap-2 min-h-[44px] rounded-xl"
                     disabled={ingredientText.trim().length === 0}
                   >
                     <ChefHat className="w-4 h-4" /> {t("scan.findRecipes")}
@@ -237,18 +235,17 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
               )}
             </motion.div>
           ) : !preview ? (
-            /* Choose input method */
             <motion.div key="upload" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col items-center gap-6 w-full">
-              <h2 className="text-2xl font-display text-center text-foreground">{t("scan.title")}</h2>
+              <h2 className="text-display-2 font-display text-center text-foreground">{t("scan.title")}</h2>
               <p className="text-muted-foreground text-sm text-center -mt-4">{t("scan.subtitle")}</p>
               <div className="flex flex-col gap-3 w-full">
-                <Button size="lg" className="gap-2 w-full" onClick={() => cameraInputRef.current?.click()}>
+                <Button size="lg" className="gap-2 w-full min-h-[48px] rounded-xl" onClick={() => cameraInputRef.current?.click()}>
                   <Camera className="w-5 h-5" /> {t("scan.takePhoto")}
                 </Button>
-                <Button variant="outline" size="lg" className="gap-2 w-full" onClick={() => fileInputRef.current?.click()}>
+                <Button variant="outline" size="lg" className="gap-2 w-full min-h-[48px] rounded-xl" onClick={() => fileInputRef.current?.click()}>
                   <Upload className="w-5 h-5" /> {t("scan.uploadImage")}
                 </Button>
-                <Button variant="outline" size="lg" className="gap-2 w-full" onClick={() => setInputMode("type")}>
+                <Button variant="outline" size="lg" className="gap-2 w-full min-h-[48px] rounded-xl" onClick={() => setInputMode("type")}>
                   <Pencil className="w-5 h-5" /> {t("scan.typeIngredients")}
                 </Button>
               </div>
@@ -259,12 +256,11 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
               </Button>
             </motion.div>
           ) : (
-            /* Photo preview */
             <motion.div key="preview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col items-center gap-4 w-full">
-              <h2 className="text-2xl font-display text-center text-foreground">
+              <h2 className="text-display-2 font-display text-center text-foreground">
                 {loading ? t("scan.analyzing") : t("scan.ready")}
               </h2>
-              <div className="w-full rounded-xl overflow-hidden border border-border shadow-sm">
+              <div className="w-full rounded-xl overflow-hidden shadow-sm">
                 <img src={preview} alt="Fridge contents" className="w-full h-auto max-h-64 object-cover" />
               </div>
               {loading ? (
@@ -274,8 +270,8 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
                 </div>
               ) : (
                 <div className="flex gap-2 w-full">
-                  <Button variant="outline" onClick={handleReset} className="flex-1">{t("scan.retake")}</Button>
-                  <Button onClick={handleScan} className="flex-1 gap-2">
+                  <Button variant="outline" onClick={handleReset} className="flex-1 min-h-[44px] rounded-xl">{t("scan.retake")}</Button>
+                  <Button onClick={handleScan} className="flex-1 gap-2 min-h-[44px] rounded-xl">
                     <Camera className="w-4 h-4" /> {t("scan.scan")}
                   </Button>
                 </div>

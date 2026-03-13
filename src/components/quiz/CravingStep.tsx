@@ -23,29 +23,29 @@ export default function CravingStep() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
+      className="flex flex-col items-center gap-6 px-5 w-full max-w-md mx-auto"
     >
-      <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
+      <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
         {t("quiz.craving.title")}
       </h2>
-      <p className="text-muted-foreground text-center text-xs uppercase tracking-widest">
+      <p className="text-muted-foreground text-center text-body-xs tracking-wide">
         {t("quiz.craving.subtitle")}
       </p>
       <div className="flex flex-row gap-3 w-full">
         {options.map((opt, i) => (
           <motion.button
             key={opt.type}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            whileTap={{ scale: 0.97 }}
+            transition={{ delay: i * 0.08 }}
+            whileTap={{ scale: 0.96 }}
             onClick={() => handleSelect(opt.type)}
-            className={`flex-1 bg-primary text-primary-foreground rounded-lg p-4 flex flex-col items-center gap-2 shadow-md hover:shadow-lg ${
-              state.craving === opt.type ? "ring-2 ring-foreground/20" : ""
+            className={`flex-1 bg-card rounded-xl p-4 min-h-[80px] flex flex-col items-center gap-2 shadow-sm hover:shadow-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+              state.craving === opt.type ? "ring-2 ring-primary/30 shadow-md" : ""
             }`}
           >
             <span className="text-2xl">{opt.emoji}</span>
-            <span className="text-sm font-semibold">{opt.label}</span>
+            <span className="text-sm font-medium text-foreground">{opt.label}</span>
           </motion.button>
         ))}
       </div>
