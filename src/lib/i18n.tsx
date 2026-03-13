@@ -238,6 +238,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "Ver platos guardados",
     "saved.guestWarning": "Tus platos guardados se almacenan localmente y se perderán si borras los datos del navegador.",
     "saved.signInToKeep": "Inicia sesión para conservarlos",
+    "saved.tabs.recommendations": "Platos",
+    "saved.tabs.mealPlans": "Planes de comida",
+    "saved.emptyPlans": "Aún no hay planes de comida guardados.",
+    "saved.planDuration": "días",
+    "saved.planSaved": "¡Plan guardado!",
+    "saved.viewPlan": "Ver plan",
   },
   fr: {
     "app.title": "Qu'est-ce que je mange ?",
