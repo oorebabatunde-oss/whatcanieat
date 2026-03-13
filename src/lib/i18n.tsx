@@ -117,6 +117,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "View Saved Dishes",
     "saved.guestWarning": "Your saved dishes are stored locally and will be lost when you clear your browser data.",
     "saved.signInToKeep": "Sign in to keep them longer",
+    "saved.tabs.recommendations": "Dishes",
+    "saved.tabs.mealPlans": "Meal Plans",
+    "saved.emptyPlans": "No saved meal plans yet.",
+    "saved.planDuration": "day plan",
+    "saved.planSaved": "Plan saved!",
+    "saved.viewPlan": "View Plan",
   },
   es: {
     "app.title": "¿Qué puedo comer?",
