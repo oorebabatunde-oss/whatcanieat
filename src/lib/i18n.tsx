@@ -858,6 +858,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.skip": "더 없어요",
     "results.loading.title": "완벽한 음식 찾는 중...", "results.loading.subtitle": "추천 검색 중...",
     "loading.almostThere": "거의 다 됐어요. 아직 작업 중.",
+    "loading.notLongNow": "얼마 안 남았어요. 완벽한 결과를 확인 중.",
     "results.title": "이런 것들을 먹을 수 있어요!", "results.subtitle": "AI가 생성한 추천입니다.\n이미지가 정확하지 않을 수 있습니다.",
     "results.whereToBuy": "어디서 살까", "results.howToMake": "만드는 법",
     "results.dismiss": "취향 다듬기", "results.refinePlaceholder": "더 알려주세요",
