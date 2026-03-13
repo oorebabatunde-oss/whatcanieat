@@ -1,11 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
 import { Bell, BellOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-
-const FOODS = ["🥗", "🍕", "🍜", "🧁", "🥑", "🍔", "🌮", "🥘", "🍣", "🍝", "🥙", "🍛"];
 
 const ESTIMATED_SECONDS: Record<number, number> = {
   1: 20,
@@ -23,20 +20,12 @@ interface PlateLoaderProps {
 
 export default function PlateLoader({ message, progressMessage, duration = 3, onNotifyReady }: PlateLoaderProps) {
   const { t } = useI18n();
-  const [foodIndex, setFoodIndex] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [notifyEnabled, setNotifyEnabled] = useState(() => {
     try { return localStorage.getItem("mealplan-notify") === "true"; } catch { return false; }
   });
 
   const estimated = ESTIMATED_SECONDS[duration] || 35;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFoodIndex((prev) => (prev + 1) % FOODS.length);
-    }, 800);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
