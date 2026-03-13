@@ -676,6 +676,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "查看已保存的菜品",
     "saved.guestWarning": "您保存的菜品存储在本地，清除浏览器数据后将丢失。",
     "saved.signInToKeep": "登录以永久保存",
+    "saved.tabs.recommendations": "菜品",
+    "saved.tabs.mealPlans": "膳食计划",
+    "saved.emptyPlans": "还没有保存的膳食计划。",
+    "saved.planDuration": "天计划",
+    "saved.planSaved": "计划已保存！",
+    "saved.viewPlan": "查看计划",
   },
   ja: {
     "app.title": "何が食べられる？",
