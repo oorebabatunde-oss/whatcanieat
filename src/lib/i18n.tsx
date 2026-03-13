@@ -541,6 +541,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.skip": "Nada mais",
     "results.loading.title": "Buscando sua comida perfeita...", "results.loading.subtitle": "Encontrando recomendações...",
     "loading.almostThere": "Quase lá. Ainda trabalhando.",
+    "loading.notLongNow": "Não vai demorar. Garantindo resultados perfeitos.",
     "results.title": "Aqui está o que você pode comer!", "results.subtitle": "Recomendações geradas por IA.\nAs imagens podem não ser precisas.",
     "results.whereToBuy": "Onde comprar", "results.howToMake": "Como fazer",
     "results.dismiss": "Refinar meu desejo", "results.refinePlaceholder": "Conte mais — o que prefere?",
