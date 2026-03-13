@@ -202,7 +202,9 @@ export default function MealPlanResults() {
                       <div key={i} className={`px-3.5 py-2.5 flex items-center justify-between text-sm ${i > 0 ? "border-t border-border/50" : ""}`}>
                         <div className="min-w-0">
                           <span className="text-foreground">{item.name}</span>
-                          <span className="text-muted-foreground text-xs ml-1">{item.totalQuantity} {item.unit}</span>
+                         <span className="text-muted-foreground text-xs ml-1">
+                           {item.totalQuantity}{item.unit && !item.totalQuantity.toLowerCase().includes(item.unit.toLowerCase()) ? ` ${item.unit}` : ""}
+                         </span>
                           {item.recipesUsedIn.length > 0 && (
                             <p className="text-[10px] text-muted-foreground truncate">Used in: {item.recipesUsedIn.join(", ")}</p>
                           )}
