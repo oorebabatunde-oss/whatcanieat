@@ -178,7 +178,7 @@ const TOOL_SCHEMA = {
 function buildUserPrompt(considerations: any, duration: number, swap?: any): string {
   const parts: string[] = [];
 
-  parts.push(`Generate a ${duration}-day meal plan.`);
+  parts.push(`Generate a ${duration}-day meal plan. You MUST generate EXACTLY ${duration} days (dayNumber 1 through ${duration}). Do NOT generate fewer days than requested.`);
 
   const safety = considerations.safety || [];
   if (safety.length > 0) {

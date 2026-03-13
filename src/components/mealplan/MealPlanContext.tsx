@@ -65,6 +65,7 @@ interface MealPlanContextType {
   swapMeal: (mealId: string, mealName: string, type: string, removeIngredient?: string) => Promise<void>;
   regenerate: () => Promise<void>;
   adjustConstraints: () => void;
+  goBackToResults: () => void;
   reset: () => void;
 }
 
@@ -171,13 +172,19 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, step: "considerations" }));
   };
 
+  const goBackToResults = () => {
+    if (state.planData) {
+      setState((s) => ({ ...s, step: "results" }));
+    }
+  };
+
   const reset = () => {
     sessionStorage.removeItem(STORAGE_KEY);
     setState(initialState);
   };
 
   return (
-    <MealPlanContext.Provider value={{ state, setConsiderations, setDuration, generatePlan, swapMeal, regenerate, adjustConstraints, reset }}>
+    <MealPlanContext.Provider value={{ state, setConsiderations, setDuration, generatePlan, swapMeal, regenerate, adjustConstraints, goBackToResults, reset }}>
       {children}
     </MealPlanContext.Provider>
   );

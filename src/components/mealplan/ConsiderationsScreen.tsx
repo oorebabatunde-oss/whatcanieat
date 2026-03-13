@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, ShieldCheck, Wrench, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
 
 const SAFETY_OPTIONS = [
   "Nut allergy", "Egg allergy", "Shellfish allergy", "Soy allergy",
@@ -76,7 +77,8 @@ function Section({
 
 export default function ConsiderationsScreen() {
   const { t } = useI18n();
-  const { state, setConsiderations, setDuration, generatePlan } = useMealPlan();
+  const { state, setConsiderations, setDuration, generatePlan, goBackToResults } = useMealPlan();
+  const hasPlan = !!state.planData;
   const [local, setLocal] = useState<Considerations>(state.considerations);
   const [dur, setDur] = useState<1 | 3 | 7 | 30>(state.duration);
 
@@ -122,6 +124,11 @@ export default function ConsiderationsScreen() {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md mx-auto flex flex-col gap-4 px-5"
     >
+      {hasPlan && (
+        <Button variant="ghost" size="sm" onClick={goBackToResults} className="self-start gap-1.5 text-xs text-muted-foreground -mb-2">
+          <ArrowLeft className="w-3.5 h-3.5" /> {t("mealplan.backToPlan")}
+        </Button>
+      )}
       <div className="text-center mb-2">
         <h2 className="text-display-2 font-display text-foreground">{t("mealplan.title")}</h2>
         <p className="text-body-xs text-muted-foreground mt-1">{t("mealplan.subtitle")}</p>
