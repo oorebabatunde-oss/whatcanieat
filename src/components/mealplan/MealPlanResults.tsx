@@ -152,10 +152,10 @@ export default function MealPlanResults() {
             </div>
           ))}
 
-          {plan.costSummary && (
+          {costSummary && (
             <div className="bg-muted/50 rounded-xl p-3.5 text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">Estimated total:</span> ~£{plan.costSummary.total.toFixed(2)}
-              {" · "}~£{plan.costSummary.perDay.toFixed(2)}/day
+              <span className="font-semibold text-foreground">Estimated total:</span> ~£{costSummary.total.toFixed(2)}
+              {" · "}~£{costSummary.perDay.toFixed(2)}/day
             </div>
           )}
 
