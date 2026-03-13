@@ -217,16 +217,15 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
   const setConsiderations = (c: Considerations) => setState((s) => ({ ...s, considerations: c }));
   const setDuration = (d: 1 | 3 | 7 | 30) => setState((s) => ({ ...s, duration: d }));
 
-  const generatePlan = async () => {
-    setState((s) => ({ ...s, step: "loading", error: null, progressMessage: null, planData: null, isComplete: false }));
+  const generatePlan = async (selectedDuration: 1 | 3 | 7 | 30, selectedConsiderations: Considerations) => {
+    setState((s) => ({ ...s, step: "loading", error: null, progressMessage: null, planData: null, isComplete: false, duration: selectedDuration, considerations: selectedConsiderations }));
     try {
-      const plan = await callGeneratePlan(
-        state.considerations,
-        state.duration,
+      await callGeneratePlan(
+        selectedConsiderations,
+        selectedDuration,
         undefined,
         (msg) => setState((s) => ({ ...s, progressMessage: msg })),
         (days) => {
-          // Progressive: show results as soon as first chunk arrives
           setState((s) => {
             const existingDays = s.planData?.days || [];
             const newPlan: PlanData = {
@@ -242,10 +241,6 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
         },
         t,
       );
-      if (plan.days && plan.days.length > state.duration) {
-        plan.days = plan.days.slice(0, state.duration);
-      }
-      setState((s) => ({ ...s, step: "results", planData: plan, error: null, progressMessage: null, isComplete: true }));
     } catch (e: any) {
       const msg = e?.message || "Something went wrong";
       setState((s) => ({ ...s, step: "considerations", error: msg, progressMessage: null }));
