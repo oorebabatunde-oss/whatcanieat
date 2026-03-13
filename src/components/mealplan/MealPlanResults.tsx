@@ -22,6 +22,11 @@ export default function MealPlanResults() {
 
   if (!plan) return null;
 
+  // Defensive: ensure arrays exist even if AI response was truncated
+  const days = plan.days || [];
+  const groceryList = plan.groceryList || [];
+  const costSummary = plan.costSummary || { total: 0, perDay: 0 };
+
   const toggleMeal = (mealId: string) => {
     setExpandedMeals((prev) => ({ ...prev, [mealId]: !prev[mealId] }));
   };
@@ -36,7 +41,7 @@ export default function MealPlanResults() {
     }
   };
 
-  const groupedGrocery = plan.groceryList.reduce<Record<string, typeof plan.groceryList>>((acc, item) => {
+  const groupedGrocery = groceryList.reduce<Record<string, typeof groceryList>>((acc, item) => {
     const aisle = item.aisle || "Other";
     if (!acc[aisle]) acc[aisle] = [];
     acc[aisle].push(item);
