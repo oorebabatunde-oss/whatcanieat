@@ -599,6 +599,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "عرض الأطباق المحفوظة",
     "saved.guestWarning": "أطباقك المحفوظة مخزنة محلياً وستُفقد إذا مسحت بيانات المتصفح.",
     "saved.signInToKeep": "سجّل الدخول للاحتفاظ بها",
+    "saved.tabs.recommendations": "أطباق",
+    "saved.tabs.mealPlans": "خطط الوجبات",
+    "saved.emptyPlans": "لا توجد خطط وجبات محفوظة بعد.",
+    "saved.planDuration": "أيام",
+    "saved.planSaved": "تم حفظ الخطة!",
+    "saved.viewPlan": "عرض الخطة",
   },
   zh: {
     "app.title": "我能吃什么？",
