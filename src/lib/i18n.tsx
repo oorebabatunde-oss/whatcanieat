@@ -1016,6 +1016,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.skip": "Başka bir şey yok",
     "results.loading.title": "Mükemmel yemeğin aranıyor...", "results.loading.subtitle": "Öneriler aranıyor...",
     "loading.almostThere": "Neredeyse bitti. Hâlâ çalışıyor.",
+    "loading.notLongNow": "Az kaldı. Mükemmel sonuçlar sağlanıyor.",
     "results.title": "Bunları yiyebilirsin!", "results.subtitle": "AI tarafından öneriler.\nGörseller doğru olmayabilir.",
     "results.whereToBuy": "Nereden alınır", "results.howToMake": "Nasıl yapılır",
     "results.dismiss": "İsteğimi daralt", "results.refinePlaceholder": "Daha fazla anlat",
