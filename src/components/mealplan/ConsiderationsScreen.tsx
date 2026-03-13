@@ -117,7 +117,7 @@ export default function ConsiderationsScreen() {
   const handleGenerate = () => {
     setConsiderations(local);
     setDuration(dur);
-    generatePlan();
+    generatePlan(dur, local);
   };
 
   return (
