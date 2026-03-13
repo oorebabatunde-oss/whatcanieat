@@ -231,6 +231,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "Buscando tu comida perfecta...",
     "results.loading.subtitle": "Encontrando recomendaciones...",
     "loading.almostThere": "Casi listo. Aún trabajando.",
+    "loading.notLongNow": "Ya falta poco. Asegurando resultados perfectos.",
     "results.title": "¡Esto es lo que podrías comer!",
     "results.subtitle": "Estas son recomendaciones generadas por IA.\nLas imágenes pueden no ser precisas.",
     "results.whereToBuy": "Dónde comprar",
