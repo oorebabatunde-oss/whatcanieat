@@ -131,7 +131,7 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
   }, [state]);
 
   const setConsiderations = (c: Considerations) => setState((s) => ({ ...s, considerations: c }));
-  const setDuration = (d: 1 | 3 | 7) => setState((s) => ({ ...s, duration: d }));
+  const setDuration = (d: 1 | 3 | 7 | 30) => setState((s) => ({ ...s, duration: d }));
 
   const generatePlan = async () => {
     setState((s) => ({ ...s, step: "loading", error: null }));
