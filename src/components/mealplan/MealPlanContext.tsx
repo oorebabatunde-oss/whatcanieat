@@ -151,6 +151,7 @@ async function callGeneratePlan(
     const decoder = new TextDecoder();
     let buffer = "";
     let plan: PlanData | null = null;
+    let currentEvent = "";
 
     while (true) {
       const { done, value } = await reader.read();
@@ -159,8 +160,6 @@ async function callGeneratePlan(
 
       const lines = buffer.split("\n");
       buffer = lines.pop() || "";
-
-      let currentEvent = "";
       for (const line of lines) {
         if (line.startsWith("event: ")) {
           currentEvent = line.slice(7).trim();
