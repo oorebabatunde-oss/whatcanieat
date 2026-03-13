@@ -125,7 +125,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-background text-foreground font-body antialiased texture-bg;
     line-height: 1.25;
   }
 

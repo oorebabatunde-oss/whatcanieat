@@ -39,7 +39,7 @@ const Index = () => {
   const goWelcome = () => changeMode("welcome");
 
   const toolbar = (
-    <div className="flex items-center justify-end gap-2 px-5 pt-4 pb-2 w-full">
+    <div className="flex items-center justify-end gap-2 px-5 pt-4 pb-2 w-full relative z-10">
       <Link to="/saved">
         <Button variant="ghost" size="sm" className="text-muted-foreground gap-1.5">
           <Heart className="w-4 h-4" />
