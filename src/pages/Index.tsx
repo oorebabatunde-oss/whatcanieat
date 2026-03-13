@@ -115,28 +115,8 @@ const Index = () => {
     );
   }
 
-  const emojiRows = [
-    "🍕 🥑 🍜 🧁 🥗 🍔 🌮 🥘 🍣 🥐 🍩 🫕 🧀 🍝 🥙",
-    "🍱 🥞 🫐 🍓 🥦 🍗 🌽 🥚 🍰 🧇 🫓 🍚 🥥 🍋 🫑",
-    "🥗 🍕 🧁 🍜 🍔 🥑 🥘 🌮 🍣 🍩 🥐 🧀 🫕 🥙 🍝",
-  ];
-
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-5 relative overflow-hidden">
-      {/* Emoji background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
-        <div className="absolute -inset-8 flex flex-col justify-between opacity-[0.06] dark:opacity-[0.035]">
-          {Array.from({ length: 8 }).map((_, rowIdx) => (
-            <div
-              key={rowIdx}
-              className="whitespace-nowrap text-xl leading-none tracking-[0.35em]"
-              style={{ transform: rowIdx % 2 === 1 ? "translateX(-2rem)" : undefined }}
-            >
-              {emojiRows[rowIdx % emojiRows.length]}
-            </div>
-          ))}
-        </div>
-      </div>
 
       <div className="relative z-10 w-full flex flex-col items-center flex-1">
         {toolbar}
