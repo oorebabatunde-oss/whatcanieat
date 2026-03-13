@@ -97,6 +97,24 @@ const Index = () => {
     );
   }
 
+  if (mode === "mealplan") {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        {toolbar}
+        <header className="pt-6 pb-2 px-4 text-center">
+          <button onClick={goWelcome} className="inline-block">
+            <h1 className="text-xl font-display font-bold text-primary">
+              {t("app.title")}
+            </h1>
+          </button>
+        </header>
+        <main className="flex-1 flex items-start justify-center pt-4 pb-8">
+          <MealPlanFlow />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-4 relative overflow-hidden">
       {/* Emoji texture background */}
