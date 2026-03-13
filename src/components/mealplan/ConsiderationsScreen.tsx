@@ -42,19 +42,18 @@ function Chip({ label, selected, onClick }: { label: string; selected: boolean; 
   );
 }
 
-function Section({
-  icon,
-  title,
-  subtitle,
-  defaultOpen,
-  children,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-}) {
+import React from "react";
+
+const Section = React.forwardRef<
+  HTMLDivElement,
+  {
+    icon: React.ReactNode;
+    title: string;
+    subtitle: string;
+    defaultOpen?: boolean;
+    children: React.ReactNode;
+  }
+>(function Section({ icon, title, subtitle, defaultOpen, children }, ref) {
   const [open, setOpen] = useState(defaultOpen ?? false);
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
@@ -73,7 +72,7 @@ function Section({
       </CollapsibleContent>
     </Collapsible>
   );
-}
+});
 
 export default function ConsiderationsScreen() {
   const { t } = useI18n();
