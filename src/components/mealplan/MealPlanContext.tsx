@@ -52,7 +52,7 @@ type MealPlanStep = "considerations" | "loading" | "results";
 interface MealPlanState {
   step: MealPlanStep;
   considerations: Considerations;
-  duration: 1 | 3 | 7;
+  duration: 1 | 3 | 7 | 30;
   planData: PlanData | null;
   error: string | null;
 }
