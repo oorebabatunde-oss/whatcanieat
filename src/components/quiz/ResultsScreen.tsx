@@ -212,12 +212,7 @@ export default function ResultsScreen() {
           <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
             {t("results.loading.title")}
           </h2>
-          <div className="flex flex-col items-center gap-3 py-8">
-            <Loader2 className="w-12 h-12 text-primary animate-spin" />
-            <p className="text-muted-foreground text-sm text-center">
-              {t("results.loading.subtitle")}
-            </p>
-          </div>
+          <PlateLoader message={t("results.loading.subtitle")} />
         </>
       ) : error ? (
         <>
