@@ -90,8 +90,19 @@ const initialState: MealPlanState = {
 function loadState(): MealPlanState {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {}
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Validate duration
+      if (![1, 3, 7, 30].includes(parsed.duration)) parsed.duration = 3;
+      // Validate step
+      if (!["considerations", "loading", "results"].includes(parsed.step)) parsed.step = "considerations";
+      // If was loading, reset to considerations
+      if (parsed.step === "loading") parsed.step = "considerations";
+      return { ...initialState, ...parsed };
+    }
+  } catch {
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
   return initialState;
 }
 
