@@ -830,6 +830,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "저장한 요리 보기",
     "saved.guestWarning": "저장한 요리는 로컬에 저장되며, 브라우저 데이터를 지우면 삭제됩니다.",
     "saved.signInToKeep": "로그인하여 영구 보관",
+    "saved.tabs.recommendations": "요리",
+    "saved.tabs.mealPlans": "식단 계획",
+    "saved.emptyPlans": "저장된 식단 계획이 없습니다.",
+    "saved.planDuration": "일 계획",
+    "saved.planSaved": "계획이 저장되었습니다!",
+    "saved.viewPlan": "계획 보기",
   },
   hi: {
     "app.title": "मैं क्या खा सकता हूँ?",
