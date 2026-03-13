@@ -351,6 +351,12 @@ serve(async (req) => {
       }
 
       const data = await response.json();
+      const finishReason = data.choices?.[0]?.finish_reason;
+      if (finishReason === "length") {
+        console.warn(`[${requestId}] Attempt ${attempt}: Output truncated (finish_reason=length)`);
+        lastError = "Output was truncated — plan too large";
+        continue;
+      }
 
       // Extract tool call result
       const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
