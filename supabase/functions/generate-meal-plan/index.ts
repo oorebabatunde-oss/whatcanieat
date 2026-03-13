@@ -75,8 +75,8 @@ GROCERY LIST:
 - Show which recipes use each ingredient
 
 COST:
-- Use GBP (£) for all cost estimates
-- Be realistic with UK supermarket pricing
+- Use the currency specified by the user (default to GBP £ if not specified) for all cost estimates
+- Be realistic with supermarket pricing for the user's likely region
 
 CONFLICT HANDLING:
 If constraints conflict (e.g. vegan + high protein + 10 min prep + low budget), return a conflicts array explaining the tension and suggesting relaxations. Still generate the best possible plan.
