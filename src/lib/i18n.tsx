@@ -621,6 +621,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.skip": "لا شيء آخر",
     "results.loading.title": "جاري البحث عن طعامك المثالي...", "results.loading.subtitle": "جاري البحث...",
     "loading.almostThere": "تقريبًا هناك. لا زلنا نعمل.",
+    "loading.notLongNow": "لن يطول الأمر. نضمن نتائج مثالية.",
     "results.title": "إليك ما يمكنك أكله!", "results.subtitle": "توصيات مولدة بالذكاء الاصطناعي.\nقد لا تكون الصور دقيقة.",
     "results.whereToBuy": "أين تشتري", "results.howToMake": "كيف تصنع",
     "results.dismiss": "تحسين رغبتي", "results.refinePlaceholder": "أخبرنا المزيد",
