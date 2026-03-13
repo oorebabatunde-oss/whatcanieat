@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Heart, LogIn, LogOut } from "lucide-react";
 
-type AppMode = "welcome" | "quiz" | "scan";
+type AppMode = "welcome" | "quiz" | "scan" | "mealplan";
 const MODE_KEY = "app-mode";
 
 function loadMode(): AppMode {
