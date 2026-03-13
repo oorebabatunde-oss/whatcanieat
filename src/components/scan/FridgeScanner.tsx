@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
+import PlateLoader from "@/components/ui/PlateLoader";
 
 interface Ingredient {
   name: string;
