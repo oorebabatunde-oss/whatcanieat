@@ -1061,6 +1061,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "Vedi piatti salvati",
     "saved.guestWarning": "I tuoi piatti salvati sono archiviati localmente e andranno persi se cancelli i dati del browser.",
     "saved.signInToKeep": "Accedi per conservarli per sempre",
+    "saved.tabs.recommendations": "Piatti",
+    "saved.tabs.mealPlans": "Piani pasto",
+    "saved.emptyPlans": "Nessun piano pasto salvato.",
+    "saved.planDuration": "giorni",
+    "saved.planSaved": "Piano salvato!",
+    "saved.viewPlan": "Vedi piano",
   },
   nl: {
     "app.title": "Wat kan ik eten?",
