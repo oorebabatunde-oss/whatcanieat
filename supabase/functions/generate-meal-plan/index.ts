@@ -221,6 +221,204 @@ function buildUserPrompt(considerations: any, duration: number, swap?: any): str
   return parts.join("\n");
 }
 
+// Generate a single chunk of days
+async function generateChunk(
+  requestId: string,
+  apiKey: string,
+  considerations: any,
+  chunkDuration: number,
+  startDay: number,
+  totalDuration: number,
+  swap?: any,
+  previousDaysMeals?: string[],
+): Promise<any> {
+  const MAX_ATTEMPTS = 2;
+  let plan: any = null;
+  let lastError = "";
+
+  // Build prompt for this chunk
+  const parts: string[] = [];
+  parts.push(`Generate EXACTLY ${chunkDuration} days of meals (days ${startDay} to ${startDay + chunkDuration - 1} of a ${totalDuration}-day plan).`);
+  parts.push(`You MUST return EXACTLY ${chunkDuration} days. Number them dayNumber ${startDay} through ${startDay + chunkDuration - 1}.`);
+
+  const safety = considerations.safety || [];
+  if (safety.length > 0) parts.push(`\nSAFETY CONSTRAINTS (must never violate): ${safety.join(", ")}`);
+
+  const practical = considerations.practical || {};
+  const practicalLines: string[] = [];
+  if (practical.budget?.amount) practicalLines.push(`Budget: ${practical.budget.currency || "£"}${practical.budget.amount} per ${practical.budget.period || "week"}. Use ${practical.budget.currency || "£"} for all cost estimates.`);
+  if (practical.maxPrepTime) practicalLines.push(`Max prep time per meal: ${practical.maxPrepTime} minutes`);
+  if (practical.mealsPerDay) practicalLines.push(`Meals per day: ${practical.mealsPerDay}`);
+  if (practical.cookingSkill) practicalLines.push(`Cooking skill: ${practical.cookingSkill}`);
+  if (practical.equipment?.length) practicalLines.push(`Equipment available: ${practical.equipment.join(", ")}`);
+  if (practical.cookingPattern) practicalLines.push(`Cooking pattern: ${practical.cookingPattern}`);
+  if (practical.storage) practicalLines.push(`Storage: ${practical.storage}`);
+  if (practical.familySize) practicalLines.push(`Family size: ${practical.familySize}`);
+  if (practical.capsuleRatio) practicalLines.push(`Capsule meal ratio: ${practical.capsuleRatio}`);
+  if (practicalLines.length > 0) parts.push(`\nPRACTICAL CONSTRAINTS:\n${practicalLines.join("\n")}`);
+
+  const preferences = considerations.preferences || [];
+  if (preferences.length > 0) parts.push(`\nPREFERENCES (soft): ${preferences.join(", ")}`);
+  if (considerations.nuance) parts.push(`\nADDITIONAL NOTES: "${considerations.nuance}"`);
+
+  // Avoid repeating meals from previous chunks
+  if (previousDaysMeals && previousDaysMeals.length > 0) {
+    parts.push(`\nAVOID REPEATING these meals already used in earlier days: ${previousDaysMeals.join(", ")}`);
+  }
+
+  parts.push(`\nIMPORTANT: Keep recipes concise (max 4 short steps). Omit substitutions. Use fewer multi-use ingredients. Only return the days array, groceryList, costSummary, nutritionNotes, conflicts.`);
+
+  if (swap) {
+    parts.push(`\nSWAP REQUEST: Replace meal "${swap.mealName}" (ID: ${swap.mealId}). Type: ${swap.type}.`);
+    if (swap.removeIngredient) parts.push(`Remove ingredient: ${swap.removeIngredient}`);
+    parts.push(`Current plan:\n${JSON.stringify(swap.currentPlan)}`);
+  }
+
+  const userPrompt = parts.join("\n");
+
+  let systemPrompt = SYSTEM_PROMPT;
+  systemPrompt += `\n\nIMPORTANT: This is a chunk of a ${totalDuration}-day plan. Generate EXACTLY ${chunkDuration} days. Keep recipes concise: max 4 short steps, no substitutions, tight ingredient lists.`;
+
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    console.log(`[${requestId}] Chunk days ${startDay}-${startDay + chunkDuration - 1}: attempt ${attempt}/${MAX_ATTEMPTS}`);
+
+    const attemptPrompt = attempt > 1
+      ? `${userPrompt}\n\nCRITICAL RETRY: Previous response returned ${plan?.days?.length || 0} days. You MUST return EXACTLY ${chunkDuration} days.`
+      : userPrompt;
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      signal: AbortSignal.timeout(120_000),
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        max_tokens: 12000,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: attemptPrompt },
+        ],
+        tools: [TOOL_SCHEMA],
+        tool_choice: { type: "function", function: { name: "generate_meal_plan" } },
+      }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      console.error(`[${requestId}] AI error: ${response.status} ${text}`);
+      if (response.status === 429 || response.status === 402) {
+        throw { status: response.status, message: response.status === 429 ? "Rate limit exceeded" : "Usage limit reached" };
+      }
+      lastError = "AI request failed";
+      continue;
+    }
+
+    const data = await response.json();
+    const finishReason = data.choices?.[0]?.finish_reason;
+    if (finishReason === "length") {
+      console.warn(`[${requestId}] Chunk truncated`);
+      lastError = "Output truncated";
+      continue;
+    }
+
+    const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
+    if (!toolCall?.function?.arguments) {
+      const content = data.choices?.[0]?.message?.content;
+      if (content) {
+        try { plan = JSON.parse(content); } catch { lastError = "Parse failed"; continue; }
+      } else { lastError = "No structured output"; continue; }
+    } else {
+      try {
+        plan = typeof toolCall.function.arguments === "string"
+          ? JSON.parse(toolCall.function.arguments)
+          : toolCall.function.arguments;
+      } catch { lastError = "Parse failed"; continue; }
+    }
+
+    if (!Array.isArray(plan?.days) || plan.days.length === 0) {
+      lastError = "No days returned";
+      plan = null;
+      continue;
+    }
+
+    // Trim and renumber
+    plan.days = plan.days.slice(0, chunkDuration)
+      .filter((d: any) => Array.isArray(d.meals) && d.meals.length > 0)
+      .map((day: any, idx: number) => ({ ...day, dayNumber: startDay + idx }));
+
+    if (plan.days.length >= chunkDuration) {
+      console.log(`[${requestId}] Chunk success: ${plan.days.length} days`);
+      break;
+    }
+
+    console.warn(`[${requestId}] Chunk got ${plan.days.length}/${chunkDuration} days`);
+    lastError = `Got ${plan.days.length}/${chunkDuration} days`;
+
+    if (attempt === MAX_ATTEMPTS && plan.days.length > 0) break;
+  }
+
+  if (!plan || !Array.isArray(plan.days) || plan.days.length === 0) {
+    throw new Error(`Chunk failed: ${lastError}`);
+  }
+
+  return plan;
+}
+
+// Merge multiple chunk results into one plan
+function mergeChunks(chunks: any[], totalDuration: number): any {
+  const allDays: any[] = [];
+  const groceryMap = new Map<string, any>();
+  let totalCost = 0;
+  const allNutritionNotes: string[] = [];
+  const allConflicts: string[] = [];
+
+  for (const chunk of chunks) {
+    if (chunk.days) allDays.push(...chunk.days);
+
+    // Merge grocery lists
+    if (Array.isArray(chunk.groceryList)) {
+      for (const item of chunk.groceryList) {
+        const key = `${item.name}||${item.unit}`.toLowerCase();
+        if (groceryMap.has(key)) {
+          const existing = groceryMap.get(key);
+          const existingQty = parseFloat(existing.totalQuantity) || 0;
+          const newQty = parseFloat(item.totalQuantity) || 0;
+          existing.totalQuantity = String(Math.round((existingQty + newQty) * 100) / 100);
+          existing.estimatedPrice = Math.round((existing.estimatedPrice + item.estimatedPrice) * 100) / 100;
+          const newRecipes = item.recipesUsedIn || [];
+          existing.recipesUsedIn = [...new Set([...existing.recipesUsedIn, ...newRecipes])];
+        } else {
+          groceryMap.set(key, { ...item });
+        }
+      }
+    }
+
+    if (chunk.costSummary?.total) totalCost += chunk.costSummary.total;
+    if (chunk.nutritionNotes) allNutritionNotes.push(...chunk.nutritionNotes);
+    if (chunk.conflicts) allConflicts.push(...chunk.conflicts);
+  }
+
+  // Renumber all days sequentially
+  allDays.sort((a, b) => a.dayNumber - b.dayNumber);
+  const finalDays = allDays.slice(0, totalDuration).map((day, idx) => ({
+    ...day,
+    dayNumber: idx + 1,
+  }));
+
+  return {
+    days: finalDays,
+    groceryList: Array.from(groceryMap.values()),
+    costSummary: {
+      total: Math.round(totalCost * 100) / 100,
+      perDay: Math.round((totalCost / (finalDays.length || 1)) * 100) / 100,
+    },
+    nutritionNotes: [...new Set(allNutritionNotes)],
+    conflicts: [...new Set(allConflicts)],
+  };
+}
+
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -242,7 +440,6 @@ serve(async (req) => {
       });
     }
 
-    // Optional auth
     const authHeader = req.headers.get("Authorization");
     if (authHeader?.startsWith("Bearer ")) {
       try {
@@ -251,7 +448,7 @@ serve(async (req) => {
         if (payload && payload.role !== "anon") {
           const userId = `user:${payload.sub}`;
           if (isRateLimited(userId)) {
-            return new Response(JSON.stringify({ error: "Too many requests. Please try again later." }), {
+            return new Response(JSON.stringify({ error: "Too many requests." }), {
               status: 429,
               headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
             });
@@ -261,9 +458,7 @@ serve(async (req) => {
     }
 
     let body: any;
-    try {
-      body = await req.json();
-    } catch {
+    try { body = await req.json(); } catch {
       return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -286,153 +481,140 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("Server configuration error");
 
-    const userPrompt = buildUserPrompt(considerations, validDuration, swap);
+    let plan: any;
 
-    // Use longer timeout for bigger plans
-    const timeoutMs = validDuration >= 7 ? 180_000 : 120_000;
-
-    // For long plans, add conciseness instructions to system prompt
-    let systemPrompt = SYSTEM_PROMPT;
-    if (validDuration >= 7) {
-      systemPrompt += `\n\nIMPORTANT FOR LONG PLANS (${validDuration} days):
-- Keep recipe steps concise: maximum 4 short steps per recipe
-- Do NOT include substitutions (omit the substitutions field entirely)
-- Keep ingredient lists tight — prefer fewer, multi-use ingredients
-- Grocery list should be consolidated aggressively`;
-    }
-
-    const MAX_ATTEMPTS = 2;
-    let plan: any = null;
-    let lastError = "";
-
-    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-      console.log(`[${requestId}] Attempt ${attempt}/${MAX_ATTEMPTS} for ${validDuration}-day plan`);
-
-      const attemptPrompt = attempt > 1
-        ? `${userPrompt}\n\nCRITICAL RETRY: Your previous response only returned ${plan?.days?.length || 0} days. You MUST return EXACTLY ${validDuration} days. This is attempt ${attempt}. Do NOT return fewer days.`
-        : userPrompt;
-
-      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        signal: AbortSignal.timeout(timeoutMs),
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
-          max_tokens: validDuration >= 7 ? 16384 : 8192,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: attemptPrompt },
-          ],
-          tools: [TOOL_SCHEMA],
-          tool_choice: { type: "function", function: { name: "generate_meal_plan" } },
-        }),
-      });
-
-      if (!response.ok) {
-        if (response.status === 429) {
-          return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again shortly." }), {
-            status: 429,
-            headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
-          });
-        }
-        if (response.status === 402) {
-          return new Response(JSON.stringify({ error: "Usage limit reached." }), {
-            status: 402,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
-        }
-        const text = await response.text();
-        console.error(`[${requestId}] AI gateway error: ${response.status} ${text}`);
-        lastError = "Failed to generate meal plan";
-        continue;
+    if (validDuration <= 7 || swap) {
+      // Single-shot for short plans and swaps
+      const userPrompt = buildUserPrompt(considerations, validDuration, swap);
+      let systemPrompt = SYSTEM_PROMPT;
+      if (validDuration >= 7) {
+        systemPrompt += `\n\nIMPORTANT FOR ${validDuration}-DAY PLANS: Keep steps concise (max 4 per recipe), omit substitutions, tight ingredient lists.`;
       }
 
-      const data = await response.json();
-      const finishReason = data.choices?.[0]?.finish_reason;
-      if (finishReason === "length") {
-        console.warn(`[${requestId}] Attempt ${attempt}: Output truncated (finish_reason=length)`);
-        lastError = "Output was truncated — plan too large";
-        continue;
-      }
+      const MAX_ATTEMPTS = 2;
+      let lastError = "";
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        console.log(`[${requestId}] Attempt ${attempt}/${MAX_ATTEMPTS} for ${validDuration}-day plan`);
+        const attemptPrompt = attempt > 1
+          ? `${userPrompt}\n\nCRITICAL RETRY: Previous response returned ${plan?.days?.length || 0} days. Return EXACTLY ${validDuration} days.`
+          : userPrompt;
 
-      // Extract tool call result
-      const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
-      if (!toolCall?.function?.arguments) {
-        const content = data.choices?.[0]?.message?.content;
-        if (content) {
-          try {
-            plan = JSON.parse(content);
-          } catch {
-            lastError = "Failed to generate structured plan";
-            continue;
+        const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          signal: AbortSignal.timeout(validDuration >= 7 ? 180_000 : 120_000),
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash",
+            max_tokens: validDuration >= 7 ? 16384 : 8192,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: attemptPrompt },
+            ],
+            tools: [TOOL_SCHEMA],
+            tool_choice: { type: "function", function: { name: "generate_meal_plan" } },
+          }),
+        });
+
+        if (!response.ok) {
+          if (response.status === 429) {
+            return new Response(JSON.stringify({ error: "Rate limit exceeded." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" } });
           }
+          if (response.status === 402) {
+            return new Response(JSON.stringify({ error: "Usage limit reached." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+          }
+          const text = await response.text();
+          console.error(`[${requestId}] AI error: ${response.status} ${text}`);
+          lastError = "AI request failed";
+          continue;
+        }
+
+        const data = await response.json();
+        if (data.choices?.[0]?.finish_reason === "length") {
+          console.warn(`[${requestId}] Truncated`);
+          lastError = "Output truncated";
+          continue;
+        }
+
+        const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
+        if (!toolCall?.function?.arguments) {
+          const content = data.choices?.[0]?.message?.content;
+          if (content) { try { plan = JSON.parse(content); } catch { lastError = "Parse failed"; continue; } }
+          else { lastError = "No output"; continue; }
         } else {
-          lastError = "Failed to generate structured plan";
-          continue;
+          try {
+            plan = typeof toolCall.function.arguments === "string" ? JSON.parse(toolCall.function.arguments) : toolCall.function.arguments;
+          } catch { lastError = "Parse failed"; continue; }
         }
-      } else {
+
+        if (!Array.isArray(plan?.days) || plan.days.length === 0) { lastError = "No days"; plan = null; continue; }
+        plan.days = plan.days.slice(0, validDuration).filter((d: any) => Array.isArray(d.meals) && d.meals.length > 0).map((day: any, idx: number) => ({ ...day, dayNumber: idx + 1 }));
+
+        if (plan.days.length >= validDuration) { console.log(`[${requestId}] Success: ${plan.days.length} days`); break; }
+        console.warn(`[${requestId}] Got ${plan.days.length}/${validDuration}`);
+        lastError = `Got ${plan.days.length}/${validDuration}`;
+        if (attempt === MAX_ATTEMPTS && plan.days.length > 0) break;
+      }
+
+      if (!plan || !plan.days?.length) {
+        return new Response(JSON.stringify({ error: `Failed: ${lastError}` }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    } else {
+      // Chunked generation for 30-day plans
+      const CHUNK_SIZE = 5; // 5 days per chunk = 6 chunks for 30 days
+      const chunks: any[] = [];
+      const usedMealNames: string[] = [];
+
+      for (let startDay = 1; startDay <= validDuration; startDay += CHUNK_SIZE) {
+        const chunkDays = Math.min(CHUNK_SIZE, validDuration - startDay + 1);
+        console.log(`[${requestId}] Generating chunk: days ${startDay}-${startDay + chunkDays - 1}`);
+
         try {
-          plan = typeof toolCall.function.arguments === "string"
-            ? JSON.parse(toolCall.function.arguments)
-            : toolCall.function.arguments;
-        } catch {
-          lastError = "Failed to parse meal plan";
-          continue;
+          const chunk = await generateChunk(
+            requestId,
+            LOVABLE_API_KEY,
+            considerations,
+            chunkDays,
+            startDay,
+            validDuration,
+            undefined,
+            usedMealNames.length > 0 ? usedMealNames : undefined,
+          );
+          chunks.push(chunk);
+
+          // Track used meal names to avoid repetition
+          for (const day of chunk.days || []) {
+            for (const meal of day.meals || []) {
+              if (meal.name) usedMealNames.push(meal.name);
+            }
+          }
+        } catch (e: any) {
+          if (e.status === 429 || e.status === 402) {
+            return new Response(JSON.stringify({ error: e.message }), {
+              status: e.status,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+          console.error(`[${requestId}] Chunk failed at day ${startDay}:`, e.message);
+          // If we have some chunks, continue with what we have
+          if (chunks.length === 0) {
+            return new Response(JSON.stringify({ error: "Failed to generate meal plan" }), {
+              status: 500,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+          break;
         }
       }
 
-      if (!Array.isArray(plan?.days) || plan.days.length === 0) {
-        lastError = "No days returned";
-        plan = null;
-        continue;
-      }
-
-      // Trim excess days
-      if (plan.days.length > validDuration) {
-        plan.days = plan.days.slice(0, validDuration);
-      }
-
-      // Re-number days sequentially
-      plan.days = plan.days.map((day: any, idx: number) => ({
-        ...day,
-        dayNumber: idx + 1,
-      }));
-
-      // Validate each day has meals
-      plan.days = plan.days.filter((d: any) => Array.isArray(d.meals) && d.meals.length > 0);
-
-      // Check if we got the right count
-      if (plan.days.length >= validDuration) {
-        console.log(`[${requestId}] Success on attempt ${attempt}: ${plan.days.length} days`);
-        break;
-      }
-
-      console.warn(`[${requestId}] Attempt ${attempt}: AI returned ${plan.days.length}/${validDuration} days`);
-      lastError = `AI returned ${plan.days.length} days instead of ${validDuration}`;
-
-      // If last attempt and we have SOME days, accept partial but log it
-      if (attempt === MAX_ATTEMPTS && plan.days.length > 0) {
-        console.warn(`[${requestId}] Accepting partial plan: ${plan.days.length}/${validDuration} days after ${MAX_ATTEMPTS} attempts`);
-        break;
-      }
+      plan = mergeChunks(chunks, validDuration);
+      console.log(`[${requestId}] Merged ${chunks.length} chunks: ${plan.days.length} days total`);
     }
 
-    if (!plan || !Array.isArray(plan.days) || plan.days.length === 0) {
-      console.error(`[${requestId}] All attempts failed: ${lastError}`);
-      return new Response(JSON.stringify({ error: `Failed to generate meal plan: ${lastError}` }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Final re-number to ensure consistency
-    plan.days = plan.days.map((day: any, idx: number) => ({
-      ...day,
-      dayNumber: idx + 1,
-    }));
+    // Final renumber
+    plan.days = plan.days.map((day: any, idx: number) => ({ ...day, dayNumber: idx + 1 }));
 
     console.log(`[${requestId}] generate-meal-plan: final result ${plan.days.length} days (requested ${validDuration})`);
 
