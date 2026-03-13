@@ -27,29 +27,29 @@ export default function DietaryStep() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
+      className="flex flex-col items-center gap-6 px-5 w-full max-w-md mx-auto"
     >
-      <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
+      <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
         {t("quiz.dietary.title")}
       </h2>
-      <p className="text-muted-foreground text-center text-xs uppercase tracking-widest">
+      <p className="text-muted-foreground text-center text-body-xs tracking-wide">
         {t("quiz.dietary.subtitle")}
       </p>
-      <div className="flex flex-wrap justify-center gap-3 w-full">
+      <div className="flex flex-wrap justify-center gap-2.5 w-full">
         {dietaryOptions.map((d, i) => {
           const selected = state.dietary.includes(d.type);
           return (
             <motion.button
               key={d.type}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: selected ? 1.05 : 1 }}
-              transition={{ delay: i * 0.05 }}
-              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.04 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => toggleDietary(d.type)}
-              className={`rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 ${
+              className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 selected
-                  ? "bg-primary text-primary-foreground shadow-lg"
-                  : "bg-card text-foreground border border-border hover:border-primary/30"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-card text-foreground shadow-sm hover:shadow-md"
               }`}
             >
               <span>{d.emoji}</span>
@@ -58,15 +58,15 @@ export default function DietaryStep() {
           );
         })}
         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4 }}
-          whileTap={{ scale: 0.95 }}
+          transition={{ delay: 0.35 }}
+          whileTap={{ scale: 0.96 }}
           onClick={() => toggleDietary("none")}
-          className={`rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 ${
+          className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
             isNone
-              ? "bg-primary text-primary-foreground shadow-lg"
-              : "bg-card text-foreground border border-border hover:border-primary/30"
+              ? "bg-primary text-primary-foreground shadow-md"
+              : "bg-card text-foreground shadow-sm hover:shadow-md"
           }`}
         >
           ✅ {t("quiz.dietary.none")}
@@ -76,7 +76,7 @@ export default function DietaryStep() {
         onClick={nextStep}
         disabled={!hasSelection}
         size="lg"
-        className="w-full max-w-xs mt-4 rounded-lg font-semibold tracking-wide"
+        className="w-full max-w-xs mt-4 rounded-xl font-medium"
       >
         {t("quiz.next")} <ArrowRight className="w-5 h-5 ml-1" />
       </Button>

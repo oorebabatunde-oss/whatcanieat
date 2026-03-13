@@ -15,12 +15,12 @@ export default function ContextStep() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col items-center gap-6 px-4 w-full max-w-md mx-auto"
+      className="flex flex-col items-center gap-6 px-5 w-full max-w-md mx-auto"
     >
-      <h2 className="text-2xl md:text-3xl font-display text-center text-foreground">
+      <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
         {t("quiz.context.title")}
       </h2>
-      <p className="text-muted-foreground text-center text-xs uppercase tracking-widest">
+      <p className="text-muted-foreground text-center text-body-xs tracking-wide">
         {t("quiz.context.subtitle")}
       </p>
 
@@ -28,7 +28,7 @@ export default function ContextStep() {
         value={state.context}
         onChange={(e) => setContext(e.target.value)}
         placeholder={t("quiz.context.placeholder")}
-        className="w-full min-h-[100px] bg-card border-border text-foreground placeholder:text-muted-foreground resize-none"
+        className="w-full min-h-[100px] bg-card text-foreground placeholder:text-muted-foreground resize-none rounded-xl"
         maxLength={200}
       />
 
@@ -36,7 +36,7 @@ export default function ContextStep() {
         onClick={nextStep}
         disabled={!(state.context || "").trim()}
         size="lg"
-        className="w-full max-w-xs rounded-lg font-semibold tracking-wide"
+        className="w-full max-w-xs rounded-xl font-medium"
       >
         {t("quiz.dietary.submit")} <Sparkles className="w-5 h-5 ml-1" />
       </Button>
@@ -45,7 +45,7 @@ export default function ContextStep() {
         variant="outline"
         onClick={nextStep}
         size="lg"
-        className="w-full max-w-xs rounded-lg font-semibold tracking-wide gap-1.5"
+        className="w-full max-w-xs rounded-xl font-medium gap-1.5"
       >
         <SkipForward className="w-4 h-4" /> {t("quiz.context.skip")}
       </Button>

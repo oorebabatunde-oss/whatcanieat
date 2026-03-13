@@ -30,10 +30,10 @@ function Chip({ label, selected, onClick }: { label: string; selected: boolean; 
       type="button"
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
+        "px-3.5 min-h-[44px] rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         selected
-          ? "bg-primary text-primary-foreground border-primary"
-          : "bg-card text-foreground border-border hover:border-primary/40"
+          ? "bg-primary/10 text-primary border border-primary/30 shadow-sm"
+          : "bg-card text-foreground shadow-sm hover:shadow-md"
       )}
     >
       {label}
@@ -58,17 +58,17 @@ function Section({
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
-        <button type="button" className="w-full flex items-center gap-2 py-2 text-left">
+        <button type="button" className="w-full flex items-center gap-2.5 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg">
           {icon}
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground">{title}</p>
-            <p className="text-xs text-muted-foreground">{subtitle}</p>
+            <p className="text-body-xs text-muted-foreground">{subtitle}</p>
           </div>
-          <ChevronDown className={cn("w-4 h-4 text-muted-foreground transition-transform", open && "rotate-180")} />
+          <ChevronDown className={cn("w-4 h-4 text-muted-foreground transition-transform duration-200", open && "rotate-180")} />
         </button>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="pb-3 pt-1">{children}</div>
+        <div className="pb-4 pt-1">{children}</div>
       </CollapsibleContent>
     </Collapsible>
   );
@@ -120,11 +120,11 @@ export default function ConsiderationsScreen() {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md mx-auto flex flex-col gap-3 px-4"
+      className="w-full max-w-md mx-auto flex flex-col gap-4 px-5"
     >
       <div className="text-center mb-2">
-        <h2 className="text-lg font-display font-bold text-foreground">{t("mealplan.title")}</h2>
-        <p className="text-xs text-muted-foreground">{t("mealplan.subtitle")}</p>
+        <h2 className="text-display-2 font-display text-foreground">{t("mealplan.title")}</h2>
+        <p className="text-body-xs text-muted-foreground mt-1">{t("mealplan.subtitle")}</p>
       </div>
 
       {/* Safety */}
@@ -134,7 +134,7 @@ export default function ConsiderationsScreen() {
         subtitle={t("mealplan.safetySubtitle")}
         defaultOpen
       >
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {SAFETY_OPTIONS.map((opt) => (
             <Chip key={opt} label={opt} selected={local.safety.includes(opt)} onClick={() => toggleSafety(opt)} />
           ))}
@@ -147,10 +147,10 @@ export default function ConsiderationsScreen() {
         title={t("mealplan.practical")}
         subtitle={t("mealplan.practicalSubtitle")}
       >
-        <div className="space-y-3">
+        <div className="space-y-4">
           {/* Budget */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.budget")}</p>
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.budget")}</p>
             <div className="space-y-2">
               <div className="flex gap-2 items-center">
                 <div className="flex gap-1.5">
@@ -193,11 +193,11 @@ export default function ConsiderationsScreen() {
                       },
                     }))
                   }
-                  className="h-8 w-28 text-base"
+                  className="h-10 w-28 text-base rounded-xl"
                 />
               </div>
               <div className="flex gap-1.5 items-center">
-                <span className="text-xs text-muted-foreground">{t("mealplan.budget.per")}</span>
+                <span className="text-body-xs text-muted-foreground">{t("mealplan.budget.per")}</span>
                 {(["day", "week", "month"] as const).map((p) => (
                   <Chip
                     key={p}
@@ -224,8 +224,8 @@ export default function ConsiderationsScreen() {
 
           {/* Max prep time */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.prepTime")}</p>
-            <div className="flex gap-1.5">
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.prepTime")}</p>
+            <div className="flex gap-2">
               {[10, 20, 30, 60].map((m) => (
                 <Chip key={m} label={`${m} min`} selected={local.practical.maxPrepTime === m} onClick={() => setPractical("maxPrepTime", local.practical.maxPrepTime === m ? undefined : m)} />
               ))}
@@ -234,8 +234,8 @@ export default function ConsiderationsScreen() {
 
           {/* Meals per day */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.mealsPerDay")}</p>
-            <div className="flex gap-1.5">
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.mealsPerDay")}</p>
+            <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
                 <Chip key={n} label={`${n}`} selected={local.practical.mealsPerDay === n} onClick={() => setPractical("mealsPerDay", local.practical.mealsPerDay === n ? undefined : n)} />
               ))}
@@ -244,8 +244,8 @@ export default function ConsiderationsScreen() {
 
           {/* Cooking skill */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.skill")}</p>
-            <div className="flex gap-1.5">
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.skill")}</p>
+            <div className="flex gap-2">
               {(["beginner", "simple", "comfortable"] as const).map((s) => (
                 <Chip key={s} label={t(`mealplan.skill.${s}`)} selected={local.practical.cookingSkill === s} onClick={() => setPractical("cookingSkill", local.practical.cookingSkill === s ? undefined : s)} />
               ))}
@@ -254,8 +254,8 @@ export default function ConsiderationsScreen() {
 
           {/* Equipment */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.equipment")}</p>
-            <div className="flex flex-wrap gap-1.5">
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.equipment")}</p>
+            <div className="flex flex-wrap gap-2">
               {EQUIPMENT_OPTIONS.map((e) => (
                 <Chip key={e} label={e} selected={(local.practical.equipment || []).includes(e)} onClick={() => toggleEquipment(e)} />
               ))}
@@ -264,8 +264,8 @@ export default function ConsiderationsScreen() {
 
           {/* Cooking pattern */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.pattern")}</p>
-            <div className="flex gap-1.5">
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.pattern")}</p>
+            <div className="flex gap-2">
               {(["daily", "batch", "no-cook-weekdays"] as const).map((p) => (
                 <Chip key={p} label={t(`mealplan.pattern.${p}`)} selected={local.practical.cookingPattern === p} onClick={() => setPractical("cookingPattern", local.practical.cookingPattern === p ? undefined : p)} />
               ))}
@@ -274,8 +274,8 @@ export default function ConsiderationsScreen() {
 
           {/* Storage */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.storage")}</p>
-            <div className="flex gap-1.5">
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.storage")}</p>
+            <div className="flex gap-2">
               {(["freezer", "fridge-only", "limited"] as const).map((s) => (
                 <Chip key={s} label={t(`mealplan.storage.${s}`)} selected={local.practical.storage === s} onClick={() => setPractical("storage", local.practical.storage === s ? undefined : s)} />
               ))}
@@ -284,8 +284,8 @@ export default function ConsiderationsScreen() {
 
           {/* Family size */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.familySize")}</p>
-            <div className="flex gap-1.5">
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.familySize")}</p>
+            <div className="flex gap-2">
               {[1, 2, 3, 4, 5, 6].map((n) => (
                 <Chip key={n} label={`${n}`} selected={local.practical.familySize === n} onClick={() => setPractical("familySize", local.practical.familySize === n ? undefined : n)} />
               ))}
@@ -294,8 +294,8 @@ export default function ConsiderationsScreen() {
 
           {/* Capsule ratio */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.capsule")}</p>
-            <div className="flex gap-1.5">
+            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.capsule")}</p>
+            <div className="flex gap-2">
               {(["none", "some", "mostly"] as const).map((r) => (
                 <Chip key={r} label={t(`mealplan.capsule.${r}`)} selected={local.practical.capsuleRatio === r} onClick={() => setPractical("capsuleRatio", local.practical.capsuleRatio === r ? undefined : r)} />
               ))}
@@ -306,11 +306,11 @@ export default function ConsiderationsScreen() {
 
       {/* Preferences */}
       <Section
-        icon={<Sparkles className="w-4 h-4 text-secondary shrink-0" />}
+        icon={<Sparkles className="w-4 h-4 text-primary shrink-0" />}
         title={t("mealplan.preferences")}
         subtitle={t("mealplan.preferencesSubtitle")}
       >
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {PREFERENCE_OPTIONS.map((opt) => (
             <Chip key={opt} label={opt} selected={local.preferences.includes(opt)} onClick={() => togglePreference(opt)} />
           ))}
@@ -319,12 +319,12 @@ export default function ConsiderationsScreen() {
 
       {/* Nuance */}
       <div>
-        <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.nuance")}</p>
+        <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.nuance")}</p>
         <Textarea
           value={local.nuance}
           onChange={(e) => setLocal((c) => ({ ...c, nuance: e.target.value }))}
           placeholder={t("mealplan.nuancePlaceholder")}
-          className="text-sm min-h-[60px]"
+          className="text-sm min-h-[60px] rounded-xl"
           maxLength={500}
         />
       </div>
@@ -336,10 +336,10 @@ export default function ConsiderationsScreen() {
             key={d}
             onClick={() => setDur(d)}
             className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
+              "px-4 min-h-[44px] rounded-xl text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               dur === d
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-card text-foreground border-border hover:border-primary/40"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-card text-foreground shadow-sm hover:shadow-md"
             )}
           >
             {d === 30 ? "1 month" : `${d} ${d === 1 ? "day" : t("mealplan.days")}`}
@@ -348,7 +348,7 @@ export default function ConsiderationsScreen() {
       </div>
 
       {/* Generate */}
-      <Button onClick={handleGenerate} className="w-full text-sm font-semibold mt-1">
+      <Button onClick={handleGenerate} className="w-full text-sm font-medium mt-1 rounded-xl">
         {t("mealplan.generate")}
       </Button>
 

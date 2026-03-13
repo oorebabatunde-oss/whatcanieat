@@ -14,8 +14,15 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Playpen Sans", "cursive"],
+        display: ["Inter", "sans-serif"],
         body: ["Manrope", "sans-serif"],
+      },
+      fontSize: {
+        "display-1": ["2rem", { lineHeight: "1.15", fontWeight: "700" }],
+        "display-2": ["1.5rem", { lineHeight: "1.2", fontWeight: "600" }],
+        "body-base": ["1rem", { lineHeight: "1.25" }],
+        "body-sm": ["0.875rem", { lineHeight: "1.3" }],
+        "body-xs": ["0.8125rem", { lineHeight: "1.3" }],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,6 +58,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        caution: {
+          DEFAULT: "hsl(var(--caution))",
+          foreground: "hsl(var(--caution-foreground))",
+        },
         snack: "hsl(var(--snack))",
         meal: "hsl(var(--meal))",
         mystery: "hsl(var(--mystery))",
@@ -85,8 +100,8 @@ export default {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        "accordion-down": "accordion-down 0.25s ease-out",
+        "accordion-up": "accordion-up 0.25s ease-out",
         "bounce-subtle": "bounce-subtle 2s ease-in-out infinite",
       },
     },
