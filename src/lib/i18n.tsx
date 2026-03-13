@@ -753,6 +753,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "保存した料理を見る",
     "saved.guestWarning": "保存した料理はローカルに保存され、ブラウザのデータを消去すると失われます。",
     "saved.signInToKeep": "ログインして永久に保存",
+    "saved.tabs.recommendations": "料理",
+    "saved.tabs.mealPlans": "食事プラン",
+    "saved.emptyPlans": "保存された食事プランはまだありません。",
+    "saved.planDuration": "日間プラン",
+    "saved.planSaved": "プランを保存しました！",
+    "saved.viewPlan": "プランを見る",
   },
   ko: {
     "app.title": "뭘 먹을 수 있을까?",
