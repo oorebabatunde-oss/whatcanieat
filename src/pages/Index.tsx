@@ -140,7 +140,7 @@ const Index = () => {
         </h1>
       </motion.div>
 
-      <div className="flex flex-row items-stretch gap-3 w-full max-w-[18rem]">
+      <div className="flex flex-row items-stretch gap-3 w-full max-w-[28rem]">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -165,6 +165,19 @@ const Index = () => {
           <span className="text-2xl group-hover:scale-110 transition-transform">🥘</span>
           <span className="text-sm font-bold leading-snug text-foreground">{t("home.scanFridge")}</span>
           <span className="text-xs text-muted-foreground font-normal leading-tight">{t("home.scanFridgeSubtext")}</span>
+        </motion.button>
+
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => changeMode("mealplan")}
+          className="group bg-card/90 backdrop-blur-sm border border-border rounded-2xl px-3 py-3 flex flex-col items-center gap-2 shadow-sm hover:shadow-md hover:border-primary/40 flex-1 text-center transition-all"
+        >
+          <span className="text-2xl group-hover:scale-110 transition-transform">📋</span>
+          <span className="text-sm font-bold leading-snug text-foreground">{t("home.planMeals")}</span>
+          <span className="text-xs text-muted-foreground font-normal leading-tight">{t("home.planMealsSubtext")}</span>
         </motion.button>
       </div>
       </div>
