@@ -25,20 +25,25 @@ const PREFERENCE_OPTIONS = [
   "Comfort food", "Quick snacks",
 ];
 
-function Chip({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "px-3.5 min-h-[44px] rounded-full text-sm font-medium border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        selected
-          ? "bg-primary/10 text-primary border-primary/30 shadow-sm"
-          : "bg-card text-foreground border-border shadow-sm hover:shadow-md"
-      )}
-    >
-      {label}
-    </button>
+const Chip = React.forwardRef<HTMLButtonElement, { label: string; selected: boolean; onClick: () => void }>(
+  function Chip({ label, selected, onClick }, ref) {
+    return (
+      <button
+        ref={ref}
+        type="button"
+        onClick={onClick}
+        className={cn(
+          "px-3.5 min-h-[44px] rounded-full text-sm font-medium border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          selected
+            ? "bg-primary/10 text-primary border-primary/30 shadow-sm"
+            : "bg-card text-foreground border-border shadow-sm hover:shadow-md"
+        )}
+      >
+        {label}
+      </button>
+    );
+  }
+);
   );
 }
 
