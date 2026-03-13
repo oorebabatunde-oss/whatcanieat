@@ -354,6 +354,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "Voir les plats sauvegardés",
     "saved.guestWarning": "Vos plats sauvegardés sont stockés localement et seront perdus si vous effacez les données du navigateur.",
     "saved.signInToKeep": "Connectez-vous pour les conserver",
+    "saved.tabs.recommendations": "Plats",
+    "saved.tabs.mealPlans": "Plans repas",
+    "saved.emptyPlans": "Aucun plan repas sauvegardé.",
+    "saved.planDuration": "jours",
+    "saved.planSaved": "Plan sauvegardé !",
+    "saved.viewPlan": "Voir le plan",
   },
   de: {
     "app.title": "Was kann ich essen?",
