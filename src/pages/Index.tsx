@@ -125,12 +125,12 @@ const Index = () => {
     <div className="min-h-screen bg-background flex flex-col items-center px-5 relative overflow-hidden">
       {/* Emoji background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
-        <div className="absolute inset-0 flex flex-col justify-start opacity-[0.07] dark:opacity-[0.04] py-4">
-          {Array.from({ length: 12 }).map((_, rowIdx) => (
+        <div className="absolute -inset-8 flex flex-col justify-between opacity-[0.06] dark:opacity-[0.035]">
+          {Array.from({ length: 8 }).map((_, rowIdx) => (
             <div
               key={rowIdx}
-              className="whitespace-nowrap text-2xl leading-10 tracking-[0.3em]"
-              style={{ transform: rowIdx % 2 === 1 ? "translateX(-1.5rem)" : undefined }}
+              className="whitespace-nowrap text-xl leading-none tracking-[0.35em]"
+              style={{ transform: rowIdx % 2 === 1 ? "translateX(-2rem)" : undefined }}
             >
               {emojiRows[rowIdx % emojiRows.length]}
             </div>
