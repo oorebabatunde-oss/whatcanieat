@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { QuizProvider } from "@/components/quiz/QuizContext";
 import QuizFlow from "@/components/quiz/QuizFlow";
 import FridgeScanner from "@/components/scan/FridgeScanner";
+import MealPlanFlow from "@/components/mealplan/MealPlanFlow";
 import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
