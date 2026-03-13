@@ -44,8 +44,6 @@ const Chip = React.forwardRef<HTMLButtonElement, { label: string; selected: bool
     );
   }
 );
-  );
-}
 
 import React from "react";
 
