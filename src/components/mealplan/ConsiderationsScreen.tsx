@@ -151,10 +151,47 @@ export default function ConsiderationsScreen() {
           {/* Budget */}
           <div>
             <p className="text-xs font-medium text-foreground mb-1">{t("mealplan.budget")}</p>
-            <div className="flex gap-1.5">
-              {(["low", "medium", "flexible"] as const).map((b) => (
-                <Chip key={b} label={t(`mealplan.budget.${b}`)} selected={local.practical.budget === b} onClick={() => setPractical("budget", local.practical.budget === b ? undefined : b)} />
-              ))}
+            <div className="flex gap-2 items-center">
+              <div className="flex gap-1.5">
+                {["£", "$", "€"].map((c) => (
+                  <Chip
+                    key={c}
+                    label={c}
+                    selected={local.practical.budget?.currency === c}
+                    onClick={() =>
+                      setLocal((prev) => ({
+                        ...prev,
+                        practical: {
+                          ...prev.practical,
+                          budget: {
+                            amount: prev.practical.budget?.amount || 0,
+                            currency: prev.practical.budget?.currency === c ? "" : c,
+                          },
+                        },
+                      }))
+                    }
+                  />
+                ))}
+              </div>
+              <Input
+                type="number"
+                min={0}
+                placeholder="Total budget"
+                value={local.practical.budget?.amount || ""}
+                onChange={(e) =>
+                  setLocal((prev) => ({
+                    ...prev,
+                    practical: {
+                      ...prev.practical,
+                      budget: {
+                        amount: Number(e.target.value) || 0,
+                        currency: prev.practical.budget?.currency || "£",
+                      },
+                    },
+                  }))
+                }
+                className="h-8 w-28 text-sm"
+              />
             </div>
           </div>
 
