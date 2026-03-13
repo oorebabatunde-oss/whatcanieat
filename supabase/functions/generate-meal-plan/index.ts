@@ -376,10 +376,30 @@ serve(async (req) => {
       });
     }
 
-    // Validate: trim days to match requested duration
-    if (Array.isArray(plan.days) && plan.days.length > validDuration) {
+    // Strict validation: ensure exactly validDuration days
+    if (!Array.isArray(plan.days) || plan.days.length === 0) {
+      console.error(`[${requestId}] AI returned no days array`);
+      return new Response(JSON.stringify({ error: "Failed to generate meal plan — no days returned" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Trim excess days
+    if (plan.days.length > validDuration) {
       console.log(`[${requestId}] Trimming ${plan.days.length} days to ${validDuration}`);
       plan.days = plan.days.slice(0, validDuration);
+    }
+
+    // Re-number days sequentially to ensure consistency
+    plan.days = plan.days.map((day: any, idx: number) => ({
+      ...day,
+      dayNumber: idx + 1,
+    }));
+
+    // Warn if fewer days than requested (don't fail — partial is better than nothing)
+    if (plan.days.length < validDuration) {
+      console.warn(`[${requestId}] AI returned ${plan.days.length} days but ${validDuration} were requested`);
     }
 
     console.log(`[${requestId}] generate-meal-plan: success, ${plan.days?.length || 0} days (requested ${validDuration})`);
