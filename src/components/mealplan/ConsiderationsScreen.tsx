@@ -277,7 +277,7 @@ export default function ConsiderationsScreen() {
                 : "bg-card text-foreground border-border hover:border-primary/40"
             )}
           >
-            {d} {t("mealplan.days")}
+            {d} {d === 1 ? "day" : t("mealplan.days")}
           </button>
         ))}
       </div>
