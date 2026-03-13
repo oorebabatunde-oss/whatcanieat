@@ -51,15 +51,17 @@ export default function PlateLoader({ message }: PlateLoaderProps) {
         <p className="text-muted-foreground text-sm text-center">{message}</p>
       )}
 
-      <AnimatePresence>
-        {showAlmost && (
+      <AnimatePresence mode="wait">
+        {delayPhase >= 1 && (
           <motion.p
+            key={delayPhase}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.4 }}
             className="text-muted-foreground/70 text-xs text-center italic"
           >
-            {t("loading.almostThere")}
+            {delayPhase === 1 ? t("loading.almostThere") : t("loading.notLongNow")}
           </motion.p>
         )}
       </AnimatePresence>
