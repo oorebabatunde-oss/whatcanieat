@@ -134,7 +134,7 @@ const Index = () => {
           </p>
         </motion.div>
 
-        <div className="flex flex-row items-stretch gap-3 w-full max-w-[28rem]">
+        <div className="flex flex-col items-stretch gap-3 w-full max-w-[28rem]">
           <motion.button
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
