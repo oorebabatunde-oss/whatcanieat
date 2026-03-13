@@ -1214,6 +1214,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "Посмотреть сохранённые блюда",
     "saved.guestWarning": "Ваши сохранённые блюда хранятся локально и будут потеряны при очистке данных браузера.",
     "saved.signInToKeep": "Войдите, чтобы сохранить навсегда",
+    "saved.tabs.recommendations": "Блюда",
+    "saved.tabs.mealPlans": "Планы питания",
+    "saved.emptyPlans": "Сохранённых планов питания пока нет.",
+    "saved.planDuration": "дней",
+    "saved.planSaved": "План сохранён!",
+    "saved.viewPlan": "Посмотреть план",
   },
 };
 
