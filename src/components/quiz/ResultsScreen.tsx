@@ -1,6 +1,7 @@
 import { useQuiz } from "./QuizContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck, Undo2 } from "lucide-react";
+import { RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck, Undo2, Loader2 } from "lucide-react";
+import PlateLoader from "@/components/ui/PlateLoader";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
