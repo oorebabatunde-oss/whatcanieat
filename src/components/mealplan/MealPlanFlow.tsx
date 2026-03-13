@@ -9,7 +9,7 @@ function MealPlanInner() {
   const { t } = useI18n();
 
   if (state.step === "loading") {
-    return <PlateLoader message={t("mealplan.generating")} progressMessage={progressMessage} />;
+    return <PlateLoader message={t("mealplan.generating")} progressMessage={progressMessage} duration={state.duration} />;
   }
 
   if (state.step === "results" && state.planData) {

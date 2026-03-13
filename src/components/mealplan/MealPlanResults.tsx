@@ -5,7 +5,7 @@ import { useMealPlan } from "./MealPlanContext";
 import { useSaveMealPlan } from "@/hooks/useSaveMealPlan";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft, RotateCcw } from "lucide-react";
+import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft, RotateCcw, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import SwapDialog from "./SwapDialog";
 
@@ -22,7 +22,7 @@ export default function MealPlanResults() {
 
   if (!plan) return null;
 
-  // Defensive: ensure arrays exist even if AI response was truncated
+  const isComplete = state.isComplete;
   const days = plan.days || [];
   const groceryList = plan.groceryList || [];
   const costSummary = plan.costSummary || { total: 0, perDay: 0 };
@@ -32,6 +32,7 @@ export default function MealPlanResults() {
   };
 
   const handleSave = async () => {
+    if (!isComplete) return;
     try {
       await savePlan(plan, state.considerations, state.duration);
       setSaved(true);
@@ -54,6 +55,18 @@ export default function MealPlanResults() {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md mx-auto flex flex-col gap-4 px-5"
     >
+      {/* Still loading indicator */}
+      {!isComplete && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="bg-primary/10 rounded-xl p-3 flex gap-2 items-center text-xs text-primary"
+        >
+          <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+          <span>{state.progressMessage || t("loading.step.grocery")}</span>
+        </motion.div>
+      )}
+
       {/* Conflicts */}
       {plan.conflicts && plan.conflicts.length > 0 && (
         <div className="bg-caution/10 rounded-xl p-3 flex gap-2 items-start">
@@ -66,13 +79,13 @@ export default function MealPlanResults() {
 
       {/* Action bar */}
       <div className="flex gap-2 flex-wrap">
-        <Button variant="outline" size="sm" onClick={regenerate} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
+        <Button variant="outline" size="sm" onClick={regenerate} disabled={!isComplete} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <RefreshCw className="w-3.5 h-3.5" /> {t("mealplan.regenerate")}
         </Button>
         <Button variant="outline" size="sm" onClick={adjustConstraints} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <Sliders className="w-3.5 h-3.5" /> {t("mealplan.adjust")}
         </Button>
-        <Button variant="outline" size="sm" onClick={handleSave} disabled={saved} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
+        <Button variant="outline" size="sm" onClick={handleSave} disabled={saved || !isComplete} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <Save className="w-3.5 h-3.5" /> {saved ? t("saved.planSaved") : t("mealplan.save")}
         </Button>
         <Button variant="outline" size="sm" onClick={() => { sessionStorage.clear(); window.location.reload(); }} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
@@ -86,7 +99,7 @@ export default function MealPlanResults() {
           {t("mealplan.tabMeals")}
         </Button>
         <Button variant={activeTab === "grocery" ? "default" : "outline"} size="sm" onClick={() => setActiveTab("grocery")} className="flex-1 text-xs min-h-[44px] rounded-xl">
-          {t("mealplan.tabGrocery")}
+          {t("mealplan.tabGrocery")} {!isComplete && <Loader2 className="w-3 h-3 animate-spin ml-1" />}
         </Button>
       </div>
 
@@ -144,6 +157,7 @@ export default function MealPlanResults() {
                         variant="ghost"
                         size="sm"
                         className="text-xs gap-1.5 text-muted-foreground min-h-[44px]"
+                        disabled={!isComplete}
                         onClick={() => setSwapTarget({ id: meal.id, name: meal.name, ingredients: meal.ingredients.map((i) => i.name) })}
                       >
                         <ArrowRightLeft className="w-3.5 h-3.5" /> {t("mealplan.swap")}
@@ -155,14 +169,14 @@ export default function MealPlanResults() {
             </div>
           ))}
 
-          {costSummary && (
+          {isComplete && costSummary && (
             <div className="bg-muted/50 rounded-xl p-3.5 text-xs text-muted-foreground">
               <span className="font-semibold text-foreground">Estimated total:</span> ~£{costSummary.total.toFixed(2)}
               {" · "}~£{costSummary.perDay.toFixed(2)}/day
             </div>
           )}
 
-          {plan.nutritionNotes && plan.nutritionNotes.length > 0 && (
+          {isComplete && plan.nutritionNotes && plan.nutritionNotes.length > 0 && (
             <div className="bg-muted/50 rounded-xl p-3.5 text-xs text-muted-foreground space-y-1">
               {plan.nutritionNotes.map((note, i) => <p key={i}>• {note}</p>)}
             </div>
@@ -172,30 +186,40 @@ export default function MealPlanResults() {
 
       {activeTab === "grocery" && (
         <div className="flex flex-col gap-3">
-          {Object.entries(groupedGrocery).map(([aisle, items]) => (
-            <div key={aisle}>
-              <h4 className="text-body-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">{aisle}</h4>
-              <div className="glass-card rounded-xl overflow-hidden shadow-sm">
-                {items.map((item, i) => (
-                  <div key={i} className={`px-3.5 py-2.5 flex items-center justify-between text-sm ${i > 0 ? "border-t border-border/50" : ""}`}>
-                    <div className="min-w-0">
-                      <span className="text-foreground">{item.name}</span>
-                      <span className="text-muted-foreground text-xs ml-1">{item.totalQuantity} {item.unit}</span>
-                      {item.recipesUsedIn.length > 0 && (
-                        <p className="text-[10px] text-muted-foreground truncate">Used in: {item.recipesUsedIn.join(", ")}</p>
-                      )}
-                    </div>
-                    <span className="text-xs text-muted-foreground shrink-0">~£{item.estimatedPrice.toFixed(2)}</span>
+          {!isComplete ? (
+            <div className="flex flex-col items-center gap-3 py-8 text-muted-foreground">
+              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              <p className="text-sm">{t("loading.step.grocery")}</p>
+              <p className="text-xs italic">{t("loading.groceryWait")}</p>
+            </div>
+          ) : (
+            <>
+              {Object.entries(groupedGrocery).map(([aisle, items]) => (
+                <div key={aisle}>
+                  <h4 className="text-body-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">{aisle}</h4>
+                  <div className="glass-card rounded-xl overflow-hidden shadow-sm">
+                    {items.map((item, i) => (
+                      <div key={i} className={`px-3.5 py-2.5 flex items-center justify-between text-sm ${i > 0 ? "border-t border-border/50" : ""}`}>
+                        <div className="min-w-0">
+                          <span className="text-foreground">{item.name}</span>
+                          <span className="text-muted-foreground text-xs ml-1">{item.totalQuantity} {item.unit}</span>
+                          {item.recipesUsedIn.length > 0 && (
+                            <p className="text-[10px] text-muted-foreground truncate">Used in: {item.recipesUsedIn.join(", ")}</p>
+                          )}
+                        </div>
+                        <span className="text-xs text-muted-foreground shrink-0">~£{item.estimatedPrice.toFixed(2)}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          ))}
+                </div>
+              ))}
 
-          {costSummary && (
-            <div className="bg-muted/50 rounded-xl p-3.5 text-xs text-foreground font-semibold">
-              Total: ~£{costSummary.total.toFixed(2)}
-            </div>
+              {costSummary && (
+                <div className="bg-muted/50 rounded-xl p-3.5 text-xs text-foreground font-semibold">
+                  Total: ~£{costSummary.total.toFixed(2)}
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
