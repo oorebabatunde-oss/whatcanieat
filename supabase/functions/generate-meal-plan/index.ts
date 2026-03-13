@@ -63,6 +63,10 @@ PRIORITY ORDER (never violate higher priority for lower):
 CAPSULE MEALS:
 Capsule meals are quick, portable, minimal-prep meals (yogurt bowls, wraps, smoothies, snack plates, salads). Mark them with isCapsule: true.
 
+RECIPE NAMING:
+- Use simple, descriptive meal names (e.g. "Akara and Pap", "Grilled Chicken Salad", "Moin Moin Breakfast")
+- Never use narrative or story-like names. No "stories", "tales", or filler words in names.
+
 RECIPE INSTRUCTIONS:
 - Use clear, step-based, simple language
 - Each step should be one action, max 3 steps per recipe
