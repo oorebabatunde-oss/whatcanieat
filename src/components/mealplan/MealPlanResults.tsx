@@ -22,6 +22,11 @@ export default function MealPlanResults() {
 
   if (!plan) return null;
 
+  // Defensive: ensure arrays exist even if AI response was truncated
+  const days = plan.days || [];
+  const groceryList = plan.groceryList || [];
+  const costSummary = plan.costSummary || { total: 0, perDay: 0 };
+
   const toggleMeal = (mealId: string) => {
     setExpandedMeals((prev) => ({ ...prev, [mealId]: !prev[mealId] }));
   };
@@ -36,7 +41,7 @@ export default function MealPlanResults() {
     }
   };
 
-  const groupedGrocery = plan.groceryList.reduce<Record<string, typeof plan.groceryList>>((acc, item) => {
+  const groupedGrocery = groceryList.reduce<Record<string, typeof groceryList>>((acc, item) => {
     const aisle = item.aisle || "Other";
     if (!acc[aisle]) acc[aisle] = [];
     acc[aisle].push(item);
@@ -84,7 +89,7 @@ export default function MealPlanResults() {
 
       {activeTab === "meals" && (
         <div className="flex flex-col gap-4">
-          {plan.days.map((day) => (
+          {days.map((day) => (
             <div key={day.dayNumber} className="flex flex-col gap-2">
               <h3 className="text-body-xs font-semibold text-muted-foreground uppercase tracking-wide">
                 {t("mealplan.dayLabel")} {day.dayNumber}
@@ -147,10 +152,10 @@ export default function MealPlanResults() {
             </div>
           ))}
 
-          {plan.costSummary && (
+          {costSummary && (
             <div className="bg-muted/50 rounded-xl p-3.5 text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">Estimated total:</span> ~£{plan.costSummary.total.toFixed(2)}
-              {" · "}~£{plan.costSummary.perDay.toFixed(2)}/day
+              <span className="font-semibold text-foreground">Estimated total:</span> ~£{costSummary.total.toFixed(2)}
+              {" · "}~£{costSummary.perDay.toFixed(2)}/day
             </div>
           )}
 
@@ -184,9 +189,9 @@ export default function MealPlanResults() {
             </div>
           ))}
 
-          {plan.costSummary && (
+          {costSummary && (
             <div className="bg-muted/50 rounded-xl p-3.5 text-xs text-foreground font-semibold">
-              Total: ~£{plan.costSummary.total.toFixed(2)}
+              Total: ~£{costSummary.total.toFixed(2)}
             </div>
           )}
         </div>
