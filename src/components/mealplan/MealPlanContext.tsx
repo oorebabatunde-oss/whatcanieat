@@ -137,6 +137,10 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, step: "loading", error: null }));
     try {
       const plan = await callGeneratePlan(state.considerations, state.duration);
+      // Client-side validation: trim days to requested duration
+      if (plan.days && plan.days.length > state.duration) {
+        plan.days = plan.days.slice(0, state.duration);
+      }
       setState((s) => ({ ...s, step: "results", planData: plan, error: null }));
     } catch (e: any) {
       const msg = e?.message || "Something went wrong";

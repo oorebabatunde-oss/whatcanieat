@@ -115,14 +115,26 @@ const Index = () => {
     );
   }
 
-  const emojis = "🍕🥑🍜🧁🥗🍔🌮🥘🍣🥐🍩🫕🧀🍝🥙🍱🥞🫐🍓🥦🍗🌽🥚🍰🧇🫓🍚🥥🍋🫑";
+  const emojiRows = [
+    "🍕 🥑 🍜 🧁 🥗 🍔 🌮 🥘 🍣 🥐 🍩 🫕 🧀 🍝 🥙",
+    "🍱 🥞 🫐 🍓 🥦 🍗 🌽 🥚 🍰 🧇 🫓 🍚 🥥 🍋 🫑",
+    "🥗 🍕 🧁 🍜 🍔 🥑 🥘 🌮 🍣 🍩 🥐 🧀 🫕 🥙 🍝",
+  ];
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-5 relative overflow-hidden">
       {/* Emoji background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
-        <div className="absolute inset-0 text-[2rem] leading-[2.5rem] tracking-widest opacity-[0.06] dark:opacity-[0.04] break-all whitespace-pre-wrap p-4">
-          {emojis.repeat(20)}
+        <div className="absolute inset-0 flex flex-col justify-start opacity-[0.07] dark:opacity-[0.04] py-4">
+          {Array.from({ length: 12 }).map((_, rowIdx) => (
+            <div
+              key={rowIdx}
+              className="whitespace-nowrap text-2xl leading-10 tracking-[0.3em]"
+              style={{ transform: rowIdx % 2 === 1 ? "translateX(-1.5rem)" : undefined }}
+            >
+              {emojiRows[rowIdx % emojiRows.length]}
+            </div>
+          ))}
         </div>
       </div>
 
