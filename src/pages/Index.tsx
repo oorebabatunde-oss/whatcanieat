@@ -75,7 +75,7 @@ const Index = () => {
           {toolbar}
           <header className="pt-6 pb-2 px-5 text-center">
             <button onClick={goWelcome} className="inline-block">
-              <h1 className="text-xl font-display font-semibold text-primary">
+              <h1 className="text-xl font-logo font-semibold text-primary">
                 {t("app.title")}
               </h1>
             </button>
