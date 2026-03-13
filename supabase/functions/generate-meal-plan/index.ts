@@ -187,7 +187,7 @@ function buildUserPrompt(considerations: any, duration: number, swap?: any): str
 
   const practical = considerations.practical || {};
   const practicalLines: string[] = [];
-  if (practical.budget?.amount) practicalLines.push(`Total budget: ${practical.budget.currency || "£"}${practical.budget.amount} for the whole plan. Use ${practical.budget.currency || "£"} for all cost estimates.`);
+  if (practical.budget?.amount) practicalLines.push(`Budget: ${practical.budget.currency || "£"}${practical.budget.amount} per ${practical.budget.period || "week"}. Use ${practical.budget.currency || "£"} for all cost estimates. Scale costs to fit the plan duration of ${duration} day(s).`);
   if (practical.maxPrepTime) practicalLines.push(`Max prep time per meal: ${practical.maxPrepTime} minutes`);
   if (practical.mealsPerDay) practicalLines.push(`Meals per day: ${practical.mealsPerDay}`);
   if (practical.cookingSkill) practicalLines.push(`Cooking skill: ${practical.cookingSkill}`);
