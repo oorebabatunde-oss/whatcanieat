@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
+import PlateLoader from "@/components/ui/PlateLoader";
 
 interface Ingredient {
   name: string;
@@ -215,10 +216,7 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
                 autoFocus
               />
               {loading ? (
-                <div className="flex flex-col items-center gap-3 py-4">
-                  <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                  <p className="text-muted-foreground text-sm">{t("scan.identifying")}</p>
-                </div>
+                <PlateLoader message={t("scan.identifying")} />
               ) : (
                 <div className="flex gap-2 w-full">
                   <Button variant="outline" onClick={() => { setInputMode("choose"); setIngredientText(""); }} className="flex-1 min-h-[44px] rounded-xl">
@@ -264,10 +262,7 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
                 <img src={preview} alt="Fridge contents" className="w-full h-auto max-h-64 object-cover" />
               </div>
               {loading ? (
-                <div className="flex flex-col items-center gap-3 py-4">
-                  <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                  <p className="text-muted-foreground text-sm">{t("scan.identifying")}</p>
-                </div>
+                <PlateLoader message={t("scan.identifying")} />
               ) : (
                 <div className="flex gap-2 w-full">
                   <Button variant="outline" onClick={handleReset} className="flex-1 min-h-[44px] rounded-xl">{t("scan.retake")}</Button>
