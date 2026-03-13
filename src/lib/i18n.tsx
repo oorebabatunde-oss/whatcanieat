@@ -55,6 +55,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.loading.title": "Finding your perfect food...",
     "results.loading.subtitle": "Finding recommendations...",
     "loading.almostThere": "Almost there. Still working.",
+    "loading.notLongNow": "Not long now. Ensuring perfect results.",
     "results.title": "Here's what you could eat!",
     "results.subtitle": "These are AI-generated recommendations.\nImages may not be accurate.",
     "results.whereToBuy": "Where to buy",
