@@ -443,6 +443,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "Gespeicherte Gerichte ansehen",
     "saved.guestWarning": "Deine gespeicherten Gerichte werden lokal gespeichert und gehen verloren, wenn du die Browserdaten löschst.",
     "saved.signInToKeep": "Melde dich an, um sie zu behalten",
+    "saved.tabs.recommendations": "Gerichte",
+    "saved.tabs.mealPlans": "Essenspläne",
+    "saved.emptyPlans": "Noch keine gespeicherten Essenspläne.",
+    "saved.planDuration": "Tage",
+    "saved.planSaved": "Plan gespeichert!",
+    "saved.viewPlan": "Plan ansehen",
   },
   pt: {
     "app.title": "O que posso comer?",
