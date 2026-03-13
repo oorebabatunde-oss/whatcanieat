@@ -77,7 +77,8 @@ function Section({
 
 export default function ConsiderationsScreen() {
   const { t } = useI18n();
-  const { state, setConsiderations, setDuration, generatePlan } = useMealPlan();
+  const { state, setConsiderations, setDuration, generatePlan, goBackToResults } = useMealPlan();
+  const hasPlan = !!state.planData;
   const [local, setLocal] = useState<Considerations>(state.considerations);
   const [dur, setDur] = useState<1 | 3 | 7 | 30>(state.duration);
 
