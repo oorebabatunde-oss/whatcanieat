@@ -55,6 +55,7 @@ interface MealPlanState {
   duration: 1 | 3 | 7 | 30;
   planData: PlanData | null;
   error: string | null;
+  progressMessage: string | null;
 }
 
 interface MealPlanContextType {
@@ -67,6 +68,7 @@ interface MealPlanContextType {
   adjustConstraints: () => void;
   goBackToResults: () => void;
   reset: () => void;
+  progressMessage: string | null;
 }
 
 const MealPlanContext = createContext<MealPlanContextType | null>(null);
@@ -86,6 +88,7 @@ const initialState: MealPlanState = {
   duration: 3,
   planData: null,
   error: null,
+  progressMessage: null,
 };
 
 function loadState(): MealPlanState {
@@ -107,19 +110,88 @@ function loadState(): MealPlanState {
   return initialState;
 }
 
-async function callGeneratePlan(considerations: Considerations, duration: number, swap?: any): Promise<PlanData> {
+async function callGeneratePlan(
+  considerations: Considerations,
+  duration: number,
+  swap?: any,
+  onProgress?: (msg: string) => void,
+): Promise<PlanData> {
+  // For 30-day plans (chunked), use raw fetch to handle SSE streaming
+  if (duration >= 30 && !swap) {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/generate-meal-plan`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${supabaseKey}`,
+        "apikey": supabaseKey,
+      },
+      body: JSON.stringify({ considerations, duration }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      try {
+        const json = JSON.parse(text);
+        throw new Error(json.error || "Failed to generate plan");
+      } catch {
+        throw new Error("Failed to generate plan");
+      }
+    }
+
+    const contentType = response.headers.get("content-type") || "";
+
+    if (contentType.includes("text/event-stream")) {
+      // Parse SSE stream
+      const reader = response.body!.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let plan: PlanData | null = null;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        let currentEvent = "";
+        for (const line of lines) {
+          if (line.startsWith("event: ")) {
+            currentEvent = line.slice(7).trim();
+          } else if (line.startsWith("data: ")) {
+            const data = JSON.parse(line.slice(6));
+            if (currentEvent === "progress" && data.message) {
+              onProgress?.(data.message);
+            } else if (currentEvent === "complete" && data.plan) {
+              plan = data.plan;
+            } else if (currentEvent === "error") {
+              throw new Error(data.error || "Generation failed");
+            }
+          }
+        }
+      }
+
+      if (!plan) throw new Error("No plan received");
+      return plan;
+    }
+
+    // Fallback: regular JSON response
+    const data = await response.json();
+    if (data.error) throw new Error(data.error);
+    return data.plan;
+  }
+
+  // Standard path for shorter plans
   const { data, error } = await supabase.functions.invoke("generate-meal-plan", {
     body: { considerations, duration, swap },
   });
 
-  if (error) {
-    throw new Error(error.message || "Failed to generate plan");
-  }
-
-  if (data?.error) {
-    throw new Error(data.error);
-  }
-
+  if (error) throw new Error(error.message || "Failed to generate plan");
+  if (data?.error) throw new Error(data.error);
   return data.plan;
 }
 
@@ -134,17 +206,21 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
   const setDuration = (d: 1 | 3 | 7 | 30) => setState((s) => ({ ...s, duration: d }));
 
   const generatePlan = async () => {
-    setState((s) => ({ ...s, step: "loading", error: null }));
+    setState((s) => ({ ...s, step: "loading", error: null, progressMessage: null }));
     try {
-      const plan = await callGeneratePlan(state.considerations, state.duration);
-      // Client-side validation: trim days to requested duration
+      const plan = await callGeneratePlan(
+        state.considerations,
+        state.duration,
+        undefined,
+        (msg) => setState((s) => ({ ...s, progressMessage: msg })),
+      );
       if (plan.days && plan.days.length > state.duration) {
         plan.days = plan.days.slice(0, state.duration);
       }
-      setState((s) => ({ ...s, step: "results", planData: plan, error: null }));
+      setState((s) => ({ ...s, step: "results", planData: plan, error: null, progressMessage: null }));
     } catch (e: any) {
       const msg = e?.message || "Something went wrong";
-      setState((s) => ({ ...s, step: "considerations", error: msg }));
+      setState((s) => ({ ...s, step: "considerations", error: msg, progressMessage: null }));
       toast({ title: "Couldn't generate plan", description: msg, variant: "destructive" });
     }
   };
@@ -188,7 +264,7 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <MealPlanContext.Provider value={{ state, setConsiderations, setDuration, generatePlan, swapMeal, regenerate, adjustConstraints, goBackToResults, reset }}>
+    <MealPlanContext.Provider value={{ state, setConsiderations, setDuration, generatePlan, swapMeal, regenerate, adjustConstraints, goBackToResults, reset, progressMessage: state.progressMessage }}>
       {children}
     </MealPlanContext.Provider>
   );

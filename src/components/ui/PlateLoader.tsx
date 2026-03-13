@@ -6,9 +6,10 @@ const FOODS = ["🥗", "🍕", "🍜", "🧁", "🥑", "🍔", "🌮", "🥘", "
 
 interface PlateLoaderProps {
   message?: string;
+  progressMessage?: string | null;
 }
 
-export default function PlateLoader({ message }: PlateLoaderProps) {
+export default function PlateLoader({ message, progressMessage }: PlateLoaderProps) {
   const { t } = useI18n();
   const [foodIndex, setFoodIndex] = useState(0);
   const [delayPhase, setDelayPhase] = useState<0 | 1 | 2>(0);
@@ -50,6 +51,21 @@ export default function PlateLoader({ message }: PlateLoaderProps) {
       {message && (
         <p className="text-muted-foreground text-sm text-center">{message}</p>
       )}
+
+      <AnimatePresence mode="wait">
+        {progressMessage && (
+          <motion.p
+            key={progressMessage}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.3 }}
+            className="text-primary text-xs font-medium text-center"
+          >
+            {progressMessage}
+          </motion.p>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence mode="wait">
         {delayPhase >= 1 && (
