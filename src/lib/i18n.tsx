@@ -1138,6 +1138,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "Opgeslagen gerechten bekijken",
     "saved.guestWarning": "Je opgeslagen gerechten worden lokaal opgeslagen en gaan verloren als je browsergegevens wist.",
     "saved.signInToKeep": "Log in om ze te bewaren",
+    "saved.tabs.recommendations": "Gerechten",
+    "saved.tabs.mealPlans": "Maaltijdplannen",
+    "saved.emptyPlans": "Nog geen opgeslagen maaltijdplannen.",
+    "saved.planDuration": "dagen plan",
+    "saved.planSaved": "Plan opgeslagen!",
+    "saved.viewPlan": "Plan bekijken",
   },
   ru: {
     "app.title": "Что мне поесть?",
