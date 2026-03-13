@@ -65,6 +65,7 @@ interface MealPlanContextType {
   swapMeal: (mealId: string, mealName: string, type: string, removeIngredient?: string) => Promise<void>;
   regenerate: () => Promise<void>;
   adjustConstraints: () => void;
+  goBackToResults: () => void;
   reset: () => void;
 }
 
