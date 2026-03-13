@@ -56,15 +56,15 @@ function Section({
   const [open, setOpen] = useState(defaultOpen ?? false);
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger className="w-full">
-        <div className="flex items-center gap-2 py-2 text-left">
+      <CollapsibleTrigger asChild>
+        <button type="button" className="w-full flex items-center gap-2 py-2 text-left">
           {icon}
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground">{title}</p>
             <p className="text-xs text-muted-foreground">{subtitle}</p>
           </div>
           <ChevronDown className={cn("w-4 h-4 text-muted-foreground transition-transform", open && "rotate-180")} />
-        </div>
+        </button>
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="pb-3 pt-1">{children}</div>
@@ -277,7 +277,7 @@ export default function ConsiderationsScreen() {
                 : "bg-card text-foreground border-border hover:border-primary/40"
             )}
           >
-            {d} {t("mealplan.days")}
+            {d} {d === 1 ? "day" : t("mealplan.days")}
           </button>
         ))}
       </div>
