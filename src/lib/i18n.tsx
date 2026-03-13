@@ -165,6 +165,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "mealplan.generating": "Building your meal plan...",
     "mealplan.regenerate": "Regenerate",
     "mealplan.adjust": "Adjust",
+    "mealplan.backToPlan": "Back to plan",
     "mealplan.save": "Save plan",
     "mealplan.tabMeals": "Meals",
     "mealplan.tabGrocery": "Grocery List",
