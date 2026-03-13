@@ -907,6 +907,12 @@ const translations: Record<Lang, Record<string, string>> = {
     "results.viewSaved": "सहेजे गए व्यंजन देखें",
     "saved.guestWarning": "आपके सहेजे गए व्यंजन स्थानीय रूप से संग्रहीत हैं और ब्राउज़र डेटा साफ़ करने पर खो जाएंगे।",
     "saved.signInToKeep": "उन्हें हमेशा रखने के लिए साइन इन करें",
+    "saved.tabs.recommendations": "व्यंजन",
+    "saved.tabs.mealPlans": "भोजन योजनाएं",
+    "saved.emptyPlans": "अभी तक कोई भोजन योजना सहेजी नहीं गई।",
+    "saved.planDuration": "दिन की योजना",
+    "saved.planSaved": "योजना सहेजी गई!",
+    "saved.viewPlan": "योजना देखें",
   },
   tr: {
     "app.title": "Ne Yiyebilirim?",
