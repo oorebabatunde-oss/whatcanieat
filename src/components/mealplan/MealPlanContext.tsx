@@ -206,17 +206,21 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
   const setDuration = (d: 1 | 3 | 7 | 30) => setState((s) => ({ ...s, duration: d }));
 
   const generatePlan = async () => {
-    setState((s) => ({ ...s, step: "loading", error: null }));
+    setState((s) => ({ ...s, step: "loading", error: null, progressMessage: null }));
     try {
-      const plan = await callGeneratePlan(state.considerations, state.duration);
-      // Client-side validation: trim days to requested duration
+      const plan = await callGeneratePlan(
+        state.considerations,
+        state.duration,
+        undefined,
+        (msg) => setState((s) => ({ ...s, progressMessage: msg })),
+      );
       if (plan.days && plan.days.length > state.duration) {
         plan.days = plan.days.slice(0, state.duration);
       }
-      setState((s) => ({ ...s, step: "results", planData: plan, error: null }));
+      setState((s) => ({ ...s, step: "results", planData: plan, error: null, progressMessage: null }));
     } catch (e: any) {
       const msg = e?.message || "Something went wrong";
-      setState((s) => ({ ...s, step: "considerations", error: msg }));
+      setState((s) => ({ ...s, step: "considerations", error: msg, progressMessage: null }));
       toast({ title: "Couldn't generate plan", description: msg, variant: "destructive" });
     }
   };
