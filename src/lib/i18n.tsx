@@ -1161,6 +1161,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "quiz.context.placeholder": "bijv. Ik kook voor een peuter, alleen Koreaans, budgetvriendelijk...",
     "quiz.context.skip": "Verder niets",
     "results.loading.title": "Perfect eten zoeken...", "results.loading.subtitle": "Aanbevelingen zoeken...",
+    "loading.almostThere": "Bijna klaar. Nog even bezig.",
     "results.title": "Dit kun je eten!", "results.subtitle": "AI-gegenereerde aanbevelingen.\nAfbeeldingen zijn mogelijk niet accuraat.",
     "results.whereToBuy": "Waar kopen", "results.howToMake": "Hoe maken",
     "results.dismiss": "Mijn trek verfijnen", "results.refinePlaceholder": "Vertel meer",
