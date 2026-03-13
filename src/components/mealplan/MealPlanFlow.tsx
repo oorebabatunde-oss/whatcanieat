@@ -1,9 +1,8 @@
 import { MealPlanProvider, useMealPlan } from "./MealPlanContext";
 import ConsiderationsScreen from "./ConsiderationsScreen";
 import MealPlanResults from "./MealPlanResults";
-import { motion } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
-import { Loader2 } from "lucide-react";
+import PlateLoader from "@/components/ui/PlateLoader";
 
 function MealPlanInner() {
   const { state } = useMealPlan();
