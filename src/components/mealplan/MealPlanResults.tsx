@@ -88,7 +88,7 @@ export default function MealPlanResults() {
         <Button variant="outline" size="sm" onClick={handleSave} disabled={saved || !isComplete} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <Save className="w-3.5 h-3.5" /> {saved ? t("saved.planSaved") : t("mealplan.save")}
         </Button>
-        <Button variant="outline" size="sm" onClick={() => { sessionStorage.clear(); window.location.reload(); }} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
+        <Button variant="outline" size="sm" onClick={() => reset()} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <RotateCcw className="w-3.5 h-3.5" /> {t("mealplan.newPlan")}
         </Button>
       </div>
