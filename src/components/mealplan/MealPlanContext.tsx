@@ -187,6 +187,32 @@ async function callGeneratePlan(
       }
     }
 
+    // Process any remaining buffer content
+    if (buffer.trim()) {
+      const remainingLines = buffer.split("\n");
+      for (const line of remainingLines) {
+        if (line.startsWith("event: ")) {
+          currentEvent = line.slice(7).trim();
+        } else if (line.startsWith("data: ")) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            if (currentEvent === "complete" && data.plan) {
+              plan = data.plan;
+              onComplete(data.plan);
+            } else if (currentEvent === "error") {
+              throw new Error(data.error || "Generation failed");
+            }
+          } catch (e) {
+            if (e instanceof Error && e.message !== "Generation failed") {
+              // skip
+            } else {
+              throw e;
+            }
+          }
+        }
+      }
+    }
+
     if (!plan) throw new Error("No plan received");
 
     // Send browser notification
