@@ -339,7 +339,9 @@ export default function ConsiderationsScreen() {
       </div>
 
       {/* Duration toggle */}
-      <div className="flex items-center justify-center gap-2">
+      <div>
+        <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.planDurationLabel")}</p>
+        <div className="flex items-center justify-center gap-2">
         {([1, 3, 7, 30] as const).map((d) => (
           <button
             key={d}
