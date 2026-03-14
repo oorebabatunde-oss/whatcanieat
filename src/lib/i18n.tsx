@@ -672,6 +672,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "home.scanFridge": "ماذا يمكنني أن آكل مما لدي؟",
     "home.findCravingSubtext": "أجب على بعض الأسئلة وسنقترح لك الطبق المثالي",
     "home.scanFridgeSubtext": "التقط صورة أو اكتب ما لديك للحصول على أفكار وصفات",
+    "home.planMeals": "خطط وجباتي",
+    "home.planMealsSubtext": "حدد احتياجاتك وسنبني خطة وجبات كاملة",
     "quiz.craving.title": "ماذا تشتهي؟", "quiz.craving.subtitle": "اختر واحداً للبدء",
     "quiz.craving.snack": "وجبة خفيفة", "quiz.craving.meal": "وجبة", "quiz.craving.unknown": "فاجئني",
     "quiz.flavor.title": "أي نكهات تفضل؟", "quiz.flavor.subtitle": "اختر ما تشاء",
