@@ -356,6 +356,7 @@ export default function ConsiderationsScreen() {
             {d === 30 ? "1 month" : `${d} ${d === 1 ? "day" : t("mealplan.days")}`}
           </button>
         ))}
+        </div>
       </div>
 
       {/* Generate */}
