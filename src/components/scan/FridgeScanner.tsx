@@ -216,7 +216,7 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
                 autoFocus
               />
               {loading ? (
-                <PlateLoader message={t("scan.identifying")} />
+                <PlateLoader message={t("scan.identifying")} variant="scan" />
               ) : (
                 <div className="flex gap-2 w-full">
                   <Button variant="outline" onClick={() => { setInputMode("choose"); setIngredientText(""); }} className="flex-1 min-h-[44px] rounded-xl">
