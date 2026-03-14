@@ -763,6 +763,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "home.scanFridge": "我已有的食材能做什么？",
     "home.findCravingSubtext": "回答几个问题，我们为你推荐完美菜品",
     "home.scanFridgeSubtext": "拍张照片或输入你有的食材来获取食谱建议",
+    "home.planMeals": "规划我的餐食",
+    "home.planMealsSubtext": "设定你的需求，我们为你制定完整的膳食计划",
     "quiz.craving.title": "你想吃什么？", "quiz.craving.subtitle": "选一个开始",
     "quiz.craving.snack": "零食", "quiz.craving.meal": "正餐", "quiz.craving.unknown": "随便",
     "quiz.flavor.title": "想要什么口味？", "quiz.flavor.subtitle": "选择任意多个",
