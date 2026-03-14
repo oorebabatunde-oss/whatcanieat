@@ -300,16 +300,6 @@ export default function ConsiderationsScreen() {
               ))}
             </div>
           </div>
-
-          {/* Capsule ratio */}
-          <div>
-            <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.capsule")}</p>
-            <div className="flex gap-2">
-              {(["none", "some", "mostly"] as const).map((r) => (
-                <Chip key={r} label={t(`mealplan.capsule.${r}`)} selected={local.practical.capsuleRatio === r} onClick={() => setPractical("capsuleRatio", local.practical.capsuleRatio === r ? undefined : r)} />
-              ))}
-            </div>
-          </div>
         </div>
       </Section>
 
