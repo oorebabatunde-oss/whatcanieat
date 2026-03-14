@@ -215,7 +215,7 @@ export default function ResultsScreen() {
           <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
             {t("results.loading.title")}
           </h2>
-          <PlateLoader message={t("results.loading.subtitle")} />
+          <PlateLoader message={t("results.loading.subtitle")} variant="craving" />
         </>
       ) : error ? (
         <>
