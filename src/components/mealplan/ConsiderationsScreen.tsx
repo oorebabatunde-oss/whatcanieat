@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
 import { useMealPlan, Considerations } from "./MealPlanContext";
@@ -45,7 +45,7 @@ const Chip = React.forwardRef<HTMLButtonElement, { label: string; selected: bool
   }
 );
 
-import React from "react";
+
 
 const Section = React.forwardRef<
   HTMLDivElement,
