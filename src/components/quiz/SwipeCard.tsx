@@ -22,6 +22,7 @@ interface SwipeCardProps {
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   isTop: boolean;
+  exitDirection?: "left" | "right";
 }
 
 export default function SwipeCard({
@@ -33,6 +34,7 @@ export default function SwipeCard({
   onSwipeLeft,
   onSwipeRight,
   isTop,
+  exitDirection = "right",
 }: SwipeCardProps) {
   const { t } = useI18n();
   const x = useMotionValue(0);
@@ -58,6 +60,8 @@ export default function SwipeCard({
     window.open(`https://www.google.com/search?q=${encodeURIComponent(rec.name + " recipe")}`, "_blank");
   };
 
+  const exitX = exitDirection === "left" ? -300 : 300;
+
   return (
     <motion.div
       style={{ x, rotate, zIndex: isTop ? 10 : 0 }}
@@ -67,11 +71,11 @@ export default function SwipeCard({
       onDragEnd={handleDragEnd}
       initial={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
       animate={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
-      exit={{ x: 300, opacity: 0, transition: { duration: 0.2 } }}
+      exit={{ x: exitX, opacity: 0, transition: { duration: 0.2 } }}
       className="absolute w-full cursor-grab active:cursor-grabbing"
     >
       <div className="glass-card rounded-xl overflow-hidden shadow-md">
-        {/* Swipe indicators — softer treatment */}
+        {/* Swipe indicators */}
         {isTop && (
           <>
             <motion.div

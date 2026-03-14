@@ -339,7 +339,9 @@ export default function ConsiderationsScreen() {
       </div>
 
       {/* Duration toggle */}
-      <div className="flex items-center justify-center gap-2">
+      <div>
+        <p className="text-body-xs font-medium text-foreground mb-1.5">{t("mealplan.planDurationLabel")}</p>
+        <div className="flex items-center justify-center gap-2">
         {([1, 3, 7, 30] as const).map((d) => (
           <button
             key={d}
@@ -354,6 +356,7 @@ export default function ConsiderationsScreen() {
             {d === 30 ? "1 month" : `${d} ${d === 1 ? "day" : t("mealplan.days")}`}
           </button>
         ))}
+        </div>
       </div>
 
       {/* Generate */}
@@ -362,7 +365,12 @@ export default function ConsiderationsScreen() {
       </Button>
 
       {state.error && (
-        <p className="text-xs text-destructive text-center">{state.error}</p>
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-xs text-destructive text-center">{state.error}</p>
+          <Button variant="outline" size="sm" onClick={handleGenerate} className="text-xs gap-1.5 min-h-[44px] rounded-xl">
+            {t("mealplan.regenerate")}
+          </Button>
+        </div>
       )}
     </motion.div>
   );

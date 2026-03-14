@@ -363,6 +363,10 @@ Combine identical ingredients, sum quantities, round to realistic pack sizes.
 Group by aisle: Produce, Protein, Dairy, Pantry, Frozen, Spices, Other.
 Use ${currency} for prices. Be realistic with supermarket pricing.
 
+UNIT RULES:
+- For the "unit" field, use standard units: "g", "ml", "kg", "L", "pcs".
+- NEVER use "units", "items", "unit items", or "unit". If counted individually (bananas, eggs), use "pcs" and put just the number in totalQuantity.
+
 INGREDIENTS:
 ${ingredientSummary.join("\n")}`;
 
@@ -757,12 +761,24 @@ ${constraintsBlock}`;
               currentStartDay += chunkSize;
             }
 
-            // Build grocery list
+            // Build grocery list with retry
             sendEvent("progress", { message: "Building your grocery list..." });
             console.log(`[${requestId}] Building grocery list for ${allChunkDays.length} days`);
 
             const finalDays = allChunkDays.map((d: any, i: number) => ({ ...d, dayNumber: i + 1 }));
-            const { groceryList, costSummary } = await buildGroceryList(requestId, LOVABLE_API_KEY, finalDays, considerations);
+            let groceryResult: { groceryList: any[]; costSummary: any };
+            try {
+              groceryResult = await buildGroceryList(requestId, LOVABLE_API_KEY, finalDays, considerations);
+            } catch (groceryError: any) {
+              console.warn(`[${requestId}] Grocery list failed, retrying: ${groceryError.message}`);
+              try {
+                groceryResult = await buildGroceryList(requestId, LOVABLE_API_KEY, finalDays, considerations);
+              } catch {
+                console.warn(`[${requestId}] Grocery list retry failed, using fallback`);
+                groceryResult = buildGroceryListFallback(finalDays);
+              }
+            }
+            const { groceryList, costSummary } = groceryResult;
 
             const plan = {
               days: finalDays,

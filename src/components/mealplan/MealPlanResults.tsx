@@ -11,7 +11,7 @@ import SwapDialog from "./SwapDialog";
 
 export default function MealPlanResults() {
   const { t } = useI18n();
-  const { state, regenerate, adjustConstraints } = useMealPlan();
+  const { state, regenerate, adjustConstraints, reset } = useMealPlan();
   const { savePlan } = useSaveMealPlan();
   const plan = state.planData;
 
@@ -88,7 +88,7 @@ export default function MealPlanResults() {
         <Button variant="outline" size="sm" onClick={handleSave} disabled={saved || !isComplete} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <Save className="w-3.5 h-3.5" /> {saved ? t("saved.planSaved") : t("mealplan.save")}
         </Button>
-        <Button variant="outline" size="sm" onClick={() => { sessionStorage.clear(); window.location.reload(); }} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
+        <Button variant="outline" size="sm" onClick={() => reset()} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <RotateCcw className="w-3.5 h-3.5" /> {t("mealplan.newPlan")}
         </Button>
       </div>
@@ -153,15 +153,20 @@ export default function MealPlanResults() {
                         </div>
                       )}
 
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs gap-1.5 text-muted-foreground min-h-[44px]"
-                        disabled={!isComplete}
-                        onClick={() => setSwapTarget({ id: meal.id, name: meal.name, ingredients: meal.ingredients.map((i) => i.name) })}
-                      >
-                        <ArrowRightLeft className="w-3.5 h-3.5" /> {t("mealplan.swap")}
-                      </Button>
+                      <div className="flex flex-col">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs gap-1.5 text-muted-foreground min-h-[44px]"
+                          disabled={!isComplete}
+                          onClick={() => setSwapTarget({ id: meal.id, name: meal.name, ingredients: meal.ingredients.map((i) => i.name) })}
+                        >
+                          <ArrowRightLeft className="w-3.5 h-3.5" /> {t("mealplan.swap")}
+                        </Button>
+                        {!isComplete && (
+                          <span className="text-[10px] text-muted-foreground/60 text-center -mt-1">{t("mealplan.swapDisabled")}</span>
+                        )}
+                      </div>
                     </div>
                   )}
                 </motion.div>

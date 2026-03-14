@@ -37,6 +37,7 @@ export default function ResultsScreen() {
   const [refining, setRefining] = useState(false);
   const [allSwiped, setAllSwiped] = useState(false);
   const [swipeHistory, setSwipeHistory] = useState<{ index: number; action: "left" | "right"; rec: Recommendation }[]>([]);
+  const [lastSwipeDirection, setLastSwipeDirection] = useState<"left" | "right">("right");
 
   const fetchImages = (recs: Recommendation[]) => {
     recs.forEach(async (rec) => {
@@ -87,6 +88,7 @@ export default function ResultsScreen() {
   }, [state.craving, state.flavors, state.textures, state.dietary, state.context]);
 
   const handleSwipeRight = async (rec: Recommendation) => {
+    setLastSwipeDirection("right");
     setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "right", rec }]);
     if (user) {
       await supabase.from("saved_recommendations").insert({
@@ -114,6 +116,7 @@ export default function ResultsScreen() {
   };
 
   const handleSwipeLeft = () => {
+    setLastSwipeDirection("left");
     setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "left", rec: recommendations[currentIndex] }]);
     advance();
   };
@@ -212,7 +215,7 @@ export default function ResultsScreen() {
           <h2 className="text-display-2 md:text-display-1 font-display text-center text-foreground">
             {t("results.loading.title")}
           </h2>
-          <PlateLoader message={t("results.loading.subtitle")} />
+          <PlateLoader message={t("results.loading.subtitle")} variant="craving" />
         </>
       ) : error ? (
         <>
@@ -310,6 +313,7 @@ export default function ResultsScreen() {
                   onSwipeLeft={handleSwipeLeft}
                   onSwipeRight={() => handleSwipeRight(rec)}
                   isTop={i === 0}
+                  exitDirection={lastSwipeDirection}
                 />
               ))}
             </AnimatePresence>
