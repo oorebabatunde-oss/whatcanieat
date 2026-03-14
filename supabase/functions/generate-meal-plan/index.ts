@@ -363,6 +363,10 @@ Combine identical ingredients, sum quantities, round to realistic pack sizes.
 Group by aisle: Produce, Protein, Dairy, Pantry, Frozen, Spices, Other.
 Use ${currency} for prices. Be realistic with supermarket pricing.
 
+UNIT RULES:
+- For the "unit" field, use standard units: "g", "ml", "kg", "L", "pcs".
+- NEVER use "units", "items", "unit items", or "unit". If counted individually (bananas, eggs), use "pcs" and put just the number in totalQuantity.
+
 INGREDIENTS:
 ${ingredientSummary.join("\n")}`;
 
