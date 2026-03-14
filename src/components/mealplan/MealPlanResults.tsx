@@ -153,15 +153,20 @@ export default function MealPlanResults() {
                         </div>
                       )}
 
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs gap-1.5 text-muted-foreground min-h-[44px]"
-                        disabled={!isComplete}
-                        onClick={() => setSwapTarget({ id: meal.id, name: meal.name, ingredients: meal.ingredients.map((i) => i.name) })}
-                      >
-                        <ArrowRightLeft className="w-3.5 h-3.5" /> {t("mealplan.swap")}
-                      </Button>
+                      <div className="flex flex-col">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs gap-1.5 text-muted-foreground min-h-[44px]"
+                          disabled={!isComplete}
+                          onClick={() => setSwapTarget({ id: meal.id, name: meal.name, ingredients: meal.ingredients.map((i) => i.name) })}
+                        >
+                          <ArrowRightLeft className="w-3.5 h-3.5" /> {t("mealplan.swap")}
+                        </Button>
+                        {!isComplete && (
+                          <span className="text-[10px] text-muted-foreground/60 text-center -mt-1">{t("mealplan.swapDisabled")}</span>
+                        )}
+                      </div>
                     </div>
                   )}
                 </motion.div>

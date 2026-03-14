@@ -313,6 +313,7 @@ export default function ResultsScreen() {
                   onSwipeLeft={handleSwipeLeft}
                   onSwipeRight={() => handleSwipeRight(rec)}
                   isTop={i === 0}
+                  exitDirection={lastSwipeDirection}
                 />
               ))}
             </AnimatePresence>

@@ -365,7 +365,12 @@ export default function ConsiderationsScreen() {
       </Button>
 
       {state.error && (
-        <p className="text-xs text-destructive text-center">{state.error}</p>
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-xs text-destructive text-center">{state.error}</p>
+          <Button variant="outline" size="sm" onClick={handleGenerate} className="text-xs gap-1.5 min-h-[44px] rounded-xl">
+            {t("mealplan.regenerate")}
+          </Button>
+        </div>
       )}
     </motion.div>
   );
