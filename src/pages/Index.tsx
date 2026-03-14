@@ -140,10 +140,10 @@ const Index = () => {
             <motion.button
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.4 }}
+              transition={{ delay: 0.15, duration: 0.35 }}
               whileTap={{ scale: 0.96 }}
               onClick={() => changeMode("quiz")}
-              className="group glass-card rounded-xl px-4 py-4 flex flex-col items-center gap-2.5 shadow-sm hover:shadow-md flex-1 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="group glass-card rounded-xl px-4 py-4 flex flex-col items-center gap-2.5 shadow-sm hover:shadow-md flex-1 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 will-change-transform"
             >
               <span className="text-2xl group-hover:scale-110 transition-transform duration-200">🍽️</span>
               <span className="text-sm font-semibold leading-snug text-foreground">{t("home.findCraving")}</span>
