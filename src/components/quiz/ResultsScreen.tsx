@@ -37,6 +37,7 @@ export default function ResultsScreen() {
   const [refining, setRefining] = useState(false);
   const [allSwiped, setAllSwiped] = useState(false);
   const [swipeHistory, setSwipeHistory] = useState<{ index: number; action: "left" | "right"; rec: Recommendation }[]>([]);
+  const [lastSwipeDirection, setLastSwipeDirection] = useState<"left" | "right">("right");
 
   const fetchImages = (recs: Recommendation[]) => {
     recs.forEach(async (rec) => {
