@@ -854,6 +854,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "home.scanFridge": "今ある食材で何が作れる？",
     "home.findCravingSubtext": "いくつかの質問に答えるとぴったりの料理を提案します",
     "home.scanFridgeSubtext": "写真を撮るか食材を入力してレシピのアイデアを見つけよう",
+    "home.planMeals": "食事を計画する",
+    "home.planMealsSubtext": "条件を設定すると完全な食事プランを作成します",
     "quiz.craving.title": "何が食べたい？", "quiz.craving.subtitle": "一つ選んでください",
     "quiz.craving.snack": "おやつ", "quiz.craving.meal": "食事", "quiz.craving.unknown": "おまかせ",
     "quiz.flavor.title": "どんな味が好き？", "quiz.flavor.subtitle": "いくつでも選べます",
