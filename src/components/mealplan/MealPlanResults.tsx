@@ -11,7 +11,7 @@ import SwapDialog from "./SwapDialog";
 
 export default function MealPlanResults() {
   const { t } = useI18n();
-  const { state, regenerate, adjustConstraints } = useMealPlan();
+  const { state, regenerate, adjustConstraints, reset } = useMealPlan();
   const { savePlan } = useSaveMealPlan();
   const plan = state.planData;
 
