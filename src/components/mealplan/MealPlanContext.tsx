@@ -268,9 +268,16 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
         t,
       );
     } catch (e: any) {
-      const msg = e?.message || "Something went wrong";
-      setState((s) => ({ ...s, step: "considerations", error: msg, progressMessage: null }));
-      toast({ title: "Couldn't generate plan", description: msg, variant: "destructive" });
+      let msg = e?.message || "Something went wrong";
+      let description = msg;
+      if (e instanceof TypeError && msg.includes("fetch")) {
+        msg = t("error.network");
+        description = t("error.networkDesc");
+      } else if (msg === "No plan received" || msg.includes("failed")) {
+        description = t("error.generationFailed");
+      }
+      setState((s) => ({ ...s, step: "considerations", error: description, progressMessage: null }));
+      toast({ title: t("error.generationFailed"), description, variant: "destructive" });
     }
   };
 
