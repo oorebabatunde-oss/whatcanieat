@@ -132,7 +132,7 @@ const Index = () => {
               {t("app.title")}
             </h1>
             <p className="text-muted-foreground text-body-sm">
-              Figure out what to eat — no stress.
+              {t("home.subtitle")}
             </p>
           </motion.div>
 
