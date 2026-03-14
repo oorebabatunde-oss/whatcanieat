@@ -1444,6 +1444,16 @@ const translations: Record<Lang, Record<string, string>> = {
     "saved.planDuration": "дней",
     "saved.planSaved": "План сохранён!",
     "saved.viewPlan": "Посмотреть план",
+    "home.subtitle": "Решите, что поесть — без стресса.",
+    "loading.step.craving.finding": "Ищем блюда для вас…",
+    "loading.step.craving.matching": "Подбираем под ваши предпочтения…",
+    "loading.step.scan.analyzing": "Анализируем ваши продукты…",
+    "loading.step.scan.matching": "Ищем подходящие рецепты…",
+    "mealplan.planDurationLabel": "Длительность плана",
+    "mealplan.swapDisabled": "Доступно после завершения плана",
+    "error.network": "Ошибка сети",
+    "error.networkDesc": "Проверьте подключение и попробуйте снова",
+    "error.generationFailed": "Ошибка генерации — попробуйте снова",
   },
 };
 
