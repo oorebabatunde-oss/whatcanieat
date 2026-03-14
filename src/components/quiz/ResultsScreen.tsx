@@ -116,6 +116,7 @@ export default function ResultsScreen() {
   };
 
   const handleSwipeLeft = () => {
+    setLastSwipeDirection("left");
     setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "left", rec: recommendations[currentIndex] }]);
     advance();
   };
