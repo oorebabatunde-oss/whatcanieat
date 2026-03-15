@@ -157,7 +157,9 @@ const PlateLoader = React.forwardRef<HTMLDivElement, PlateLoaderProps>(function 
       )}
     </div>
   );
-}
+});
+
+export default PlateLoader;
 
 // Utility to send browser notification
 export function sendCompletionNotification(t: (key: string) => string) {
