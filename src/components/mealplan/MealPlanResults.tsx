@@ -241,4 +241,6 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
       )}
     </motion.div>
   );
-}
+});
+
+export default MealPlanResults;
