@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Bell, BellOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ interface PlateLoaderProps {
   variant?: LoaderVariant;
 }
 
-export default function PlateLoader({ message, progressMessage, duration = 3, onNotifyReady, variant = "mealplan" }: PlateLoaderProps) {
+const PlateLoader = React.forwardRef<HTMLDivElement, PlateLoaderProps>(function PlateLoader({ message, progressMessage, duration = 3, onNotifyReady, variant = "mealplan" }, ref) {
   const { t } = useI18n();
   const [elapsed, setElapsed] = useState(0);
   const [notifyEnabled, setNotifyEnabled] = useState(() => {
@@ -90,7 +90,7 @@ export default function PlateLoader({ message, progressMessage, duration = 3, on
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 py-8 px-5 w-full max-w-sm mx-auto">
+    <div ref={ref} className="flex flex-col items-center gap-4 py-8 px-5 w-full max-w-sm mx-auto">
       <div className="relative flex flex-col items-center" style={{ height: 120 }}>
       <div className="relative flex items-center justify-center w-24 h-24">
         <div className="absolute inset-0 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
@@ -157,7 +157,9 @@ export default function PlateLoader({ message, progressMessage, duration = 3, on
       )}
     </div>
   );
-}
+});
+
+export default PlateLoader;
 
 // Utility to send browser notification
 export function sendCompletionNotification(t: (key: string) => string) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
 import { useMealPlan } from "./MealPlanContext";
@@ -9,7 +9,7 @@ import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, S
 import { toast } from "@/hooks/use-toast";
 import SwapDialog from "./SwapDialog";
 
-export default function MealPlanResults() {
+const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPlanResults(_props, ref) {
   const { t } = useI18n();
   const { state, regenerate, adjustConstraints, reset } = useMealPlan();
   const { savePlan } = useSaveMealPlan();
@@ -51,6 +51,7 @@ export default function MealPlanResults() {
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md mx-auto flex flex-col gap-4 px-5"
@@ -241,4 +242,6 @@ export default function MealPlanResults() {
       )}
     </motion.div>
   );
-}
+});
+
+export default MealPlanResults;
