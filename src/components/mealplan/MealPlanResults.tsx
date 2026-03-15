@@ -51,6 +51,7 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md mx-auto flex flex-col gap-4 px-5"
