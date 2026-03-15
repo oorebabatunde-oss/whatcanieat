@@ -302,6 +302,7 @@ export default function ResultsScreen() {
               {visibleCards.map((rec, i) => (
                 <SwipeCard
                   key={rec.name}
+                  ref={i === 0 ? topCardRef : undefined}
                   rec={rec}
                   imageUrl={imageUrls[rec.name]}
                   imageLoaded={!!imageLoaded[rec.name]}
