@@ -9,7 +9,7 @@ import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, S
 import { toast } from "@/hooks/use-toast";
 import SwapDialog from "./SwapDialog";
 
-export default function MealPlanResults() {
+const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPlanResults(_props, ref) {
   const { t } = useI18n();
   const { state, regenerate, adjustConstraints, reset } = useMealPlan();
   const { savePlan } = useSaveMealPlan();
