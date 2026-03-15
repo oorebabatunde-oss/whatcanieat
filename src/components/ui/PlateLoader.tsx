@@ -21,7 +21,7 @@ interface PlateLoaderProps {
   variant?: LoaderVariant;
 }
 
-export default function PlateLoader({ message, progressMessage, duration = 3, onNotifyReady, variant = "mealplan" }: PlateLoaderProps) {
+const PlateLoader = React.forwardRef<HTMLDivElement, PlateLoaderProps>(function PlateLoader({ message, progressMessage, duration = 3, onNotifyReady, variant = "mealplan" }, ref) {
   const { t } = useI18n();
   const [elapsed, setElapsed] = useState(0);
   const [notifyEnabled, setNotifyEnabled] = useState(() => {
