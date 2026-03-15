@@ -301,10 +301,9 @@ export default function ResultsScreen() {
 
           {/* Card stack */}
           <div className="relative w-full" style={{ height: 520 }}>
-            <AnimatePresence>
               {visibleCards.map((rec, i) => (
                 <SwipeCard
-                  key={rec.name + currentIndex + i}
+                  key={rec.name}
                   rec={rec}
                   imageUrl={imageUrls[rec.name]}
                   imageLoaded={!!imageLoaded[rec.name]}
@@ -313,10 +312,8 @@ export default function ResultsScreen() {
                   onSwipeLeft={handleSwipeLeft}
                   onSwipeRight={() => handleSwipeRight(rec)}
                   isTop={i === 0}
-                  exitDirection={lastSwipeDirection}
                 />
               ))}
-            </AnimatePresence>
           </div>
 
           {/* Action buttons */}
