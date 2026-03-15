@@ -1,14 +1,14 @@
 import { useQuiz } from "./QuizContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck, Undo2, Loader2 } from "lucide-react";
 import PlateLoader from "@/components/ui/PlateLoader";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Textarea } from "@/components/ui/textarea";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
-import SwipeCard from "./SwipeCard";
+import SwipeCard, { type SwipeCardHandle } from "./SwipeCard";
 import { toast } from "sonner";
 import { useNavigate, Link } from "react-router-dom";
 
