@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
+import { motion, useMotionValue, useTransform, useAnimation, PanInfo } from "framer-motion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -34,19 +34,27 @@ export default function SwipeCard({
   onSwipeLeft,
   onSwipeRight,
   isTop,
-  exitDirection = "right",
 }: SwipeCardProps) {
   const { t } = useI18n();
   const x = useMotionValue(0);
+  const controls = useAnimation();
   const rotate = useTransform(x, [-200, 200], [-15, 15]);
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
   const nopeOpacity = useTransform(x, [-100, 0], [1, 0]);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
-    if (info.offset.x > 100) {
+  const handleDragEnd = async (_: any, info: PanInfo) => {
+    const threshold = 100;
+    if (info.offset.x > threshold) {
+      // Fly off to the right, then notify parent
+      await controls.start({ x: 400, opacity: 0, transition: { duration: 0.2 } });
       onSwipeRight();
-    } else if (info.offset.x < -100) {
+    } else if (info.offset.x < -threshold) {
+      // Fly off to the left, then notify parent
+      await controls.start({ x: -400, opacity: 0, transition: { duration: 0.2 } });
       onSwipeLeft();
+    } else {
+      // Snap back
+      controls.start({ x: 0, transition: { type: "spring", stiffness: 500, damping: 30 } });
     }
   };
 
@@ -60,18 +68,14 @@ export default function SwipeCard({
     window.open(`https://www.google.com/search?q=${encodeURIComponent(rec.name + " recipe")}`, "_blank");
   };
 
-  const exitX = exitDirection === "left" ? -300 : 300;
-
   return (
     <motion.div
       style={{ x, rotate, zIndex: isTop ? 10 : 0 }}
       drag={isTop ? "x" : false}
-      dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.9}
       onDragEnd={handleDragEnd}
+      animate={controls}
       initial={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
-      animate={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
-      exit={{ x: exitX, opacity: 0, transition: { duration: 0.2 } }}
       className="absolute w-full cursor-grab active:cursor-grabbing"
     >
       <div className="glass-card rounded-xl overflow-hidden shadow-md">
