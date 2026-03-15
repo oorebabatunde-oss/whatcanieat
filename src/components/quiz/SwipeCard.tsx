@@ -1,3 +1,4 @@
+import React, { useImperativeHandle } from "react";
 import { motion, useMotionValue, useTransform, useAnimation, PanInfo } from "framer-motion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,10 @@ interface Recommendation {
   imageQuery: string;
 }
 
+export interface SwipeCardHandle {
+  triggerSwipe: (direction: "left" | "right") => Promise<void>;
+}
+
 interface SwipeCardProps {
   rec: Recommendation;
   imageUrl?: string;
@@ -22,19 +27,12 @@ interface SwipeCardProps {
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   isTop: boolean;
-  exitDirection?: "left" | "right";
 }
 
-export default function SwipeCard({
-  rec,
-  imageUrl,
-  imageLoaded,
-  imageCredit,
-  onImageLoad,
-  onSwipeLeft,
-  onSwipeRight,
-  isTop,
-}: SwipeCardProps) {
+const SwipeCard = React.forwardRef<SwipeCardHandle, SwipeCardProps>(function SwipeCard(
+  { rec, imageUrl, imageLoaded, imageCredit, onImageLoad, onSwipeLeft, onSwipeRight, isTop },
+  ref,
+) {
   const { t } = useI18n();
   const x = useMotionValue(0);
   const controls = useAnimation();
@@ -42,18 +40,24 @@ export default function SwipeCard({
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
   const nopeOpacity = useTransform(x, [-100, 0], [1, 0]);
 
+  const flyOff = async (direction: "left" | "right") => {
+    const targetX = direction === "left" ? -400 : 400;
+    await controls.start({ x: targetX, opacity: 0, transition: { duration: 0.2 } });
+    if (direction === "left") onSwipeLeft();
+    else onSwipeRight();
+  };
+
+  useImperativeHandle(ref, () => ({
+    triggerSwipe: flyOff,
+  }));
+
   const handleDragEnd = async (_: any, info: PanInfo) => {
     const threshold = 100;
     if (info.offset.x > threshold) {
-      // Fly off to the right, then notify parent
-      await controls.start({ x: 400, opacity: 0, transition: { duration: 0.2 } });
-      onSwipeRight();
+      await flyOff("right");
     } else if (info.offset.x < -threshold) {
-      // Fly off to the left, then notify parent
-      await controls.start({ x: -400, opacity: 0, transition: { duration: 0.2 } });
-      onSwipeLeft();
+      await flyOff("left");
     } else {
-      // Snap back
       controls.start({ x: 0, transition: { type: "spring", stiffness: 500, damping: 30 } });
     }
   };
@@ -79,7 +83,6 @@ export default function SwipeCard({
       className="absolute w-full cursor-grab active:cursor-grabbing"
     >
       <div className="glass-card rounded-xl overflow-hidden shadow-md">
-        {/* Swipe indicators */}
         {isTop && (
           <>
             <motion.div
@@ -173,4 +176,6 @@ export default function SwipeCard({
       </div>
     </motion.div>
   );
-}
+});
+
+export default SwipeCard;
