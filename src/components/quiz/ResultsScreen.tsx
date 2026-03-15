@@ -320,7 +320,7 @@ export default function ResultsScreen() {
               variant="outline"
               size="icon"
               className="h-14 w-14 rounded-full border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors"
-              onClick={handleSwipeLeft}
+              onClick={() => topCardRef.current?.triggerSwipe("left")}
               aria-label="Skip"
             >
               <X className="w-6 h-6" />
