@@ -329,7 +329,7 @@ export default function ResultsScreen() {
               variant="outline"
               size="icon"
               className="h-14 w-14 rounded-full border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-              onClick={() => handleSwipeRight(recommendations[currentIndex])}
+              onClick={() => topCardRef.current?.triggerSwipe("right")}
               aria-label="Save"
             >
               <Heart className="w-6 h-6" />
