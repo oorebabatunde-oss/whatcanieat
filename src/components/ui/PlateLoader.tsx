@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Bell, BellOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
