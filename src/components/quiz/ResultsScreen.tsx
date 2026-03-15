@@ -88,7 +88,6 @@ export default function ResultsScreen() {
   }, [state.craving, state.flavors, state.textures, state.dietary, state.context]);
 
   const handleSwipeRight = async (rec: Recommendation) => {
-    setLastSwipeDirection("right");
     setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "right", rec }]);
     if (user) {
       await supabase.from("saved_recommendations").insert({
