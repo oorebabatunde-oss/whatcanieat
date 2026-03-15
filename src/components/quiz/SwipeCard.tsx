@@ -79,10 +79,10 @@ const SwipeCard = React.forwardRef<SwipeCardHandle, SwipeCardProps>(function Swi
       dragElastic={0.9}
       onDragEnd={handleDragEnd}
       animate={controls}
-      initial={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.5 }}
+      initial={{ scale: isTop ? 1 : 0.95, opacity: 1 }}
       className="absolute w-full cursor-grab active:cursor-grabbing"
     >
-      <div className={`rounded-xl overflow-hidden shadow-md ${isTop ? "glass-card" : "bg-card"}`}>
+      <div className="bg-card rounded-xl overflow-hidden shadow-md border border-border">
         {isTop && (
           <>
             <motion.div
