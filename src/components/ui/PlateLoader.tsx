@@ -90,7 +90,7 @@ const PlateLoader = React.forwardRef<HTMLDivElement, PlateLoaderProps>(function 
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 py-8 px-5 w-full max-w-sm mx-auto">
+    <div ref={ref} className="flex flex-col items-center gap-4 py-8 px-5 w-full max-w-sm mx-auto">
       <div className="relative flex flex-col items-center" style={{ height: 120 }}>
       <div className="relative flex items-center justify-center w-24 h-24">
         <div className="absolute inset-0 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
