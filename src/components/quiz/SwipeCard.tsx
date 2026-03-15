@@ -1,4 +1,5 @@
-import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
+import React, { useImperativeHandle } from "react";
+import { motion, useMotionValue, useTransform, useAnimation, PanInfo } from "framer-motion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,6 +14,10 @@ interface Recommendation {
   imageQuery: string;
 }
 
+export interface SwipeCardHandle {
+  triggerSwipe: (direction: "left" | "right") => Promise<void>;
+}
+
 interface SwipeCardProps {
   rec: Recommendation;
   imageUrl?: string;
@@ -22,31 +27,38 @@ interface SwipeCardProps {
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   isTop: boolean;
-  exitDirection?: "left" | "right";
 }
 
-export default function SwipeCard({
-  rec,
-  imageUrl,
-  imageLoaded,
-  imageCredit,
-  onImageLoad,
-  onSwipeLeft,
-  onSwipeRight,
-  isTop,
-  exitDirection = "right",
-}: SwipeCardProps) {
+const SwipeCard = React.forwardRef<SwipeCardHandle, SwipeCardProps>(function SwipeCard(
+  { rec, imageUrl, imageLoaded, imageCredit, onImageLoad, onSwipeLeft, onSwipeRight, isTop },
+  ref,
+) {
   const { t } = useI18n();
   const x = useMotionValue(0);
+  const controls = useAnimation();
   const rotate = useTransform(x, [-200, 200], [-15, 15]);
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
   const nopeOpacity = useTransform(x, [-100, 0], [1, 0]);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
-    if (info.offset.x > 100) {
-      onSwipeRight();
-    } else if (info.offset.x < -100) {
-      onSwipeLeft();
+  const flyOff = async (direction: "left" | "right") => {
+    const targetX = direction === "left" ? -400 : 400;
+    await controls.start({ x: targetX, opacity: 0, transition: { duration: 0.2 } });
+    if (direction === "left") onSwipeLeft();
+    else onSwipeRight();
+  };
+
+  useImperativeHandle(ref, () => ({
+    triggerSwipe: flyOff,
+  }));
+
+  const handleDragEnd = async (_: any, info: PanInfo) => {
+    const threshold = 100;
+    if (info.offset.x > threshold) {
+      await flyOff("right");
+    } else if (info.offset.x < -threshold) {
+      await flyOff("left");
+    } else {
+      controls.start({ x: 0, transition: { type: "spring", stiffness: 500, damping: 30 } });
     }
   };
 
@@ -60,22 +72,17 @@ export default function SwipeCard({
     window.open(`https://www.google.com/search?q=${encodeURIComponent(rec.name + " recipe")}`, "_blank");
   };
 
-  const exitX = exitDirection === "left" ? -300 : 300;
-
   return (
     <motion.div
       style={{ x, rotate, zIndex: isTop ? 10 : 0 }}
       drag={isTop ? "x" : false}
-      dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.9}
       onDragEnd={handleDragEnd}
+      animate={controls}
       initial={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
-      animate={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.7 }}
-      exit={{ x: exitX, opacity: 0, transition: { duration: 0.2 } }}
       className="absolute w-full cursor-grab active:cursor-grabbing"
     >
       <div className="glass-card rounded-xl overflow-hidden shadow-md">
-        {/* Swipe indicators */}
         {isTop && (
           <>
             <motion.div
@@ -169,4 +176,6 @@ export default function SwipeCard({
       </div>
     </motion.div>
   );
-}
+});
+
+export default SwipeCard;

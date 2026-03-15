@@ -1,14 +1,14 @@
 import { useQuiz } from "./QuizContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck, Undo2, Loader2 } from "lucide-react";
 import PlateLoader from "@/components/ui/PlateLoader";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Textarea } from "@/components/ui/textarea";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
-import SwipeCard from "./SwipeCard";
+import SwipeCard, { type SwipeCardHandle } from "./SwipeCard";
 import { toast } from "sonner";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -37,7 +37,7 @@ export default function ResultsScreen() {
   const [refining, setRefining] = useState(false);
   const [allSwiped, setAllSwiped] = useState(false);
   const [swipeHistory, setSwipeHistory] = useState<{ index: number; action: "left" | "right"; rec: Recommendation }[]>([]);
-  const [lastSwipeDirection, setLastSwipeDirection] = useState<"left" | "right">("right");
+  const topCardRef = useRef<SwipeCardHandle>(null);
 
   const fetchImages = (recs: Recommendation[]) => {
     recs.forEach(async (rec) => {
@@ -88,7 +88,6 @@ export default function ResultsScreen() {
   }, [state.craving, state.flavors, state.textures, state.dietary, state.context]);
 
   const handleSwipeRight = async (rec: Recommendation) => {
-    setLastSwipeDirection("right");
     setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "right", rec }]);
     if (user) {
       await supabase.from("saved_recommendations").insert({
@@ -116,7 +115,6 @@ export default function ResultsScreen() {
   };
 
   const handleSwipeLeft = () => {
-    setLastSwipeDirection("left");
     setSwipeHistory((prev) => [...prev, { index: currentIndex, action: "left", rec: recommendations[currentIndex] }]);
     advance();
   };
@@ -301,10 +299,10 @@ export default function ResultsScreen() {
 
           {/* Card stack */}
           <div className="relative w-full" style={{ height: 520 }}>
-            <AnimatePresence>
               {visibleCards.map((rec, i) => (
                 <SwipeCard
-                  key={rec.name + currentIndex + i}
+                  key={rec.name}
+                  ref={i === 0 ? topCardRef : undefined}
                   rec={rec}
                   imageUrl={imageUrls[rec.name]}
                   imageLoaded={!!imageLoaded[rec.name]}
@@ -313,10 +311,8 @@ export default function ResultsScreen() {
                   onSwipeLeft={handleSwipeLeft}
                   onSwipeRight={() => handleSwipeRight(rec)}
                   isTop={i === 0}
-                  exitDirection={lastSwipeDirection}
                 />
               ))}
-            </AnimatePresence>
           </div>
 
           {/* Action buttons */}
@@ -325,7 +321,7 @@ export default function ResultsScreen() {
               variant="outline"
               size="icon"
               className="h-14 w-14 rounded-full border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors"
-              onClick={handleSwipeLeft}
+              onClick={() => topCardRef.current?.triggerSwipe("left")}
               aria-label="Skip"
             >
               <X className="w-6 h-6" />
@@ -334,7 +330,7 @@ export default function ResultsScreen() {
               variant="outline"
               size="icon"
               className="h-14 w-14 rounded-full border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-              onClick={() => handleSwipeRight(recommendations[currentIndex])}
+              onClick={() => topCardRef.current?.triggerSwipe("right")}
               aria-label="Save"
             >
               <Heart className="w-6 h-6" />
