@@ -36,9 +36,9 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
     try {
       await savePlan(plan, state.considerations, state.duration);
       setSaved(true);
-      toast({ title: t("saved.planSaved") });
+      toast.success(t("saved.planSaved"));
     } catch {
-      toast({ title: "Couldn't save plan", variant: "destructive" });
+      toast.error("Couldn't save plan");
     }
   };
 
