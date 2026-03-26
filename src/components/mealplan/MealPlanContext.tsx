@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { sendCompletionNotification } from "@/components/ui/PlateLoader";
 import { useI18n } from "@/lib/i18n";
 
