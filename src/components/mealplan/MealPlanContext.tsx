@@ -277,7 +277,7 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
         description = t("error.generationFailed");
       }
       setState((s) => ({ ...s, step: "considerations", error: description, progressMessage: null }));
-      toast({ title: t("error.generationFailed"), description, variant: "destructive" });
+      toast.error(t("error.generationFailed"), { description });
     }
   };
 
