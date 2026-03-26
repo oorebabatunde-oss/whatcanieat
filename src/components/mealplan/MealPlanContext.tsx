@@ -298,7 +298,7 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
     } catch (e: any) {
       const msg = e?.message || "Something went wrong";
       setState((s) => ({ ...s, step: "results", error: msg }));
-      toast({ title: "Couldn't swap meal", description: msg, variant: "destructive" });
+      toast.error("Couldn't swap meal", { description: msg });
     }
   };
 
