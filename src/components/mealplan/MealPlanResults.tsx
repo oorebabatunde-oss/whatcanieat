@@ -6,7 +6,7 @@ import { useSaveMealPlan } from "@/hooks/useSaveMealPlan";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft, RotateCcw, Loader2 } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import SwapDialog from "./SwapDialog";
 
 const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPlanResults(_props, ref) {
