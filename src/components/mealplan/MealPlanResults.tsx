@@ -6,7 +6,7 @@ import { useSaveMealPlan } from "@/hooks/useSaveMealPlan";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft, RotateCcw, Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import SwapDialog from "./SwapDialog";
 
 const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPlanResults(_props, ref) {
@@ -36,9 +36,9 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
     try {
       await savePlan(plan, state.considerations, state.duration);
       setSaved(true);
-      toast.success(t("saved.planSaved"));
+      toast({ title: t("saved.planSaved") });
     } catch {
-      toast.error("Couldn't save plan");
+      toast({ title: "Couldn't save plan", variant: "destructive" });
     }
   };
 
