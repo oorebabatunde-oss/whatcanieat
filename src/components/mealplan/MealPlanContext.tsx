@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { sendCompletionNotification } from "@/components/ui/PlateLoader";
 import { useI18n } from "@/lib/i18n";
 
@@ -277,7 +277,7 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
         description = t("error.generationFailed");
       }
       setState((s) => ({ ...s, step: "considerations", error: description, progressMessage: null }));
-      toast({ title: t("error.generationFailed"), description, variant: "destructive" });
+      toast.error(t("error.generationFailed"), { description });
     }
   };
 
@@ -298,7 +298,7 @@ export function MealPlanProvider({ children }: { children: ReactNode }) {
     } catch (e: any) {
       const msg = e?.message || "Something went wrong";
       setState((s) => ({ ...s, step: "results", error: msg }));
-      toast({ title: "Couldn't swap meal", description: msg, variant: "destructive" });
+      toast.error("Couldn't swap meal", { description: msg });
     }
   };
 
