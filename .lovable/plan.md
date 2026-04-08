@@ -1,110 +1,54 @@
 
 
-# Plan: UX Overhaul — Snackbars, Navigation, Actions, Grocery Checkmarks & Install
+# Fix Plan: 4 Issues — Home Button, Checkbox, Install CTA, Snackbar Position
 
-## Summary
+## 1. Home button doesn't work during a journey
 
-Six changes across the app: (1) consolidate toasts to Sonner following Material Design 3 snackbar guidelines, (2) update craving results buttons, (3) add "more recipes" to fridge scanner, (4) add grocery list checkmarks, (5) redesign navigation with a persistent bottom tab bar, (6) add installability via web app manifest.
+**Root cause:** The Home tab in `BottomNav.tsx` calls `navigate("/")` which changes the URL, but `Index.tsx` manages its own state via `useState<AppMode>` initialized from `sessionStorage`. Navigating to `/` doesn't reset the mode back to `"welcome"` — the user stays stuck in the quiz/scan/mealplan view.
 
----
+**Fix:** In the Home tab action, also clear the `sessionStorage` keys (`app-mode`, `quiz-state`) so that when the page re-renders, `loadMode()` returns `"welcome"`. Additionally, force a state reset by either:
+- Dispatching a custom event that `Index.tsx` listens for, OR
+- Simpler: clear sessionStorage and use `navigate("/", { replace: true })` combined with `window.location.reload()` — but that's heavy.
+- Best approach: clear sessionStorage and use a key-based remount by adding a `key` prop derived from a counter/state to the `Index` route, or use `useSearchParams`/`useNavigate` state to signal a reset. Simplest: clear sessionStorage + call `window.dispatchEvent(new Event("go-home"))` and listen for it in `Index.tsx` to call `changeMode("welcome")`.
 
-## 1. Standardise Snackbars to M3 Best Practice
+**Files:** `src/components/BottomNav.tsx`, `src/pages/Index.tsx`
 
-**Problem:** Two competing toast systems (Radix + Sonner). MealPlanResults and MealPlanContext still use the Radix `toast()` from `@/hooks/use-toast`. Inconsistent positioning, timing, and action support.
+## 2. Checkbox doesn't respond to direct taps
 
-**Changes:**
-- **Remove Radix toast system**: Delete `<Toaster />` (Radix) from `App.tsx`. Keep only `<Sonner />`.
-- **Migrate all `toast()` calls** in `MealPlanResults.tsx` and `MealPlanContext.tsx` from `import { toast } from "@/hooks/use-toast"` to `import { toast } from "sonner"`.
-- **Configure Sonner** in `App.tsx` to match M3 guidelines:
-  - Position: `bottom-center` (mobile thumb-zone friendly)
-  - Single line text, max 2 lines
-  - Success: 5s auto-dismiss; Error: 10s with close button; Info with optional action button
-  - Add `action` buttons for error toasts (e.g. "Retry" on generation failures)
-- **Update error toasts** in MealPlanContext to include a retry action.
-- **Clean up** — can optionally remove `use-toast.ts` and `toaster.tsx` if no other imports remain.
+**Root cause:** In `MealPlanResults.tsx` line 233-234, the parent `<div>` has `onClick={() => toggleGroceryItem(itemKey)}` and the `<Checkbox>` also has `onCheckedChange={() => toggleGroceryItem(itemKey)}`. When tapping the checkbox directly, both fire (event bubbles from checkbox to parent div), toggling the item twice — so it checks then immediately unchecks.
 
----
+**Fix:** Remove the `onCheckedChange` handler from `<Checkbox>` since the parent div's `onClick` already handles it. Or alternatively, stop propagation in the checkbox handler. Simplest: remove `onCheckedChange` from Checkbox and let the row click handle everything, keeping Checkbox as display-only (`checked={isChecked}` with `pointer-events-none`).
 
-## 2. Craving Results — New Action Buttons
+**File:** `src/components/mealplan/MealPlanResults.tsx`
 
-**Current:** After swiping all cards, shows "View Saved Dishes", "Refine my craving", "Start Over".
+## 3. No CTA to download/install app
 
-**New buttons (in order):**
-1. **View Saved Dishes** — unchanged, navigates to `/saved`
-2. **Show More Options** — calls the recommend API again (same params, adds current results to `rejected` list) to get fresh suggestions without requiring feedback text
-3. **Refine My Craving** — existing refine flow with text input
+**Root cause:** The `InstallButton` component uses `useState` instead of `useEffect` to listen for `beforeinstallprompt`, so the event listener is never properly set up. On non-iOS/non-installable browsers (like desktop Chrome in preview), it returns `null` — nothing is shown.
 
-Remove "Start Over" from the primary actions (keep as a subtle ghost link below). Add i18n keys for "Show More Options" in all 14 languages.
+**Fix:** 
+- Fix the `useEffect` bug (currently using `useState` as effect).
+- Always show the Install button in settings (not conditionally hidden). When `beforeinstallprompt` hasn't fired and it's not iOS, show the button anyway with a note like "Open in browser to install" or just show it — clicking it can show a small instruction.
 
----
+**File:** `src/components/BottomNav.tsx`
 
-## 3. Fridge Scanner — "See More Recipes" Button
+## 4. Snackbar not aligned properly
 
-**Current:** Results show recipes with "Scan Again" and "Back to Home" at the bottom.
+**Root cause:** The Sonner `offset={72}` positions the toast 72px from the bottom, but the screenshot shows it's visually misaligned — it appears to sit too close to the nav bar or not centered. The toast also shows left-aligned in the screenshots.
 
-**Change:** Add a **"Show More Recipes"** button above "Scan Again" that re-invokes the edge function (`scan-ingredients` or `ingredients-to-recipes`) with the same ingredients but passes the current recipe names as `exclude` so the AI generates new ones. Add a loading state while fetching. Add i18n keys for all 14 languages.
+**Fix:** Adjust the Sonner config:
+- Increase offset to account for bottom nav height (56px) + safe area + some breathing room (~80px).
+- Ensure `position="bottom-center"` is working. Add explicit width constraint via `style` or `className` to center it within the `max-w-md` layout.
+
+**File:** `src/components/ui/sonner.tsx`
 
 ---
 
-## 4. Meal Plan — Grocery List Checkmarks
+## Technical Summary
 
-**Current:** Grocery list items are plain text rows.
-
-**Change:** Add a `Checkbox` (from `@/components/ui/checkbox`) to each grocery item row. Checked state stored in local component state (`useState<Set<string>>`). Checked items get a strikethrough style. A small counter shows "X of Y checked" at the top of the grocery tab. State resets when a new plan is generated.
-
----
-
-## 5. Redesign Navigation — Persistent Bottom Tab Bar
-
-**Current:** Navigation is ad-hoc — toolbar with scattered icon buttons at the top of each page, no consistent nav pattern.
-
-**New approach (NN/g best practice — visible, persistent, labeled navigation):**
-- Create a **bottom navigation bar** component (`BottomNav.tsx`) with 4 tabs:
-  1. 🍽️ **Home** — `/` (welcome screen)
-  2. 📋 **Saved** — `/saved`
-  3. 🌐 **Language** — opens language switcher
-  4. ⚙️ **Settings** — theme toggle, sign in/out, install app
-- Each tab has an **icon + label** (following NN/g: always show labels, don't rely on icons alone)
-- Active tab highlighted with primary color
-- Fixed to bottom of viewport, 56px height, safe-area padding for notched devices
-- Remove the current scattered toolbar from `Index.tsx` and `Saved.tsx`
-- On desktop (>768px), optionally render as a top horizontal nav bar instead
-- Add i18n keys for nav labels in all 14 languages
-
----
-
-## 6. Install on Device (Simple Manifest — No PWA Service Worker)
-
-**Change:** Add a `manifest.json` to `public/` with app name, icons, `display: "standalone"`, and theme colors. Add `<link rel="manifest">` to `index.html`. Create a simple install prompt in the Settings tab of the new bottom nav (or a dedicated `/install` route) that:
-- Detects `beforeinstallprompt` event on Android/Chrome
-- Shows iOS instructions ("Share → Add to Home Screen") on Safari
-- No service worker, no `vite-plugin-pwa` — just installability
-
-Generate app icons (192x192, 512x512) as simple colored squares with the app emoji.
-
----
-
-## Technical Details
-
-**Files to create:**
-- `src/components/BottomNav.tsx` — bottom navigation bar
-- `public/manifest.json` — web app manifest
-- `public/icon-192.svg`, `public/icon-512.svg` — app icons
-
-**Files to modify:**
-- `src/App.tsx` — remove Radix Toaster, add layout wrapper with BottomNav, configure Sonner position
-- `src/pages/Index.tsx` — remove toolbar, simplify header
-- `src/pages/Saved.tsx` — remove toolbar, simplify header
-- `src/components/quiz/ResultsScreen.tsx` — new "Show More Options" button + reorder actions
-- `src/components/scan/FridgeScanner.tsx` — add "Show More Recipes" button + exclude logic
-- `src/components/mealplan/MealPlanResults.tsx` — migrate toast to Sonner, add grocery checkmarks
-- `src/components/mealplan/MealPlanContext.tsx` — migrate toast to Sonner, add retry actions
-- `src/lib/i18n.tsx` — new i18n keys across all 14 languages
-- `index.html` — add manifest link + meta tags for mobile
-- `src/components/ui/sonner.tsx` — update position to `bottom-center`, add offset for bottom nav
-
-**Files to potentially delete:**
-- `src/hooks/use-toast.ts` — if no remaining imports
-- `src/components/ui/toaster.tsx` — Radix toaster
-- `src/components/ui/use-toast.ts` — re-export wrapper
+| Issue | File(s) | Change |
+|-------|---------|--------|
+| Home button reset | `BottomNav.tsx`, `Index.tsx` | Clear sessionStorage + dispatch custom event to reset mode |
+| Checkbox double-toggle | `MealPlanResults.tsx` | Remove `onCheckedChange` from Checkbox, use parent div click only |
+| Install CTA always visible | `BottomNav.tsx` | Fix `useState` → `useEffect` for event listener; always render install option |
+| Snackbar alignment | `sonner.tsx` | Adjust offset and ensure proper centering |
 
