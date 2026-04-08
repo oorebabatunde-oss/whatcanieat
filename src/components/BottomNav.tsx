@@ -195,7 +195,7 @@ function InstallButton() {
   return (
     <button
       onClick={() => {
-        toast.info(t("settings.installBrowser") || "Open this site in your browser to install it as an app.");
+        toast.info(t("settings.installBrowser"));
       }}
       className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-muted transition-colors text-sm text-foreground min-h-[44px]"
     >

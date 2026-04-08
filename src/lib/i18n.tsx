@@ -212,6 +212,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "settings.signIn": "Sign in",
     "settings.install": "Install app",
     "settings.installIOS": "Tap Share then 'Add to Home Screen'",
+    "settings.installBrowser": "Open this site in your browser to install it as an app",
     "results.showMore": "Show more options",
     "scan.moreRecipes": "Show more recipes",
     "mealplan.groceryChecked": "checked",
