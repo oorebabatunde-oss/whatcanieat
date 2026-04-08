@@ -235,8 +235,7 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
                         >
                           <Checkbox
                             checked={isChecked}
-                            onCheckedChange={() => toggleGroceryItem(itemKey)}
-                            className="shrink-0"
+                            className="shrink-0 pointer-events-none"
                           />
                           <div className={`min-w-0 flex-1 ${isChecked ? "line-through opacity-50" : ""}`}>
                             <span className="text-foreground">{item.name}</span>

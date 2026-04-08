@@ -31,6 +31,13 @@ const Index = () => {
 
   const goWelcome = () => changeMode("welcome");
 
+  // Listen for go-home event from BottomNav
+  useState(() => {
+    const handler = () => changeMode("welcome");
+    window.addEventListener("go-home", handler);
+    return () => window.removeEventListener("go-home", handler);
+  });
+
   if (mode === "quiz") {
     return (
       <QuizProvider>
