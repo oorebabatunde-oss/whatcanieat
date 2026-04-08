@@ -1,4 +1,6 @@
+import React from "react";
 import { Home, Heart, Globe, Settings, Download, LogIn, LogOut, Sun, Moon } from "lucide-react";
+import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useI18n, SUPPORTED_LANGS } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
@@ -16,7 +18,7 @@ export default function BottomNav() {
   const [showPanel, setShowPanel] = useState<"language" | "settings" | null>(null);
 
   const tabs = [
-    { id: "home", icon: Home, label: t("nav.home"), action: () => { setShowPanel(null); navigate("/"); } },
+    { id: "home", icon: Home, label: t("nav.home"), action: () => { setShowPanel(null); sessionStorage.removeItem("app-mode"); sessionStorage.removeItem("quiz-state"); window.dispatchEvent(new Event("go-home")); navigate("/"); } },
     { id: "saved", icon: Heart, label: t("nav.saved"), action: () => { setShowPanel(null); navigate("/saved"); } },
     { id: "language", icon: Globe, label: t("nav.language"), action: () => setShowPanel(showPanel === "language" ? null : "language") },
     { id: "settings", icon: Settings, label: t("nav.settings"), action: () => setShowPanel(showPanel === "settings" ? null : "settings") },
@@ -146,14 +148,14 @@ function InstallButton() {
   const [isInstalled] = useState(() => window.matchMedia("(display-mode: standalone)").matches);
 
   // Listen for install prompt
-  useState(() => {
+  React.useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
     };
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  });
+  }, []);
 
   if (isInstalled) return null;
 
@@ -189,5 +191,16 @@ function InstallButton() {
     );
   }
 
-  return null;
+  // Always show install option even when prompt hasn't fired
+  return (
+    <button
+      onClick={() => {
+        toast.info(t("settings.installBrowser") || "Open this site in your browser to install it as an app.");
+      }}
+      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-muted transition-colors text-sm text-foreground min-h-[44px]"
+    >
+      <Download className="w-4 h-4" />
+      {t("settings.install")}
+    </button>
+  );
 }

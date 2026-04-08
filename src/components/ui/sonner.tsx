@@ -12,7 +12,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group"
       closeButton
       position="bottom-center"
-      offset={72}
+      offset={80}
+      style={{ left: "50%", transform: "translateX(-50%)" }}
       toastOptions={{
         classNames: {
           toast:

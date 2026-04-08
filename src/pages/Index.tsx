@@ -3,7 +3,7 @@ import { QuizProvider } from "@/components/quiz/QuizContext";
 import QuizFlow from "@/components/quiz/QuizFlow";
 import FridgeScanner from "@/components/scan/FridgeScanner";
 import MealPlanFlow from "@/components/mealplan/MealPlanFlow";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useI18n } from "@/lib/i18n";
 
 type AppMode = "welcome" | "quiz" | "scan" | "mealplan";
@@ -30,6 +30,13 @@ const Index = () => {
   };
 
   const goWelcome = () => changeMode("welcome");
+
+  // Listen for go-home event from BottomNav
+  useEffect(() => {
+    const handler = () => changeMode("welcome");
+    window.addEventListener("go-home", handler);
+    return () => window.removeEventListener("go-home", handler);
+  }, []);
 
   if (mode === "quiz") {
     return (
