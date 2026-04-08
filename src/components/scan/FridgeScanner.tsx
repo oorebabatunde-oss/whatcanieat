@@ -201,6 +201,9 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
           </div>
 
           <div className="flex flex-col items-center gap-2 mt-2">
+            <Button onClick={handleShowMoreRecipes} disabled={loadingMore} className="gap-2 rounded-full">
+              {loadingMore ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} {t("scan.moreRecipes")}
+            </Button>
             <Button variant="outline" onClick={handleReset} className="gap-2 rounded-full">
               <RefreshCw className="w-4 h-4" /> {t("scan.scanAgain")}
             </Button>
