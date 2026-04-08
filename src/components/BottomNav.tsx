@@ -1,3 +1,4 @@
+import React from "react";
 import { Home, Heart, Globe, Settings, Download, LogIn, LogOut, Sun, Moon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useI18n, SUPPORTED_LANGS } from "@/lib/i18n";
