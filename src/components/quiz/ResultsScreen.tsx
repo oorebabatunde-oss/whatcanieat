@@ -277,13 +277,22 @@ export default function ResultsScreen() {
               </Link>
               <Button
                 variant="outline"
+                onClick={handleShowMore}
+                disabled={loadingMore}
+                className="rounded-full gap-2"
+              >
+                {loadingMore ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                {t("results.showMore")}
+              </Button>
+              <Button
+                variant="outline"
                 onClick={() => setShowRefine(true)}
                 className="rounded-full gap-2"
               >
                 <XCircle className="w-4 h-4" /> {t("results.dismiss")}
               </Button>
-              <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground">
-                <RotateCcw className="w-4 h-4" /> {t("results.startOver")}
+              <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground text-xs">
+                <RotateCcw className="w-3.5 h-3.5" /> {t("results.startOver")}
               </Button>
             </div>
           ) : (
@@ -318,8 +327,8 @@ export default function ResultsScreen() {
                   {t("results.refineSearch")}
                 </Button>
               </div>
-              <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground w-full">
-                <RotateCcw className="w-4 h-4" /> {t("results.startOver")}
+              <Button variant="ghost" onClick={reset} className="rounded-full gap-2 text-muted-foreground w-full text-xs">
+                <RotateCcw className="w-3.5 h-3.5" /> {t("results.startOver")}
               </Button>
             </motion.div>
           )}
