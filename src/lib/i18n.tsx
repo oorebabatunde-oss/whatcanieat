@@ -212,6 +212,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "settings.signIn": "Sign in",
     "settings.install": "Install app",
     "settings.installIOS": "Tap Share then 'Add to Home Screen'",
+    "settings.installBrowser": "Open this site in your browser to install it as an app",
     "results.showMore": "Show more options",
     "scan.moreRecipes": "Show more recipes",
     "mealplan.groceryChecked": "checked",
@@ -351,6 +352,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "Inicio", "nav.saved": "Guardados", "nav.language": "Idioma", "nav.settings": "Ajustes",
     "settings.lightMode": "Modo claro", "settings.darkMode": "Modo oscuro", "settings.signOut": "Cerrar sesión", "settings.signIn": "Iniciar sesión",
     "settings.install": "Instalar app", "settings.installIOS": "Toca Compartir y luego 'Añadir a pantalla de inicio'",
+    "settings.installBrowser": "Abre este sitio en tu navegador para instalarlo como app",
     "results.showMore": "Mostrar más opciones", "scan.moreRecipes": "Mostrar más recetas", "mealplan.groceryChecked": "marcados",
   },
   fr: {
@@ -483,6 +485,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "Accueil", "nav.saved": "Sauvegardés", "nav.language": "Langue", "nav.settings": "Paramètres",
     "settings.lightMode": "Mode clair", "settings.darkMode": "Mode sombre", "settings.signOut": "Se déconnecter", "settings.signIn": "Se connecter",
     "settings.install": "Installer l'app", "settings.installIOS": "Appuyez sur Partager puis 'Ajouter à l'écran d'accueil'",
+    "settings.installBrowser": "Ouvrez ce site dans votre navigateur pour l'installer comme app",
     "results.showMore": "Plus d'options", "scan.moreRecipes": "Plus de recettes", "mealplan.groceryChecked": "cochés",
   },
   de: {
@@ -588,6 +591,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "Start", "nav.saved": "Gespeichert", "nav.language": "Sprache", "nav.settings": "Einstellungen",
     "settings.lightMode": "Helles Design", "settings.darkMode": "Dunkles Design", "settings.signOut": "Abmelden", "settings.signIn": "Anmelden",
     "settings.install": "App installieren", "settings.installIOS": "Tippe auf Teilen und dann 'Zum Home-Bildschirm'",
+    "settings.installBrowser": "Öffne diese Seite im Browser, um sie als App zu installieren",
     "results.showMore": "Mehr Optionen", "scan.moreRecipes": "Mehr Rezepte", "mealplan.groceryChecked": "erledigt",
   },
   pt: {
@@ -683,6 +687,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "Início", "nav.saved": "Salvos", "nav.language": "Idioma", "nav.settings": "Configurações",
     "settings.lightMode": "Modo claro", "settings.darkMode": "Modo escuro", "settings.signOut": "Sair", "settings.signIn": "Entrar",
     "settings.install": "Instalar app", "settings.installIOS": "Toque em Compartilhar e depois 'Adicionar à Tela de Início'",
+    "settings.installBrowser": "Abra este site no navegador para instalá-lo como app",
     "results.showMore": "Mais opções", "scan.moreRecipes": "Mais receitas", "mealplan.groceryChecked": "marcados",
   },
   ar: {
@@ -776,6 +781,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "الرئيسية", "nav.saved": "المحفوظات", "nav.language": "اللغة", "nav.settings": "الإعدادات",
     "settings.lightMode": "الوضع الفاتح", "settings.darkMode": "الوضع الداكن", "settings.signOut": "تسجيل الخروج", "settings.signIn": "تسجيل الدخول",
     "settings.install": "تثبيت التطبيق", "settings.installIOS": "انقر على مشاركة ثم 'إضافة إلى الشاشة الرئيسية'",
+    "settings.installBrowser": "افتح هذا الموقع في متصفحك لتثبيته كتطبيق",
     "results.showMore": "عرض المزيد", "scan.moreRecipes": "المزيد من الوصفات", "mealplan.groceryChecked": "تم",
   },
   zh: {
@@ -869,6 +875,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "首页", "nav.saved": "已保存", "nav.language": "语言", "nav.settings": "设置",
     "settings.lightMode": "浅色模式", "settings.darkMode": "深色模式", "settings.signOut": "退出登录", "settings.signIn": "登录",
     "settings.install": "安装应用", "settings.installIOS": "点击分享然后'添加到主屏幕'",
+    "settings.installBrowser": "在浏览器中打开此网站以将其安装为应用",
     "results.showMore": "显示更多", "scan.moreRecipes": "更多食谱", "mealplan.groceryChecked": "已勾选",
   },
   ja: {
@@ -962,6 +969,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "ホーム", "nav.saved": "保存済み", "nav.language": "言語", "nav.settings": "設定",
     "settings.lightMode": "ライトモード", "settings.darkMode": "ダークモード", "settings.signOut": "ログアウト", "settings.signIn": "ログイン",
     "settings.install": "アプリをインストール", "settings.installIOS": "共有をタップして'ホーム画面に追加'",
+    "settings.installBrowser": "このサイトをブラウザで開いてアプリとしてインストール",
     "results.showMore": "もっと見る", "scan.moreRecipes": "もっとレシピを見る", "mealplan.groceryChecked": "チェック済み",
   },
   ko: {
@@ -1055,6 +1063,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "홈", "nav.saved": "저장됨", "nav.language": "언어", "nav.settings": "설정",
     "settings.lightMode": "라이트 모드", "settings.darkMode": "다크 모드", "settings.signOut": "로그아웃", "settings.signIn": "로그인",
     "settings.install": "앱 설치", "settings.installIOS": "공유를 탭한 다음 '홈 화면에 추가'",
+    "settings.installBrowser": "브라우저에서 이 사이트를 열어 앱으로 설치하세요",
     "results.showMore": "더 보기", "scan.moreRecipes": "더 많은 레시피", "mealplan.groceryChecked": "체크됨",
   },
   hi: {
@@ -1148,6 +1157,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "होम", "nav.saved": "सहेजे गए", "nav.language": "भाषा", "nav.settings": "सेटिंग्स",
     "settings.lightMode": "लाइट मोड", "settings.darkMode": "डार्क मोड", "settings.signOut": "साइन आउट", "settings.signIn": "साइन इन",
     "settings.install": "ऐप इंस्टॉल करें", "settings.installIOS": "शेयर पर टैप करें फिर 'होम स्क्रीन पर जोड़ें'",
+    "settings.installBrowser": "इस साइट को अपने ब्राउज़र में खोलें और ऐप के रूप में इंस्टॉल करें",
     "results.showMore": "और विकल्प दिखाएं", "scan.moreRecipes": "और रेसिपी दिखाएं", "mealplan.groceryChecked": "चेक किया",
   },
   tr: {
@@ -1241,6 +1251,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "Ana Sayfa", "nav.saved": "Kaydedilenler", "nav.language": "Dil", "nav.settings": "Ayarlar",
     "settings.lightMode": "Açık mod", "settings.darkMode": "Koyu mod", "settings.signOut": "Çıkış yap", "settings.signIn": "Giriş yap",
     "settings.install": "Uygulamayı yükle", "settings.installIOS": "Paylaş'a dokunun ve 'Ana Ekrana Ekle'",
+    "settings.installBrowser": "Bu siteyi tarayıcınızda açarak uygulama olarak yükleyin",
     "results.showMore": "Daha fazla seçenek", "scan.moreRecipes": "Daha fazla tarif", "mealplan.groceryChecked": "işaretli",
   },
   it: {
@@ -1333,6 +1344,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "Home", "nav.saved": "Salvati", "nav.language": "Lingua", "nav.settings": "Impostazioni",
     "settings.lightMode": "Tema chiaro", "settings.darkMode": "Tema scuro", "settings.signOut": "Esci", "settings.signIn": "Accedi",
     "settings.install": "Installa app", "settings.installIOS": "Tocca Condividi poi 'Aggiungi a schermata Home'",
+    "settings.installBrowser": "Apri questo sito nel browser per installarlo come app",
     "results.showMore": "Più opzioni", "scan.moreRecipes": "Più ricette", "mealplan.groceryChecked": "spuntati",
   },
   nl: {
@@ -1425,6 +1437,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "Home", "nav.saved": "Opgeslagen", "nav.language": "Taal", "nav.settings": "Instellingen",
     "settings.lightMode": "Licht thema", "settings.darkMode": "Donker thema", "settings.signOut": "Uitloggen", "settings.signIn": "Inloggen",
     "settings.install": "App installeren", "settings.installIOS": "Tik op Deel en dan 'Zet op beginscherm'",
+    "settings.installBrowser": "Open deze site in je browser om het als app te installeren",
     "results.showMore": "Meer opties", "scan.moreRecipes": "Meer recepten", "mealplan.groceryChecked": "afgevinkt",
   },
   ru: {
@@ -1516,6 +1529,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "nav.home": "Главная", "nav.saved": "Сохранённое", "nav.language": "Язык", "nav.settings": "Настройки",
     "settings.lightMode": "Светлая тема", "settings.darkMode": "Тёмная тема", "settings.signOut": "Выйти", "settings.signIn": "Войти",
     "settings.install": "Установить приложение", "settings.installIOS": "Нажмите Поделиться, затем 'На экран Домой'",
+    "settings.installBrowser": "Откройте этот сайт в браузере, чтобы установить как приложение",
     "results.showMore": "Больше вариантов", "scan.moreRecipes": "Больше рецептов", "mealplan.groceryChecked": "отмечено",
   },
 };
