@@ -190,5 +190,16 @@ function InstallButton() {
     );
   }
 
-  return null;
+  // Always show install option even when prompt hasn't fired
+  return (
+    <button
+      onClick={() => {
+        toast.info(t("settings.installBrowser") || "Open this site in your browser to install it as an app.");
+      }}
+      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-muted transition-colors text-sm text-foreground min-h-[44px]"
+    >
+      <Download className="w-4 h-4" />
+      {t("settings.install")}
+    </button>
+  );
 }
