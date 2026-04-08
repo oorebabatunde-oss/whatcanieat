@@ -1,6 +1,6 @@
 import { useQuiz } from "./QuizContext";
 import { motion } from "framer-motion";
-import { RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck, Undo2, Loader2 } from "lucide-react";
+import { RotateCcw, AlertCircle, Heart, X, XCircle, Send, BookmarkCheck, Undo2, Loader2, RefreshCw } from "lucide-react";
 import PlateLoader from "@/components/ui/PlateLoader";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState, useRef } from "react";
@@ -24,6 +24,7 @@ export default function ResultsScreen() {
   const { t, lang } = useI18n();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -195,6 +196,44 @@ export default function ResultsScreen() {
       setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
       setRefining(false);
+    }
+  };
+
+  const handleShowMore = async () => {
+    setLoadingMore(true);
+    try {
+      const locale = lang || navigator.language || "en-US";
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+      const rejected = recommendations.map((r) => r.name);
+
+      const { data, error: fnError } = await supabase.functions.invoke("recommend", {
+        body: {
+          craving: state.craving,
+          flavors: state.flavors,
+          textures: state.textures,
+          dietary: state.dietary,
+          locale,
+          timezone,
+          rejected,
+        },
+      });
+
+      if (fnError) throw new Error(fnError.message);
+      if (data?.error) throw new Error(data.error);
+
+      const recs: Recommendation[] = data.recommendations ?? [];
+      setRecommendations(recs);
+      setCurrentIndex(0);
+      setAllSwiped(false);
+      setImageLoaded({});
+      setImageUrls({});
+      setImageCredits({});
+      setSwipeHistory([]);
+      fetchImages(recs);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Something went wrong");
+    } finally {
+      setLoadingMore(false);
     }
   };
 
