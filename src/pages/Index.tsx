@@ -4,13 +4,7 @@ import QuizFlow from "@/components/quiz/QuizFlow";
 import FridgeScanner from "@/components/scan/FridgeScanner";
 import MealPlanFlow from "@/components/mealplan/MealPlanFlow";
 import { useState } from "react";
-import ThemeToggle from "@/components/ThemeToggle";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useI18n } from "@/lib/i18n";
-import { useAuth } from "@/hooks/useAuth";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Heart, LogIn, LogOut } from "lucide-react";
 
 type AppMode = "welcome" | "quiz" | "scan" | "mealplan";
 const MODE_KEY = "app-mode";
@@ -26,7 +20,6 @@ function loadMode(): AppMode {
 const Index = () => {
   const [mode, setMode] = useState<AppMode>(loadMode);
   const { t } = useI18n();
-  const { user, signOut } = useAuth();
 
   const changeMode = (m: AppMode) => {
     if (m === "quiz") {
@@ -38,41 +31,10 @@ const Index = () => {
 
   const goWelcome = () => changeMode("welcome");
 
-  const toolbar = (
-    <div className="flex items-center justify-end gap-2 px-5 pt-4 pb-2 w-full relative z-10">
-      <Link to="/saved">
-        <Button variant="ghost" size="sm" className="text-muted-foreground gap-1.5">
-          <Heart className="w-4 h-4" />
-          <span className="text-xs">{t("results.viewSaved")}</span>
-        </Button>
-      </Link>
-      <div className="flex-1" />
-      {user && (
-        <span className="text-xs text-muted-foreground truncate max-w-[140px]">
-          {user.email}
-        </span>
-      )}
-      <LanguageSwitcher />
-      <ThemeToggle />
-      {user ? (
-        <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={signOut} aria-label="Sign out">
-          <LogOut className="w-5 h-5" />
-        </Button>
-      ) : (
-        <Link to="/auth">
-          <Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="Sign in">
-            <LogIn className="w-5 h-5" />
-          </Button>
-        </Link>
-      )}
-    </div>
-  );
-
   if (mode === "quiz") {
     return (
       <QuizProvider>
         <div className="min-h-screen bg-background flex flex-col">
-          {toolbar}
           <header className="pt-6 pb-2 px-5 text-center">
             <button onClick={goWelcome} className="inline-block">
               <h1 className="text-xl font-logo font-semibold text-primary">
@@ -91,7 +53,6 @@ const Index = () => {
   if (mode === "scan") {
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        {toolbar}
         <FridgeScanner onBack={goWelcome} />
       </div>
     );
@@ -100,7 +61,6 @@ const Index = () => {
   if (mode === "mealplan") {
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        {toolbar}
         <header className="pt-6 pb-2 px-5 text-center">
           <button onClick={goWelcome} className="inline-block">
             <h1 className="text-xl font-logo font-semibold text-primary">
@@ -119,7 +79,6 @@ const Index = () => {
     <div className="min-h-screen bg-background flex flex-col items-center px-5 relative overflow-hidden">
 
       <div className="relative z-10 w-full flex flex-col items-center flex-1">
-        {toolbar}
 
         <div className="flex-1 flex flex-col items-center justify-center">
           <motion.div

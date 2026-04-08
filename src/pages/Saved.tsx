@@ -2,36 +2,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ArrowLeft, LogOut, AlertTriangle } from "lucide-react";
+import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import ThemeToggle from "@/components/ThemeToggle";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SavedRecommendations from "@/components/saved/SavedRecommendations";
 import SavedMealPlans from "@/components/saved/SavedMealPlans";
 
 export default function Saved() {
-  const { user, loading: authLoading, signOut } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { t } = useI18n();
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="flex items-center justify-end gap-2 px-4 pt-4 pb-2 w-full">
-        <div className="flex-1" />
-        {user && (
-          <span className="text-xs text-muted-foreground truncate max-w-[140px]">
-            {user.email}
-          </span>
-        )}
-        <LanguageSwitcher />
-        <ThemeToggle />
-        {user && (
-          <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={signOut}>
-            <LogOut className="w-5 h-5" />
-          </Button>
-        )}
-      </div>
-
       <div className="max-w-sm mx-auto px-4 py-6">
         <div className="flex items-center gap-3 mb-6">
           <Button variant="ghost" size="icon" onClick={() => {

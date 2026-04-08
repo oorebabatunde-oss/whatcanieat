@@ -42,6 +42,7 @@ type InputMode = "choose" | "type";
 export default function FridgeScanner({ onBack }: { onBack: () => void }) {
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [result, setResult] = useState<ScanResult | null>(null);
   const [inputMode, setInputMode] = useState<InputMode>("choose");
   const [ingredientText, setIngredientText] = useState("");
@@ -98,7 +99,27 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
     }
   };
 
-  const handleReset = () => { setPreview(null); setResult(null); setInputMode("choose"); setIngredientText(""); };
+  const handleReset = () => { setPreview(null); setResult(null); setInputMode("choose"); setIngredientText(""); setLoadingMore(false); };
+
+  const handleShowMoreRecipes = async () => {
+    if (!result) return;
+    setLoadingMore(true);
+    try {
+      const ingredients = result.ingredients.map((i) => i.name);
+      const exclude = result.recipes.map((r) => r.name);
+      const { data, error } = await supabase.functions.invoke("ingredients-to-recipes", {
+        body: { ingredients, exclude },
+      });
+      if (error) throw new Error(error.message);
+      if (data?.error) throw new Error(data.error);
+      const newRecipes: Recipe[] = data.recipes || [];
+      setResult((prev) => prev ? { ...prev, recipes: [...prev.recipes, ...newRecipes] } : prev);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to get more recipes");
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const openRecipeSearch = (name: string) => {
     window.open(`https://www.google.com/search?q=${encodeURIComponent(name + " recipe")}`, "_blank");
@@ -180,6 +201,9 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
           </div>
 
           <div className="flex flex-col items-center gap-2 mt-2">
+            <Button onClick={handleShowMoreRecipes} disabled={loadingMore} className="gap-2 rounded-full">
+              {loadingMore ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} {t("scan.moreRecipes")}
+            </Button>
             <Button variant="outline" onClick={handleReset} className="gap-2 rounded-full">
               <RefreshCw className="w-4 h-4" /> {t("scan.scanAgain")}
             </Button>
