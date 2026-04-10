@@ -141,16 +141,24 @@ export default function BottomNav() {
   );
 }
 
+// Module-level variable to capture the install prompt even before component mounts
+let _deferredPrompt: any = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  _deferredPrompt = e;
+});
+
 function InstallButton() {
   const { t } = useI18n();
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(_deferredPrompt);
   const [isIOS] = useState(() => /iPad|iPhone|iPod/.test(navigator.userAgent));
   const [isInstalled] = useState(() => window.matchMedia("(display-mode: standalone)").matches);
 
-  // Listen for install prompt
+  // Listen for install prompt (in case it fires after component mounts)
   React.useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
+      _deferredPrompt = e;
       setDeferredPrompt(e);
     };
     window.addEventListener("beforeinstallprompt", handler);
