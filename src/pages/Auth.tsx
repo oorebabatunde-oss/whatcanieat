@@ -112,7 +112,7 @@ export default function Auth() {
 
               <div className="flex justify-center">
                 <InputOTP
-                  maxLength={6}
+                  maxLength={8}
                   value={otp}
                   onChange={handleVerify}
                   disabled={verifying}
@@ -124,6 +124,8 @@ export default function Auth() {
                     <InputOTPSlot index={3} />
                     <InputOTPSlot index={4} />
                     <InputOTPSlot index={5} />
+                    <InputOTPSlot index={6} />
+                    <InputOTPSlot index={7} />
                   </InputOTPGroup>
                 </InputOTP>
               </div>
