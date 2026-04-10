@@ -37,7 +37,7 @@ export default function Auth() {
 
   const handleVerify = async (value: string) => {
     setOtp(value);
-    if (value.length === 6) {
+    if (value.length === 8) {
       setVerifying(true);
       setError(null);
       const { error } = await verifyOtp(email, value);
