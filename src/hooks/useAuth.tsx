@@ -25,20 +25,28 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signInWithMagicLink = async (email: string) => {
+  const signInWithOtp = async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: window.location.origin,
         shouldCreateUser: true,
       },
     });
     return { error };
   };
 
+  const verifyOtp = async (email: string, token: string) => {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: "email",
+    });
+    return { data, error };
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
 
-  return { user, session, loading, signInWithMagicLink, signOut };
+  return { user, session, loading, signInWithOtp, verifyOtp, signOut };
 }

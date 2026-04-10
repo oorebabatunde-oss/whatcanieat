@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useAuth } from "@/hooks/useAuth";
 import { useI18n } from "@/lib/i18n";
-import { Mail, Loader2, ArrowLeft, CheckCircle } from "lucide-react";
+import { Mail, Loader2, ArrowLeft, KeyRound } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Link } from "react-router-dom";
@@ -13,9 +14,11 @@ import { Link } from "react-router-dom";
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { signInWithMagicLink } = useAuth();
+  const { signInWithOtp, verifyOtp } = useAuth();
   const { t } = useI18n();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,7 +26,7 @@ export default function Auth() {
     if (!email.trim()) return;
     setLoading(true);
     setError(null);
-    const { error } = await signInWithMagicLink(email);
+    const { error } = await signInWithOtp(email);
     if (error) {
       setError(error.message);
     } else {
@@ -32,10 +35,24 @@ export default function Auth() {
     setLoading(false);
   };
 
+  const handleVerify = async (value: string) => {
+    setOtp(value);
+    if (value.length === 6) {
+      setVerifying(true);
+      setError(null);
+      const { error } = await verifyOtp(email, value);
+      if (error) {
+        setError(error.message);
+        setOtp("");
+      }
+      setVerifying(false);
+    }
+  };
+
   const handleResend = async () => {
     setLoading(true);
     setError(null);
-    const { error } = await signInWithMagicLink(email);
+    const { error } = await signInWithOtp(email);
     if (error) {
       setError(error.message);
     }
@@ -77,7 +94,7 @@ export default function Auth() {
               className="bg-card border border-border rounded-xl p-6 space-y-5"
             >
               <div className="text-center space-y-3">
-                <CheckCircle className="w-10 h-10 text-primary mx-auto" />
+                <KeyRound className="w-10 h-10 text-primary mx-auto" />
                 <h2 className="font-display font-semibold text-foreground">
                   {t("auth.checkEmail")}
                 </h2>
@@ -86,12 +103,37 @@ export default function Auth() {
                 </p>
                 <button
                   type="button"
-                  onClick={() => { setSent(false); setError(null); }}
+                  onClick={() => { setSent(false); setError(null); setOtp(""); }}
                   className="text-primary text-sm underline underline-offset-2 hover:opacity-80"
                 >
                   {email} — {t("auth.changeEmail")}
                 </button>
               </div>
+
+              <div className="flex justify-center">
+                <InputOTP
+                  maxLength={6}
+                  value={otp}
+                  onChange={handleVerify}
+                  disabled={verifying}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+
+              {verifying && (
+                <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {t("auth.verifying")}
+                </div>
+              )}
 
               {error && (
                 <p className="text-destructive text-sm text-center">{error}</p>
@@ -101,7 +143,7 @@ export default function Auth() {
                 variant="outline"
                 className="w-full"
                 onClick={handleResend}
-                disabled={loading}
+                disabled={loading || verifying}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
                 {t("auth.resendCode")}
