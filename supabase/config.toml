@@ -1,19 +1,17 @@
 project_id = "oolqwypnmoxcvesaeefx"
 
-[functions.recommend]
-verify_jwt = false
-
-[functions.unsplash-image]
-verify_jwt = false
-
-[functions.scan-ingredients]
-verify_jwt = false
-
-[functions.ingredients-to-recipes]
-verify_jwt = false
-
-[functions.generate-meal-plan]
-verify_jwt = false
-
-[functions.process-email-queue]
-verify_jwt = true
+[functions]
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.generate-meal-plan]
+    verify_jwt = false
+  [functions.ingredients-to-recipes]
+    verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = true
+  [functions.recommend]
+    verify_jwt = false
+  [functions.scan-ingredients]
+    verify_jwt = false
+  [functions.unsplash-image]
+    verify_jwt = false
