@@ -15,6 +15,8 @@ const SAFETY_OPTIONS = [
   "Gluten free", "Dairy free", "Vegan", "Vegetarian",
   "Diabetes friendly", "Pregnancy safe", "PCOS friendly",
   "Halal", "Kosher",
+  "Dialysis", "Chemotherapy", "Kidney disease",
+  "Heart disease", "High blood pressure",
 ];
 
 const EQUIPMENT_OPTIONS = ["Microwave", "Hob", "Oven", "Air fryer", "No cook"];
