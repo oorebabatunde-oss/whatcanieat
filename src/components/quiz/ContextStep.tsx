@@ -41,14 +41,6 @@ export default function ContextStep() {
         {t("quiz.dietary.submit")} <Sparkles className="w-5 h-5 ml-1" />
       </Button>
 
-      <Button
-        variant="outline"
-        onClick={nextStep}
-        size="lg"
-        className="w-full max-w-xs rounded-xl font-medium gap-1.5"
-      >
-        <SkipForward className="w-4 h-4" /> {t("quiz.context.skip")}
-      </Button>
     </motion.div>
   );
 }
