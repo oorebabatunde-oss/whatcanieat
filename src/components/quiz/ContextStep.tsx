@@ -34,7 +34,7 @@ export default function ContextStep() {
 
       <Button
         onClick={nextStep}
-        disabled={!(state.context || "").trim()}
+        
         size="lg"
         className="w-full max-w-xs rounded-xl font-medium"
       >
