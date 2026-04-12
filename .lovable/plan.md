@@ -1,18 +1,18 @@
+# Add Medical Condition Options to Safety Considerations
 
+Add medical/health condition options to the existing `SAFETY_OPTIONS` array in `src/components/mealplan/ConsiderationsScreen.tsx`.
 
-# Add "Other" option to Safety Considerations
-
-Add a free-text "Other" chip to the safety section in `src/components/mealplan/ConsiderationsScreen.tsx`. When selected, show a text input for the user to type a custom safety consideration.
-
-## Changes
+## Change
 
 **File:** `src/components/mealplan/ConsiderationsScreen.tsx`
 
-1. After the existing safety chips, add an "Other" chip that toggles a text input
-2. When the user types a custom value, store it in `local.safety` as a free-text entry
-3. Use a local state variable `showOtherSafety` to control the input visibility
+Add the following options to the `SAFETY_OPTIONS` array:
 
-**File:** `src/components/mealplan/MealPlanContext.tsx`
+- "Dialysis"
+- "Chemotherapy"
+- "Kidney disease"
+  &nbsp;
+- "Heart disease"
+- "High blood pressure"
 
-No changes needed — `safety` is already a `string[]`, so custom entries work as-is.
-
+These will appear as selectable chips alongside the existing allergy/dietary options. No other file changes needed — the safety array already supports any string values.
