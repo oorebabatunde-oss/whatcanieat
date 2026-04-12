@@ -83,6 +83,11 @@ export default function ConsiderationsScreen() {
   const hasPlan = !!state.planData;
   const [local, setLocal] = useState<Considerations>(state.considerations);
   const [dur, setDur] = useState<1 | 3 | 7 | 30>(state.duration);
+  const [otherSafety, setOtherSafety] = useState(() => {
+    const custom = state.considerations.safety.find((s) => !SAFETY_OPTIONS.includes(s));
+    return custom || "";
+  });
+  const [showOtherSafety, setShowOtherSafety] = useState(() => !!otherSafety);
 
   const toggleSafety = (item: string) => {
     setLocal((c) => ({
@@ -147,7 +152,38 @@ export default function ConsiderationsScreen() {
           {SAFETY_OPTIONS.map((opt) => (
             <Chip key={opt} label={opt} selected={local.safety.includes(opt)} onClick={() => toggleSafety(opt)} />
           ))}
+          <Chip
+            label="Other"
+            selected={showOtherSafety}
+            onClick={() => {
+              if (showOtherSafety) {
+                setShowOtherSafety(false);
+                setOtherSafety("");
+                setLocal((c) => ({ ...c, safety: c.safety.filter((s) => SAFETY_OPTIONS.includes(s)) }));
+              } else {
+                setShowOtherSafety(true);
+              }
+            }}
+          />
         </div>
+        {showOtherSafety && (
+          <Input
+            className="mt-2 h-10 text-sm rounded-xl"
+            placeholder="e.g. Histamine intolerance"
+            value={otherSafety}
+            onChange={(e) => {
+              const val = e.target.value;
+              setOtherSafety(val);
+              setLocal((c) => ({
+                ...c,
+                safety: [
+                  ...c.safety.filter((s) => SAFETY_OPTIONS.includes(s)),
+                  ...(val.trim() ? [val.trim()] : []),
+                ],
+              }));
+            }}
+          />
+        )}
       </Section>
 
       {/* Practical */}
