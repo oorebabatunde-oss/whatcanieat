@@ -1,17 +1,18 @@
 
 
-# Update OTP Email Subject
+# Add "Other" option to Safety Considerations
 
-Change the email subject line for the OTP sign-in email from "Your login link" to "Sign in to whatcanieat".
+Add a free-text "Other" chip to the safety section in `src/components/mealplan/ConsiderationsScreen.tsx`. When selected, show a text input for the user to type a custom safety consideration.
 
-## Change
+## Changes
 
-**File:** `supabase/functions/auth-email-hook/index.ts`
+**File:** `src/components/mealplan/ConsiderationsScreen.tsx`
 
-Update the `magiclink` entry in the `EMAIL_SUBJECTS` object:
-```
-magiclink: 'Sign in to whatcanieat',
-```
+1. After the existing safety chips, add an "Other" chip that toggles a text input
+2. When the user types a custom value, store it in `local.safety` as a free-text entry
+3. Use a local state variable `showOtherSafety` to control the input visibility
 
-Then redeploy the `auth-email-hook` Edge Function.
+**File:** `src/components/mealplan/MealPlanContext.tsx`
+
+No changes needed — `safety` is already a `string[]`, so custom entries work as-is.
 
