@@ -83,6 +83,11 @@ export default function ConsiderationsScreen() {
   const hasPlan = !!state.planData;
   const [local, setLocal] = useState<Considerations>(state.considerations);
   const [dur, setDur] = useState<1 | 3 | 7 | 30>(state.duration);
+  const [otherSafety, setOtherSafety] = useState(() => {
+    const custom = state.considerations.safety.find((s) => !SAFETY_OPTIONS.includes(s));
+    return custom || "";
+  });
+  const [showOtherSafety, setShowOtherSafety] = useState(() => !!otherSafety);
 
   const toggleSafety = (item: string) => {
     setLocal((c) => ({
