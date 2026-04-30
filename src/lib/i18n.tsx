@@ -1586,6 +1586,11 @@ export const SUPPORTED_LANGS: { code: Lang; label: string }[] = [
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>(detectLanguage);
 
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  }, [lang]);
+
   const t = (key: string): string => {
     return translations[lang]?.[key] || translations.en[key] || key;
   };
