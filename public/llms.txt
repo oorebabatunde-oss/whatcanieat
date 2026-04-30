@@ -28,7 +28,7 @@ Recommendations adapt based on the type of meal: breakfast, lunch, dinner, snack
 Users can create an account to save recommended dishes for future reference.
 
 ### Multilingual
-Available in English, French, Spanish, German, Japanese, Chinese, and Arabic.
+Available in 14 languages: English, Spanish, French, German, Portuguese, Arabic, Chinese, Japanese, Korean, Hindi, Turkish, Italian, Dutch, and Russian.
 
 ## Use Cases
 
@@ -40,6 +40,6 @@ Available in English, French, Spanish, German, Japanese, Chinese, and Arabic.
 
 ## Access
 
-- URL: https://whatcanieat.lovable.app
+- URL: https://whatcanieat.food
 - Free to use, no account required for recommendations
 - Works on desktop and mobile browsers
