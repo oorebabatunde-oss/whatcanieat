@@ -79,7 +79,7 @@ const Index = () => {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="text-center mb-10"
           >
-            <h1 className="text-display-1 md:text-5xl font-bold text-foreground mb-2 leading-tight" style={{ fontFamily: "'Playpen Sans', cursive" }}>
+            <h1 className="text-display-1 md:text-5xl font-bold text-foreground mb-2 leading-tight" style={{ fontFamily: "'Playpen Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
               {t("app.title")}
             </h1>
             <p className="text-muted-foreground text-body-sm">

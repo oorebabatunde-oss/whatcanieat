@@ -1,71 +1,44 @@
-## SEO & GEO improvements
+## Fix decorative-serif flash on home page headline
 
-Apply fixes 1, 2, 3 from the previous discussion. Skip #5 (sitemap `lastmod`) since stale dates are worse than none without a build-time generator.
-
----
-
-### 1. Sync JSON-LD `inLanguage` to all 14 locales
-
-**File:** `index.html`
-
-In the JSON-LD `WebApplication` schema, replace the 7-locale array with all 14:
-
-```
-"inLanguage": ["en","es","fr","de","pt","ar","zh","ja","ko","hi","tr","it","nl","ru"]
+### Root cause
+The home headline in `src/pages/Index.tsx` (line 82) uses an inline style:
+```tsx
+style={{ fontFamily: "'Playpen Sans', cursive" }}
 ```
 
----
+Before Playpen Sans loads from Google Fonts (~300-1500 ms on first paint), the browser resolves the generic `cursive` keyword — which on macOS is **Apple Chancery**, on iOS is **Snell Roundhand**, on Windows is **Comic Sans MS**. That's the italic decorative serif you see in the screenshot for the first ~1 second.
 
-### 2. Add missing Open Graph + Twitter tags
+It only happens on the home page because that's the only place `Playpen Sans` is used as a headline — visible during initial paint.
 
-**File:** `index.html`
+### Fix (3 changes)
 
-Add to `<head>`:
+**1. `src/pages/Index.tsx` (line 82)** — replace the `cursive` fallback with a sans-serif chain so the flash, if any, is a clean sans-serif (Inter/system) instead of Apple Chancery:
+```tsx
+style={{ fontFamily: "'Playpen Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+```
 
-- `og:url` → `https://whatcanieat.food/`
-- `og:site_name` → `What Can I Eat?`
-- `og:type` already present
-- `twitter:title` → `What Can I Eat? — Food Recommendations`
-- `twitter:description` → same as meta description
-
-Result: branded preview cards on iMessage, Slack, WhatsApp, Twitter/X, LinkedIn, Discord.
-
----
-
-### 3. Dynamically update `<html lang>` when locale changes
-
-**File:** `src/lib/i18n.tsx`
-
-Inside `I18nProvider`, add a `useEffect` that runs whenever `lang` changes:
-
+**2. `tailwind.config.ts`** — same fix on the `logo` Tailwind utility for consistency:
 ```ts
-useEffect(() => {
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-}, [lang]);
+logo: ["'Playpen Sans'", "Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
 ```
 
-Benefits:
+**3. `index.html`** — preload the Playpen Sans 700 weight (the one used by the headline) so it's available before first paint, eliminating the flash entirely on warm cache and minimizing it on cold cache:
+```html
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@700&display=swap"
+/>
+```
+(Insert just before the existing `<link href="...Inter...Manrope...Playpen+Sans..." rel="stylesheet" />`.)
 
-- Screen readers pronounce content with the correct language profile.
-- Browser "Translate this page?" prompts behave correctly.
-- Spellcheck dictionary matches the UI.
-- Bonus: sets `dir="rtl"` for Arabic automatically.
-
-Note: this also fixes a subtle a11y bug today where Arabic users get `lang="en"`.
-
----
-
-
-
----
-
-### Out of scope
-
-- Sitemap `<lastmod>` (skip — no build-time generator).
-- Locale-prefixed routes + `hreflang` (much bigger refactor; would require routing changes and pre-rendering for SEO value).
+With `display=swap` already on the main fonts URL, the swap will be from a clean sans-serif → Playpen Sans, instead of from Apple Chancery → Playpen Sans.
 
 ### Files touched
+- `src/pages/Index.tsx`
+- `tailwind.config.ts`
+- `index.html`
 
-- `index.html` (fixes 1, 2, 4)
-- `src/lib/i18n.tsx` (fix 3)
+### What changes visually
+- **Before:** ~1 sec of Apple Chancery / italic decorative serif on the headline → snaps to Playpen Sans.
+- **After:** brief moment of Inter/system sans (visually close in weight to Playpen Sans) → snaps to Playpen Sans. On warm cache and most reloads, no flash at all.
