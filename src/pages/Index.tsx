@@ -3,7 +3,8 @@ import { QuizProvider } from "@/components/quiz/QuizContext";
 import QuizFlow from "@/components/quiz/QuizFlow";
 import FridgeScanner from "@/components/scan/FridgeScanner";
 import MealPlanFlow from "@/components/mealplan/MealPlanFlow";
-import { useState, useEffect } from "react";
+import FlowHeader from "@/components/FlowHeader";
+import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 
 type AppMode = "welcome" | "quiz" | "scan" | "mealplan";
@@ -29,26 +30,16 @@ const Index = () => {
     setMode(m);
   };
 
-  const goWelcome = () => changeMode("welcome");
-
-  // Listen for go-home event from BottomNav
-  useEffect(() => {
-    const handler = () => changeMode("welcome");
-    window.addEventListener("go-home", handler);
-    return () => window.removeEventListener("go-home", handler);
-  }, []);
+  const goWelcome = () => {
+    sessionStorage.removeItem("quiz-state");
+    changeMode("welcome");
+  };
 
   if (mode === "quiz") {
     return (
       <QuizProvider>
         <div className="min-h-screen bg-background flex flex-col">
-          <header className="pt-6 pb-2 px-5 text-center">
-            <button onClick={goWelcome} className="inline-block">
-              <h1 className="text-xl font-logo font-semibold text-primary">
-                {t("app.title")}
-              </h1>
-            </button>
-          </header>
+          <FlowHeader title={t("quiz.headerTitle")} onBack={goWelcome} />
           <main className="flex-1 flex items-start justify-center pt-4 pb-8">
             <QuizFlow />
           </main>
@@ -68,13 +59,7 @@ const Index = () => {
   if (mode === "mealplan") {
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        <header className="pt-6 pb-2 px-5 text-center">
-          <button onClick={goWelcome} className="inline-block">
-            <h1 className="text-xl font-logo font-semibold text-primary">
-              {t("app.title")}
-            </h1>
-          </button>
-        </header>
+        <FlowHeader title={t("mealplan.headerTitle")} onBack={goWelcome} />
         <main className="flex-1 flex items-start justify-center pt-4 pb-8">
           <MealPlanFlow />
         </main>

@@ -18,7 +18,7 @@ export default function BottomNav() {
   const [showPanel, setShowPanel] = useState<"language" | "settings" | null>(null);
 
   const tabs = [
-    { id: "home", icon: Home, label: t("nav.home"), action: () => { setShowPanel(null); sessionStorage.removeItem("app-mode"); sessionStorage.removeItem("quiz-state"); window.dispatchEvent(new Event("go-home")); navigate("/"); } },
+    { id: "home", icon: Home, label: t("nav.home"), action: () => { setShowPanel(null); navigate("/"); } },
     { id: "saved", icon: Heart, label: t("nav.saved"), action: () => { setShowPanel(null); navigate("/saved"); } },
     { id: "language", icon: Globe, label: t("nav.language"), action: () => setShowPanel(showPanel === "language" ? null : "language") },
     { id: "settings", icon: Settings, label: t("nav.settings"), action: () => setShowPanel(showPanel === "settings" ? null : "settings") },

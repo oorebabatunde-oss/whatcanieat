@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import PlateLoader from "@/components/ui/PlateLoader";
+import FlowHeader from "@/components/FlowHeader";
 
 interface Ingredient {
   name: string;
@@ -218,11 +219,7 @@ export default function FridgeScanner({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="flex-1 flex flex-col">
-      <header className="pt-6 pb-2 px-5 text-center">
-        <button onClick={onBack} className="inline-block">
-          <h1 className="text-xl font-display font-semibold text-primary">{t("app.title")}</h1>
-        </button>
-      </header>
+      <FlowHeader title={t("scan.headerTitle")} onBack={onBack} />
 
       <main className="flex-1 flex flex-col items-center px-6 pb-8 pt-4 max-w-sm mx-auto w-full">
         <AnimatePresence mode="wait">
