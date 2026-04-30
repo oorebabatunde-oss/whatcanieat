@@ -1,7 +1,7 @@
 {
   "name": "What Can I Eat?",
   "short_name": "What Can I Eat?",
-  "description": "Figure out what to eat with a quick quiz or scan your fridge for recipe ideas.",
+  "description": "Figure out what you want to eat now with 3 steps, scan your fridge for recipe ideas or meal prep for longer. No brands, no ads — just food.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f7f5f2",
