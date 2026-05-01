@@ -68,7 +68,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.title": "What do you have?",
     "scan.subtitle": "Take a photo or upload an image of your fridge, pantry, or ingredients",
     "scan.headerTitle": "Scan Your Fridge",
-    "quiz.headerTitle": "Food Quiz",
+    "quiz.headerTitle": "Craving Quiz",
     "mealplan.headerTitle": "Meal Plan",
     "common.back": "Back",
     "scan.takePhoto": "Take a Photo",
