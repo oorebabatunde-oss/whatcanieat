@@ -1,34 +1,30 @@
-## Fix toast design and placement
+No — the screenshot does not match the shadcn Sonner template well enough. The toast is too large, the close button is floating awkwardly outside the card, and it is visually colliding with the app controls underneath.
 
-I will correct the current Sonner setup in `src/components/ui/sonner.tsx`.
+Plan to fix it:
 
-### What will change
+1. Replace the current over-customized Sonner styling with a shadcn-style themed toast
+   - Use the app’s active light/dark theme from `next-themes`.
+   - Use theme tokens (`background`, `foreground`, `border`, `muted`, `primary`) instead of hardcoded dark or white styling.
+   - Keep the clean shadcn card look: compact height, subtle border, proper shadow, rounded `12px` corners.
 
-- Keep the toast synced to the user’s selected website theme via `useTheme()`.
-- Keep Sonner’s `closeButton`; that is the dismiss control, equivalent to the close/undo-style control you pointed out.
-- Remove the custom lucide type icons added previously, since they are not part of the reference design.
-- Fix the invalid CSS variable usage by wrapping theme tokens correctly:
-  - `--normal-bg: hsl(var(--popover))`
-  - `--normal-text: hsl(var(--popover-foreground))`
-  - `--normal-border: hsl(var(--border))`
-  - `--border-radius: var(--radius)`
-- Restyle the toast to look like the shadcn/Sonner reference while respecting the active theme:
-  - rounded 12px/`var(--radius)` card
-  - themed popover background and text
-  - subtle themed border
-  - stronger shadow
-  - clean title/description typography
-  - themed action/cancel buttons when used
-- Fix mobile placement so the toast does not appear behind the bottom navigation:
-  - keep `position="bottom-center"`
-  - keep desktop `offset={80}`
-  - add mobile bottom offset using an object, e.g. `mobileOffset={{ bottom: 88, left: 16, right: 16 }}`
-  - keep Sonner’s own high z-index and avoid overriding the centering transform, because the previous manual centering style can interfere with Sonner’s responsive positioning
+2. Stop using the floating native close button for this design
+   - The current top-left `x` is not matching the template and looks broken.
+   - Disable the native `closeButton` globally so it no longer protrudes from the toast.
+   - Toasts will still auto-dismiss and can still be swiped away.
 
-### File to edit
+3. Add the “Undo” control as an actual toast action where relevant
+   - For the saved-card flow, change the save toast from a plain `toast.success("Saved!")` into a shadcn-style toast with:
+     - check icon
+     - `Saved!` title
+     - `Undo` action button inside the toast
+   - The `Undo` action will call the existing undo logic instead of relying on the page’s separate Undo button below the card.
 
-- `src/components/ui/sonner.tsx`
+4. Fix bottom-navigation overlap properly
+   - Position toasts at `bottom-center`.
+   - Use a larger mobile bottom offset so the toast sits above both the bottom nav and the swipe controls on a 390px-wide phone viewport.
+   - Keep Sonner’s high internal z-index intact so the toast cannot appear behind the bottom navigation.
 
-### Result
-
-The toast will use the site’s selected light/dark theme, have a proper close/dismiss button, match the clean shadcn Sonner design more closely, and sit above the bottom navigation on the 390px mobile viewport.
+5. Verify the actual UI state shown in your screenshot
+   - Trigger a save toast on the quiz results screen.
+   - Check light theme and dark theme.
+   - Confirm the toast matches the selected website theme, sits above the bottom navigation, and no longer has the ugly floating close button.
