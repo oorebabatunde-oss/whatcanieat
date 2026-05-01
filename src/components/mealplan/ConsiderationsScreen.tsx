@@ -377,7 +377,7 @@ export default function ConsiderationsScreen() {
             key={d}
             onClick={() => setDur(d)}
             className={cn(
-              "px-4 min-h-[44px] rounded-xl text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "inline-flex items-center justify-center whitespace-nowrap h-11 px-4 rounded-xl text-sm font-medium leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               dur === d
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "bg-card text-foreground shadow-sm hover:shadow-md"
