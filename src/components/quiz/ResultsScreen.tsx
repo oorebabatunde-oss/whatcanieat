@@ -111,7 +111,12 @@ export default function ResultsScreen() {
       });
       localStorage.setItem(key, JSON.stringify(existing));
     }
-    toast.success(t("results.saved"));
+    toast.success(t("results.saved"), {
+      action: {
+        label: t("results.undo"),
+        onClick: () => handleUndo(),
+      },
+    });
     advance();
   };
 

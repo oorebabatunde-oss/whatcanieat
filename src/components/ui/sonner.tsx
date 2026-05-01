@@ -8,30 +8,28 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
-      closeButton
       position="bottom-center"
-      offset={80}
-      mobileOffset={{ bottom: 88, left: 16, right: 16 }}
+      offset={96}
+      mobileOffset={{ bottom: 96, left: 16, right: 16 }}
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-popover group-[.toaster]:text-popover-foreground group-[.toaster]:border-border group-[.toaster]:rounded-xl group-[.toaster]:shadow-2xl group-[.toaster]:p-4",
-          title: "group-[.toast]:text-sm group-[.toast]:font-semibold",
+            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border group-[.toaster]:border-border group-[.toaster]:rounded-xl group-[.toaster]:shadow-lg group-[.toaster]:px-4 group-[.toaster]:py-3",
+          title: "group-[.toast]:text-sm group-[.toast]:font-medium",
           description: "group-[.toast]:text-muted-foreground group-[.toast]:text-xs",
           actionButton:
-            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground group-[.toast]:rounded-lg group-[.toast]:text-xs group-[.toast]:font-medium group-[.toast]:px-3 group-[.toast]:h-8",
+            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground group-[.toast]:rounded-md group-[.toast]:text-xs group-[.toast]:font-medium group-[.toast]:px-3 group-[.toast]:h-8",
           cancelButton:
-            "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground group-[.toast]:rounded-lg group-[.toast]:text-xs group-[.toast]:px-3 group-[.toast]:h-8",
-          closeButton:
-            "group-[.toast]:bg-popover group-[.toast]:text-popover-foreground group-[.toast]:border-border",
+            "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground group-[.toast]:rounded-md group-[.toast]:text-xs group-[.toast]:px-3 group-[.toast]:h-8",
+          icon: "group-[.toast]:text-foreground",
         },
       }}
       style={
         {
-          "--normal-bg": "hsl(var(--popover))",
-          "--normal-text": "hsl(var(--popover-foreground))",
+          "--normal-bg": "hsl(var(--background))",
+          "--normal-text": "hsl(var(--foreground))",
           "--normal-border": "hsl(var(--border))",
-          "--border-radius": "var(--radius)",
+          "--border-radius": "0.75rem",
         } as React.CSSProperties
       }
       {...props}
