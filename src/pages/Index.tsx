@@ -40,7 +40,7 @@ const Index = () => {
       <QuizProvider>
         <div className="min-h-screen bg-background flex flex-col">
           <FlowHeader title={t("quiz.headerTitle")} onBack={goWelcome} />
-          <main className="flex-1 flex items-start justify-center pt-4 pb-8">
+          <main className="flex-1 flex items-start justify-center pt-4 pb-4">
             <QuizFlow />
           </main>
         </div>
@@ -60,7 +60,7 @@ const Index = () => {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <FlowHeader title={t("mealplan.headerTitle")} onBack={goWelcome} />
-        <main className="flex-1 flex items-start justify-center pt-4 pb-8">
+        <main className="flex-1 flex items-start justify-center pt-4 pb-4">
           <MealPlanFlow />
         </main>
       </div>
