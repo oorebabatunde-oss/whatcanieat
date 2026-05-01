@@ -351,7 +351,7 @@ export default function ResultsScreen() {
           </p>
 
           {/* Card stack */}
-          <div className="relative w-full" style={{ height: 520 }}>
+          <div className="relative w-full" style={{ height: 460 }}>
               {visibleCards.map((rec, i) => (
                 <SwipeCard
                   key={rec.name}
