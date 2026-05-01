@@ -41,12 +41,12 @@ export default function DietaryStep() {
           return (
             <motion.button
               key={d.type}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: i * 0.04 }}
-              whileTap={{ scale: 0.96 }}
+
               onClick={() => toggleDietary(d.type)}
-              className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+              className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 selected
                   ? "bg-primary text-primary-foreground shadow-md"
                   : "bg-card text-foreground shadow-sm hover:shadow-md"
@@ -58,12 +58,12 @@ export default function DietaryStep() {
           );
         })}
         <motion.button
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.35 }}
-          whileTap={{ scale: 0.96 }}
+
           onClick={() => toggleDietary("none")}
-          className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+          className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
             isNone
               ? "bg-primary text-primary-foreground shadow-md"
               : "bg-card text-foreground shadow-sm hover:shadow-md"
