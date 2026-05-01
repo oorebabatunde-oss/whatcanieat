@@ -40,12 +40,12 @@ export default function FlavorStep() {
           return (
             <motion.button
               key={f.type}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: i * 0.04 }}
-              whileTap={{ scale: 0.96 }}
+
               onClick={() => toggleFlavor(f.type)}
-              className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+              className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 selected
                   ? `${f.hue} text-white shadow-md`
                   : "bg-card text-foreground shadow-sm hover:shadow-md"
@@ -57,12 +57,12 @@ export default function FlavorStep() {
           );
         })}
         <motion.button
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          whileTap={{ scale: 0.96 }}
+
           onClick={() => toggleFlavor("unknown")}
-          className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+          className={`rounded-xl px-4 min-h-[44px] text-sm font-medium flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
             isUnknown
               ? "bg-[hsl(var(--mystery))] text-[hsl(var(--mystery-foreground))] shadow-md"
               : "bg-card text-foreground shadow-sm hover:shadow-md"
