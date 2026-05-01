@@ -35,13 +35,12 @@ export default function CravingStep() {
         {options.map((opt, i) => (
           <motion.button
             key={opt.type}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: i * 0.08 }}
-            whileTap={{ scale: 0.96 }}
             onClick={() => handleSelect(opt.type)}
-            className={`flex-1 bg-card rounded-xl p-4 min-h-[80px] flex flex-col items-center gap-2 shadow-sm hover:shadow-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-              state.craving === opt.type ? "ring-2 ring-primary/30 shadow-md" : ""
+            className={`flex-1 bg-card rounded-xl p-4 min-h-[80px] flex flex-col items-center gap-2 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+              state.craving === opt.type ? "ring-2 ring-primary/30" : ""
             }`}
           >
             <span className="text-2xl">{opt.emoji}</span>
