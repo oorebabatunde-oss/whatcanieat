@@ -1,30 +1,12 @@
-No — the screenshot does not match the shadcn Sonner template well enough. The toast is too large, the close button is floating awkwardly outside the card, and it is visually colliding with the app controls underneath.
+The recommendation card stack on the craving quiz uses a fixed container height of `520px`, but the actual card (4:3 image + title + description + 2 buttons) is roughly ~440px tall on a 390px-wide viewport. That leaves ~80px of empty space between the bottom of the card and the Skip/Save action buttons below.
 
-Plan to fix it:
+Fix:
 
-1. Replace the current over-customized Sonner styling with a shadcn-style themed toast
-   - Use the app’s active light/dark theme from `next-themes`.
-   - Use theme tokens (`background`, `foreground`, `border`, `muted`, `primary`) instead of hardcoded dark or white styling.
-   - Keep the clean shadcn card look: compact height, subtle border, proper shadow, rounded `12px` corners.
+1. In `src/components/quiz/ResultsScreen.tsx`, reduce the card-stack container height from `520` to `460` so the action buttons sit closer to the card.
+2. Tighten the spacing between the action button row and the undo / counter row below it (currently both rely on the parent's default flex gap), keeping the existing `mt-2` on the buttons.
+3. Verify visually at 390x844 that:
+   - There is no large empty gap below the card.
+   - The card does not get clipped (image + title + description + How to make / Where to buy buttons all visible).
+   - Skip/Save circle buttons and the "Undo  1/3" row remain above the bottom navigation.
 
-2. Stop using the floating native close button for this design
-   - The current top-left `x` is not matching the template and looks broken.
-   - Disable the native `closeButton` globally so it no longer protrudes from the toast.
-   - Toasts will still auto-dismiss and can still be swiped away.
-
-3. Add the “Undo” control as an actual toast action where relevant
-   - For the saved-card flow, change the save toast from a plain `toast.success("Saved!")` into a shadcn-style toast with:
-     - check icon
-     - `Saved!` title
-     - `Undo` action button inside the toast
-   - The `Undo` action will call the existing undo logic instead of relying on the page’s separate Undo button below the card.
-
-4. Fix bottom-navigation overlap properly
-   - Position toasts at `bottom-center`.
-   - Use a larger mobile bottom offset so the toast sits above both the bottom nav and the swipe controls on a 390px-wide phone viewport.
-   - Keep Sonner’s high internal z-index intact so the toast cannot appear behind the bottom navigation.
-
-5. Verify the actual UI state shown in your screenshot
-   - Trigger a save toast on the quiz results screen.
-   - Check light theme and dark theme.
-   - Confirm the toast matches the selected website theme, sits above the bottom navigation, and no longer has the ugly floating close button.
+No other files need to change.
