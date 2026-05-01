@@ -1,7 +1,12 @@
+import {
+  CircleCheckIcon,
+  InfoIcon,
+  Loader2Icon,
+  OctagonXIcon,
+  TriangleAlertIcon,
+} from "lucide-react";
 import { useTheme } from "next-themes";
-import { Toaster as Sonner, toast } from "sonner";
-
-type ToasterProps = React.ComponentProps<typeof Sonner>;
+import { Toaster as Sonner, toast, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme();
@@ -13,16 +18,23 @@ const Toaster = ({ ...props }: ToasterProps) => {
       closeButton
       position="bottom-center"
       offset={80}
-      style={{ left: "50%", transform: "translateX(-50%)" }}
-      toastOptions={{
-        classNames: {
-          toast:
-            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg group-[.toaster]:rounded-xl",
-          description: "group-[.toast]:text-muted-foreground",
-          actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
-          cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
-        },
+      icons={{
+        success: <CircleCheckIcon className="w-4 h-4 text-success" />,
+        info: <InfoIcon className="w-4 h-4 text-primary" />,
+        warning: <TriangleAlertIcon className="w-4 h-4 text-caution" />,
+        error: <OctagonXIcon className="w-4 h-4 text-destructive" />,
+        loading: <Loader2Icon className="w-4 h-4 animate-spin text-muted-foreground" />,
       }}
+      style={
+        {
+          left: "50%",
+          transform: "translateX(-50%)",
+          "--normal-bg": "var(--popover)",
+          "--normal-text": "var(--popover-foreground)",
+          "--normal-border": "var(--border)",
+          "--border-radius": "var(--radius)",
+        } as React.CSSProperties
+      }
       {...props}
     />
   );

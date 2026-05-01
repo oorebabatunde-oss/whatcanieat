@@ -1,56 +1,45 @@
-## Fix glitchy chips and standardize spacing on 8px grid
+## Goal
 
-### Root cause of chip glitch
-The `Chip` button in `src/components/mealplan/ConsiderationsScreen.tsx` (line 38) uses:
-```
-"px-3.5 min-h-[44px] rounded-full text-sm font-medium border ..."
-```
-- No `inline-flex items-center justify-center` → text aligns to baseline; height varies as the font swaps in (Inter → Manrope) and as labels of different lengths render.
-- No `whitespace-nowrap` → multi-word chips like "High blood pressure" can momentarily wrap during reflow.
-- No fixed `h-` and no vertical `py-`, only `min-h` → produces inconsistent heights row-to-row across browsers (Safari computes `min-height` differently against flex parents).
-- `px-3.5` (14px) and `gap-1.5` / `gap-2.5` break the 8px spacing system.
+Replace the current `src/components/ui/sonner.tsx` with the new shadcn **base sonner** design: a minimal Toaster that themes via CSS variables (instead of heavy `classNames` overrides) and uses lucide icons for success / info / warning / error / loading toast types.
 
-### Spacing audit (current → 8px grid)
-Non-conforming values found in `ConsiderationsScreen.tsx`:
-- `px-3.5` (14) on chips → `px-3` (12) — 4 is acceptable as a half-step; we'll standardize to multiples of 4 with majority on 8.
-- `gap-1.5` (6) → `gap-2` (8)
-- `gap-2.5` (10) → `gap-2` (8) or `gap-3` (12)
-- `mb-1.5` (6) → `mb-2` (8)
-- `py-3` (12) on Section trigger — keep (multiple of 4)
-- `pb-4 pt-1` → `pb-4 pt-2`
-- Outer `gap-4` (16), `px-5` (20) → keep `gap-4`; change `px-5` to `px-4` (16) for clean 8x grid.
-- Duration buttons row uses `gap-2` (8) ✓; chip `px-4` ✓.
+## What changes
 
-### Fix plan
+### `src/components/ui/sonner.tsx`
 
-**1. `src/components/mealplan/ConsiderationsScreen.tsx` — Chip component (line 30-48):**
-```tsx
-className={cn(
-  "inline-flex items-center justify-center whitespace-nowrap",
-  "h-11 px-4 rounded-full text-sm font-medium leading-none border",
-  "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-  selected
-    ? "bg-primary/10 text-primary border-primary/30 shadow-sm"
-    : "bg-card text-foreground border-border shadow-sm hover:shadow-md"
-)}
-```
-Changes: fixed `h-11` (44px) instead of `min-h`; `inline-flex items-center justify-center`; `whitespace-nowrap`; `leading-none` (prevents line-height shifts during font swap); `px-4` (16px, on grid); `transition-colors` only (not `transition-all`, which animates height/shadow and contributes to flicker).
+Rewrite the Toaster:
 
-**2. Same file — spacing normalization:**
-- Outer wrapper (line 142): `gap-4 px-5` → `gap-4 px-4`
-- All `mb-1.5` → `mb-2` (5 occurrences for section field labels)
-- All `gap-1.5` → `gap-2` (currency row, period row)
-- Section content padding `pb-4 pt-1` → `pb-4 pt-2`
-- Section trigger `gap-2.5` → `gap-3`
-- Duration row already on grid; ensure `gap-2` stays.
+- Drop the `classNames` override block (`group-[.toaster]:bg-background ...`).
+- Style via CSS variables on `style`:
+  - `--normal-bg: var(--popover)`
+  - `--normal-text: var(--popover-foreground)`
+  - `--normal-border: var(--border)`
+  - `--border-radius: var(--radius)`
+- Pass an `icons` prop with lucide icons:
+  - `success` → `CircleCheckIcon` (text-success / emerald)
+  - `info` → `InfoIcon`
+  - `warning` → `TriangleAlertIcon` (text-caution)
+  - `error` → `OctagonXIcon` (text-destructive)
+  - `loading` → `Loader2Icon` with `animate-spin`
+- Keep our project-specific behaviour:
+  - `position="bottom-center"`
+  - `offset={80}` (clears the bottom nav — per project memory)
+  - `closeButton`
+  - Centering wrapper style (`left: 50%`, `transform: translateX(-50%)`)
+- Re-export `toast` from `sonner` as today so no call site changes.
 
-**3. Same file — duration toggle buttons (line 374-388):**
-Apply the same height/flex pattern for visual consistency with chips: `h-11 inline-flex items-center justify-center whitespace-nowrap leading-none`.
+### No other files change
 
-### Files touched
-- `src/components/mealplan/ConsiderationsScreen.tsx` (only file)
+All 14 existing `toast.success / error / info` call sites (FridgeScanner, MealPlanResults, MealPlanContext, ResultsScreen, BottomNav) keep working — they automatically pick up the new look and icons.
 
-### Visual outcome
-- Chips render at a stable 44px height from first paint, regardless of font-load state or browser.
-- No mid-load wrap or jitter on long labels.
-- All gaps/paddings/margins are multiples of 4, with primary spacing on 8 (gap-2, gap-4, mb-2, h-11, px-4).
+## Technical notes
+
+- The new design relies on sonner reading `--normal-bg / --normal-text / --normal-border / --border-radius` from the Toaster's inline style. `--popover`, `--popover-foreground`, `--border`, `--radius` are all already defined in `src/index.css` via the shadcn theme, so light/dark mode keep working through `next-themes`.
+- The `rounded-xl` shape we have today is preserved because `--radius` in the project resolves to ~12px (matches the project's 12px radius rule).
+- Success/error/warning icons will inherit color from sonner's defaults; if we want to tint them to our semantic tokens (`text-success`, `text-caution`, `text-destructive`) we apply `className` directly on each lucide icon element in the `icons` map.
+- `position` and `offset` stay on the Toaster so toasts continue to sit above the 56px bottom nav + safe-area inset.
+
+## Out of scope
+
+- No changes to individual `toast.*` calls.
+- No changes to durations (5s success / 10s error stay as set per call site, per project memory).
+- No new dependencies — `sonner`, `lucide-react`, `next-themes` are already installed.
