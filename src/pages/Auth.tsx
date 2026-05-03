@@ -60,11 +60,16 @@ export default function Auth() {
   };
 
   const handleResend = async () => {
+    if (cooldown > 0) return;
     setLoading(true);
     setError(null);
     const { error } = await signInWithOtp(email);
     if (error) {
-      setError(error.message);
+      const m = error.message.match(/(\d+)\s*seconds?/i);
+      if (m) setCooldown(parseInt(m[1], 10));
+      else setError(error.message);
+    } else {
+      setCooldown(60);
     }
     setLoading(false);
   };
