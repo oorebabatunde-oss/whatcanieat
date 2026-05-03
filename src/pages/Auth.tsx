@@ -35,9 +35,12 @@ export default function Auth() {
     setError(null);
     const { error } = await signInWithOtp(email);
     if (error) {
-      setError(error.message);
+      const m = error.message.match(/(\d+)\s*seconds?/i);
+      if (m) setCooldown(parseInt(m[1], 10));
+      else setError(error.message);
     } else {
       setSent(true);
+      setCooldown(60);
     }
     setLoading(false);
   };
