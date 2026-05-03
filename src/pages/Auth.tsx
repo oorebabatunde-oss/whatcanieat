@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,8 +18,15 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cooldown, setCooldown] = useState(0);
   const { signInWithOtp, verifyOtp } = useAuth();
   const { t } = useI18n();
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const id = setInterval(() => setCooldown((c) => (c <= 1 ? 0 : c - 1)), 1000);
+    return () => clearInterval(id);
+  }, [cooldown]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,9 +35,12 @@ export default function Auth() {
     setError(null);
     const { error } = await signInWithOtp(email);
     if (error) {
-      setError(error.message);
+      const m = error.message.match(/(\d+)\s*seconds?/i);
+      if (m) setCooldown(parseInt(m[1], 10));
+      else setError(error.message);
     } else {
       setSent(true);
+      setCooldown(60);
     }
     setLoading(false);
   };
@@ -50,11 +60,16 @@ export default function Auth() {
   };
 
   const handleResend = async () => {
+    if (cooldown > 0) return;
     setLoading(true);
     setError(null);
     const { error } = await signInWithOtp(email);
     if (error) {
-      setError(error.message);
+      const m = error.message.match(/(\d+)\s*seconds?/i);
+      if (m) setCooldown(parseInt(m[1], 10));
+      else setError(error.message);
+    } else {
+      setCooldown(60);
     }
     setLoading(false);
   };
@@ -145,10 +160,10 @@ export default function Auth() {
                 variant="outline"
                 className="w-full"
                 onClick={handleResend}
-                disabled={loading || verifying}
+                disabled={loading || verifying || cooldown > 0}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                {t("auth.resendCode")}
+                {cooldown > 0 ? t("auth.resendIn").replace("{s}", String(cooldown)) : t("auth.resendCode")}
               </Button>
             </motion.div>
           ) : (

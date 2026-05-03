@@ -1,19 +1,23 @@
-## Problem
+## Add resend cooldown timer
 
-The Sign In page asks for an 8-digit code, but the email contains a "Sign In" button (link) instead. Clicking the link logs the user in directly — bypassing the OTP input — and if they try to type a code, they have nothing to enter.
+Supabase rate-limits OTP requests (~60s). Currently users tap "Resend code" and get a red error. Add a visible countdown so they know when resending is allowed.
 
-The cause is in `supabase/functions/_shared/email-templates/magic-link.tsx`: the template only renders a `confirmationUrl` button. It ignores the `token` value that Supabase Auth passes in for OTP-style sign-in.
+### Changes
 
-## Fix
+**`src/pages/Auth.tsx`**
+- Add `cooldown` state (seconds remaining), default 60 after sending code.
+- Start countdown when initial code is sent (`handleSubmit` success) and after each successful resend (`handleResend` success).
+- `useEffect` with `setInterval` decrementing every 1s, stops at 0.
+- Disable the Resend button while `cooldown > 0`.
+- Button label:
+  - `cooldown > 0`: "Resend code in {n}s"
+  - `cooldown === 0`: "Resend code" (existing `t("auth.resendCode")`)
+- If the API still returns a rate-limit error (e.g. user lands mid-cooldown), parse the seconds from the error message and seed the timer instead of showing the raw red text.
 
-1. Update `magic-link.tsx` to display the 8-digit `token` prominently as the primary content, styled as a large, monospaced, letter-spaced code block. Remove the "Sign In" button (or keep it as a small secondary fallback — recommend removing to avoid the link-vs-code confusion entirely, matching the app's OTP-only flow).
-2. Update the template's props interface to accept `token: string`.
-3. Update the preview `SAMPLE_DATA.magiclink` in `auth-email-hook/index.ts` — already has `token: '123456'`, change to an 8-digit sample like `'12345678'` for accurate preview.
-4. Apply brand styling consistent with the existing template (Inter font, brand green accent, white background per email guidelines).
-5. Redeploy the `auth-email-hook` edge function so the change takes effect.
+**`src/lib/i18n.tsx`**
+- Add new key `auth.resendIn` with `{seconds}` placeholder, translated across all 14 supported languages (mirroring existing `auth.*` keys).
 
-## Files
-
-- `supabase/functions/_shared/email-templates/magic-link.tsx` — render token, remove/demote link
-- `supabase/functions/auth-email-hook/index.ts` — bump sample token to 8 digits
-- Deploy: `auth-email-hook`
+### Technical notes
+- Timer uses `useEffect` + `setInterval`; cleanup on unmount and when reaching 0.
+- Cooldown seeded to 60s (matches Supabase default OTP rate-limit window).
+- No backend/DB/edge function changes.
