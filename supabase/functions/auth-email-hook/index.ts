@@ -58,7 +58,7 @@ const SAMPLE_DATA: Record<string, object> = {
   magiclink: {
     siteName: SITE_NAME,
     siteUrl: SAMPLE_PROJECT_URL,
-    token: '123456',
+    token: '12345678',
   },
   recovery: {
     siteName: SITE_NAME,

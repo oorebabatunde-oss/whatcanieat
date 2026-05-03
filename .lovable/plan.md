@@ -1,12 +1,19 @@
-The recommendation card stack on the craving quiz uses a fixed container height of `520px`, but the actual card (4:3 image + title + description + 2 buttons) is roughly ~440px tall on a 390px-wide viewport. That leaves ~80px of empty space between the bottom of the card and the Skip/Save action buttons below.
+## Problem
 
-Fix:
+The Sign In page asks for an 8-digit code, but the email contains a "Sign In" button (link) instead. Clicking the link logs the user in directly — bypassing the OTP input — and if they try to type a code, they have nothing to enter.
 
-1. In `src/components/quiz/ResultsScreen.tsx`, reduce the card-stack container height from `520` to `460` so the action buttons sit closer to the card.
-2. Tighten the spacing between the action button row and the undo / counter row below it (currently both rely on the parent's default flex gap), keeping the existing `mt-2` on the buttons.
-3. Verify visually at 390x844 that:
-   - There is no large empty gap below the card.
-   - The card does not get clipped (image + title + description + How to make / Where to buy buttons all visible).
-   - Skip/Save circle buttons and the "Undo  1/3" row remain above the bottom navigation.
+The cause is in `supabase/functions/_shared/email-templates/magic-link.tsx`: the template only renders a `confirmationUrl` button. It ignores the `token` value that Supabase Auth passes in for OTP-style sign-in.
 
-No other files need to change.
+## Fix
+
+1. Update `magic-link.tsx` to display the 8-digit `token` prominently as the primary content, styled as a large, monospaced, letter-spaced code block. Remove the "Sign In" button (or keep it as a small secondary fallback — recommend removing to avoid the link-vs-code confusion entirely, matching the app's OTP-only flow).
+2. Update the template's props interface to accept `token: string`.
+3. Update the preview `SAMPLE_DATA.magiclink` in `auth-email-hook/index.ts` — already has `token: '123456'`, change to an 8-digit sample like `'12345678'` for accurate preview.
+4. Apply brand styling consistent with the existing template (Inter font, brand green accent, white background per email guidelines).
+5. Redeploy the `auth-email-hook` edge function so the change takes effect.
+
+## Files
+
+- `supabase/functions/_shared/email-templates/magic-link.tsx` — render token, remove/demote link
+- `supabase/functions/auth-email-hook/index.ts` — bump sample token to 8 digits
+- Deploy: `auth-email-hook`
