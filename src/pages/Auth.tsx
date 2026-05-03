@@ -160,10 +160,10 @@ export default function Auth() {
                 variant="outline"
                 className="w-full"
                 onClick={handleResend}
-                disabled={loading || verifying}
+                disabled={loading || verifying || cooldown > 0}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                {t("auth.resendCode")}
+                {cooldown > 0 ? t("auth.resendIn").replace("{s}", String(cooldown)) : t("auth.resendCode")}
               </Button>
             </motion.div>
           ) : (
