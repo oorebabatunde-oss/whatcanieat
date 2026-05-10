@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft, RotateCcw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import SwapDialog from "./SwapDialog";
+import NamePlanDialog from "./NamePlanDialog";
 
 const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPlanResults(_props, ref) {
   const { t } = useI18n();
