@@ -281,6 +281,14 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
           onClose={() => setSwapTarget(null)}
         />
       )}
+
+      <NamePlanDialog
+        open={nameDialogOpen}
+        initialName={defaultPlanName}
+        defaultName={defaultPlanName}
+        onCancel={() => setNameDialogOpen(false)}
+        onSave={handleSave}
+      />
     </motion.div>
   );
 });
