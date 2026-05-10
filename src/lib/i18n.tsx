@@ -83,7 +83,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "scan.recipeIdeas": "Recipe Ideas",
     "scan.recipeSubtitle": "AI-generated suggestions based on your ingredients",
     "scan.recipe": "Read recipe",
-    "scan.video": "Video",
+    "scan.video": "Watch recipe",
     "scan.scanAgain": "Scan Again",
     "scan.backHome": "Back to Home",
     "scan.emptyTitle": "No ingredients found",
