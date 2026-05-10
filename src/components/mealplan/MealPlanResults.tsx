@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Clock, Users, DollarSign, ChevronDown, ChevronUp, RefreshCw, Sliders, Save, AlertTriangle, ArrowRightLeft, RotateCcw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import SwapDialog from "./SwapDialog";
+import NamePlanDialog from "./NamePlanDialog";
 
 const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPlanResults(_props, ref) {
   const { t } = useI18n();
@@ -21,6 +22,7 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
   const [saved, setSaved] = useState(false);
   const [swapTarget, setSwapTarget] = useState<{ id: string; name: string; ingredients: string[] } | null>(null);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [nameDialogOpen, setNameDialogOpen] = useState(false);
 
   if (!plan) return null;
 
@@ -42,10 +44,17 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
     });
   };
 
-  const handleSave = async () => {
+  const defaultPlanName = `${state.duration}-Day Plan — ${new Date().toLocaleDateString()}`;
+
+  const openSaveDialog = () => {
     if (!isComplete) return;
+    setNameDialogOpen(true);
+  };
+
+  const handleSave = async (name: string) => {
+    setNameDialogOpen(false);
     try {
-      await savePlan(plan, state.considerations, state.duration);
+      await savePlan(plan, state.considerations, state.duration, name);
       setSaved(true);
       toast.success(t("saved.planSaved"));
     } catch {
@@ -100,7 +109,7 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
         <Button variant="outline" size="sm" onClick={adjustConstraints} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <Sliders className="w-3.5 h-3.5" /> {t("mealplan.adjust")}
         </Button>
-        <Button variant="outline" size="sm" onClick={handleSave} disabled={saved || !isComplete} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
+        <Button variant="outline" size="sm" onClick={openSaveDialog} disabled={saved || !isComplete} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
           <Save className="w-3.5 h-3.5" /> {saved ? t("saved.planSaved") : t("mealplan.save")}
         </Button>
         <Button variant="outline" size="sm" onClick={() => { reset(); setCheckedItems(new Set()); }} className="gap-1.5 text-xs min-h-[44px] rounded-xl">
@@ -272,6 +281,14 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
           onClose={() => setSwapTarget(null)}
         />
       )}
+
+      <NamePlanDialog
+        open={nameDialogOpen}
+        initialName={defaultPlanName}
+        defaultName={defaultPlanName}
+        onCancel={() => setNameDialogOpen(false)}
+        onSave={handleSave}
+      />
     </motion.div>
   );
 });

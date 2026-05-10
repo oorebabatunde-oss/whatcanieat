@@ -6,8 +6,8 @@ const GUEST_KEY = "guest_saved_meal_plans";
 export function useSaveMealPlan() {
   const { user } = useAuth();
 
-  const savePlan = async (planData: any, considerations: any, duration: number) => {
-    const name = `${duration}-Day Plan — ${new Date().toLocaleDateString()}`;
+  const savePlan = async (planData: any, considerations: any, duration: number, customName?: string) => {
+    const name = customName?.trim() || `${duration}-Day Plan — ${new Date().toLocaleDateString()}`;
 
     if (user) {
       const { error } = await supabase.from("saved_meal_plans").insert({

@@ -1,23 +1,53 @@
-## Add resend cooldown timer
+## Saved meal plans: grocery checkboxes + naming/renaming
 
-Supabase rate-limits OTP requests (~60s). Currently users tap "Resend code" and get a red error. Add a visible countdown so they know when resending is allowed.
+Two related improvements to saved meal plans.
 
-### Changes
+### 1. Grocery list checkboxes in saved view
 
-**`src/pages/Auth.tsx`**
-- Add `cooldown` state (seconds remaining), default 60 after sending code.
-- Start countdown when initial code is sent (`handleSubmit` success) and after each successful resend (`handleResend` success).
-- `useEffect` with `setInterval` decrementing every 1s, stops at 0.
-- Disable the Resend button while `cooldown > 0`.
-- Button label:
-  - `cooldown > 0`: "Resend code in {n}s"
-  - `cooldown === 0`: "Resend code" (existing `t("auth.resendCode")`)
-- If the API still returns a rate-limit error (e.g. user lands mid-cooldown), parse the seconds from the error message and seed the timer instead of showing the raw red text.
+`src/components/mealplan/SavedPlanView.tsx` currently renders the grocery tab as plain rows. Bring it in line with `MealPlanResults.tsx`:
 
-**`src/lib/i18n.tsx`**
-- Add new key `auth.resendIn` with `{seconds}` placeholder, translated across all 14 supported languages (mirroring existing `auth.*` keys).
+- Add a `checkedItems: Set<string>` state and a `toggleGroceryItem` handler.
+- Render a `<Checkbox>` (from `@/components/ui/checkbox`) on each grocery row, with `line-through opacity-50` styling when checked.
+- Show a `{checked} / {total}` counter above the list (reusing the `mealplan.groceryChecked` translation key).
+- Persist checked state per saved plan in `localStorage` under `grocery-checked-{plan.id}` so progress survives navigation/refresh. (No DB changes — grocery checkmarks are ephemeral shopping state, not plan content.)
 
-### Technical notes
-- Timer uses `useEffect` + `setInterval`; cleanup on unmount and when reaching 0.
-- Cooldown seeded to 60s (matches Supabase default OTP rate-limit window).
-- No backend/DB/edge function changes.
+### 2. Name and rename meal plans
+
+**At save time** (`src/hooks/useSaveMealPlan.ts` + caller in `MealPlanResults.tsx`):
+- Replace the auto-generated name with a prompt/dialog asking the user for a name, pre-filled with the current default `"{duration}-Day Plan — {date}"`.
+- Use a small shadcn `Dialog` with an `Input` + Save/Cancel rather than a native `prompt()` for consistency with the app's design system.
+- If the user clears the field, fall back to the default.
+
+**Rename existing plans** (`src/components/saved/SavedMealPlans.tsx`):
+- Add a pencil/edit icon button next to the trash icon on each saved plan row.
+- Tapping it opens the same naming dialog pre-filled with the current name.
+- On save:
+  - Authenticated users: `UPDATE saved_meal_plans SET name = ... WHERE id = ...` via Supabase.
+  - Guests: update the entry inside `localStorage["guest_saved_meal_plans"]`.
+- Update local `plans` state optimistically.
+
+### Database change required
+
+The `saved_meal_plans` table currently has no UPDATE RLS policy (users can only insert/select/delete their own). To allow renaming for signed-in users, add:
+
+```sql
+CREATE POLICY "Users can update own meal plans"
+ON public.saved_meal_plans
+FOR UPDATE
+TO authenticated
+USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+```
+
+### i18n
+
+Add new keys (translated across all 14 languages, mirroring existing `saved.*` / `mealplan.*` patterns):
+- `mealplan.namePlanTitle` ("Name your meal plan")
+- `mealplan.namePlanPlaceholder` ("e.g. Weekday lunches")
+- `saved.renamePlan` ("Rename")
+- `common.save`, `common.cancel` (if not already present)
+
+### Out of scope
+
+- No changes to meal-plan generation, grocery data shape, or the recommendations tab.
+- Checked grocery state is local-only; not synced across devices.

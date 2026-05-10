@@ -2,10 +2,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, ChevronRight } from "lucide-react";
+import { Trash2, ChevronRight, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import SavedPlanView from "@/components/mealplan/SavedPlanView";
+import NamePlanDialog from "@/components/mealplan/NamePlanDialog";
+import { toast } from "sonner";
 import type { User } from "@supabase/supabase-js";
 
 interface SavedPlan {
@@ -29,6 +31,7 @@ export default function SavedMealPlans({ user, authLoading }: Props) {
   const [plans, setPlans] = useState<SavedPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewingPlan, setViewingPlan] = useState<SavedPlan | null>(null);
+  const [renaming, setRenaming] = useState<SavedPlan | null>(null);
 
   useEffect(() => {
     if (authLoading) return;
@@ -58,9 +61,33 @@ export default function SavedMealPlans({ user, authLoading }: Props) {
     setPlans((prev) => prev.filter((p) => p.id !== id));
   };
 
+  const handleRename = async (newName: string) => {
+    if (!renaming) return;
+    const id = renaming.id;
+    setRenaming(null);
+    if (user) {
+      const { error } = await supabase
+        .from("saved_meal_plans")
+        .update({ name: newName })
+        .eq("id", id);
+      if (error) {
+        toast.error(error.message, { duration: 10000 });
+        return;
+      }
+    } else {
+      const stored = JSON.parse(localStorage.getItem(GUEST_KEY) || "[]") as SavedPlan[];
+      const updated = stored.map((p) => (p.id === id ? { ...p, name: newName } : p));
+      localStorage.setItem(GUEST_KEY, JSON.stringify(updated));
+    }
+    setPlans((prev) => prev.map((p) => (p.id === id ? { ...p, name: newName } : p)));
+    if (viewingPlan?.id === id) setViewingPlan({ ...viewingPlan, name: newName });
+    toast.success(t("saved.planRenamed"));
+  };
+
   if (viewingPlan) {
     return (
       <SavedPlanView
+        planId={viewingPlan.id}
         planData={viewingPlan.plan_data}
         planName={viewingPlan.name}
         onBack={() => setViewingPlan(null)}
@@ -95,7 +122,7 @@ export default function SavedMealPlans({ user, authLoading }: Props) {
             exit={{ opacity: 0, x: -100 }}
             className="bg-card border border-border rounded-xl overflow-hidden shadow-sm"
           >
-            <div className="p-3 flex items-center gap-3">
+            <div className="p-3 flex items-center gap-2">
               <button
                 onClick={() => setViewingPlan(plan)}
                 className="flex-1 flex items-center gap-3 text-left min-w-0"
@@ -118,6 +145,15 @@ export default function SavedMealPlans({ user, authLoading }: Props) {
               <Button
                 variant="ghost"
                 size="icon"
+                className="h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground"
+                onClick={() => setRenaming(plan)}
+                aria-label={t("saved.renamePlan")}
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
                 className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive"
                 onClick={() => handleDelete(plan.id)}
               >
@@ -127,6 +163,14 @@ export default function SavedMealPlans({ user, authLoading }: Props) {
           </motion.div>
         ))}
       </AnimatePresence>
+
+      <NamePlanDialog
+        open={renaming !== null}
+        initialName={renaming?.name || ""}
+        defaultName={renaming?.name || "Meal Plan"}
+        onCancel={() => setRenaming(null)}
+        onSave={handleRename}
+      />
     </div>
   );
 }
