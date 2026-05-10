@@ -44,10 +44,17 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
     });
   };
 
-  const handleSave = async () => {
+  const defaultPlanName = `${state.duration}-Day Plan — ${new Date().toLocaleDateString()}`;
+
+  const openSaveDialog = () => {
     if (!isComplete) return;
+    setNameDialogOpen(true);
+  };
+
+  const handleSave = async (name: string) => {
+    setNameDialogOpen(false);
     try {
-      await savePlan(plan, state.considerations, state.duration);
+      await savePlan(plan, state.considerations, state.duration, name);
       setSaved(true);
       toast.success(t("saved.planSaved"));
     } catch {
