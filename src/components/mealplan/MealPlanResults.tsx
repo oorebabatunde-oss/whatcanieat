@@ -22,6 +22,7 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
   const [saved, setSaved] = useState(false);
   const [swapTarget, setSwapTarget] = useState<{ id: string; name: string; ingredients: string[] } | null>(null);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [nameDialogOpen, setNameDialogOpen] = useState(false);
 
   if (!plan) return null;
 
