@@ -20,7 +20,7 @@ const App = () => (
         <TooltipProvider>
           <Sonner />
           <BrowserRouter>
-            <div className="pb-14">
+            <main className="pb-14">
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
@@ -28,7 +28,7 @@ const App = () => (
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-            </div>
+            </main>
             <BottomNav />
           </BrowserRouter>
         </TooltipProvider>
