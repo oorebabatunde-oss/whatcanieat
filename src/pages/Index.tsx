@@ -36,6 +36,31 @@ const Index = () => {
     changeMode("welcome");
   };
 
+  const seo = {
+    welcome: {
+      title: "What Can I Eat? — Food Recommendations & Meal Ideas",
+      description: "Figure out what you want to eat now with 3 steps, scan your fridge for recipe ideas, or plan meals ahead. No brands, no ads — just food.",
+      path: "/",
+    },
+    quiz: {
+      title: "Craving Quiz — What Can I Eat?",
+      description: "Answer a few quick questions about your mood, cravings, and dietary needs to get personalized dish recommendations.",
+      path: "/",
+    },
+    scan: {
+      title: "Scan Your Fridge — What Can I Eat?",
+      description: "Snap a photo of your fridge or pantry and get recipe ideas based on the ingredients you already have at home.",
+      path: "/",
+    },
+    mealplan: {
+      title: "Meal Planner — What Can I Eat?",
+      description: "Build a personalized meal plan from 1 to 30 days, tailored to your diet, preferences, and any medical considerations.",
+      path: "/",
+    },
+  }[mode];
+
+  const seoHead = <SeoHead title={seo.title} description={seo.description} path={seo.path} />;
+
   if (mode === "quiz") {
     return (
       <QuizProvider>
