@@ -116,7 +116,7 @@ const SwipeCard = React.forwardRef<SwipeCardHandle, SwipeCardProps>(function Swi
             />
           )}
           {imageCredit && imageLoaded && imageCredit.source !== "AI" && (
-            <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-foreground/40 rounded-tl text-[10px] text-background/80">
+            <div className="absolute bottom-0 right-0 px-2 py-0.5 bg-foreground/80 rounded-tl text-[10px] text-background">
               Photo by{" "}
               <a
                 href={`${imageCredit.link}${imageCredit.source === "Unsplash" ? "?utm_source=your_app&utm_medium=referral" : ""}`}
