@@ -10,6 +10,7 @@ import { Mail, Loader2, ArrowLeft, KeyRound } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Link } from "react-router-dom";
+import SeoHead from "@/components/SeoHead";
 
 export default function Auth() {
   const [email, setEmail] = useState("");

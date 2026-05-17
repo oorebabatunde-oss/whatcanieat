@@ -6,6 +6,7 @@ import MealPlanFlow from "@/components/mealplan/MealPlanFlow";
 import FlowHeader from "@/components/FlowHeader";
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import SeoHead from "@/components/SeoHead";
 
 type AppMode = "welcome" | "quiz" | "scan" | "mealplan";
 const MODE_KEY = "app-mode";
