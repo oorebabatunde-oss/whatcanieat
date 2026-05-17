@@ -38,6 +38,12 @@ Available in 14 languages: English, Spanish, French, German, Portuguese, Arabic,
 - "I need a vegan dinner idea" — apply dietary filters
 - "What should I eat for a late-night snack?" — set the meal context
 
+## Pages
+
+- [Home](/): Start here to take the quiz, scan your fridge, or build a meal plan.
+- [Saved](/saved): View your saved dishes and meal plans.
+- [Auth](/auth): Sign in or create an account.
+
 ## Access
 
 - URL: https://whatcanieat.food
