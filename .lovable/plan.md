@@ -1,18 +1,17 @@
-# Add Umami Analytics Tracking
+# Fix low-contrast text
 
-## Summary
-Add the Umami analytics tracking script to the project to enable privacy-friendly analytics without requiring a Google account.
+The accessibility scan flagged text that doesn't meet WCAG AA contrast (4.5:1 for body, 3:1 for large text). Two spots in the codebase use faded utility classes on top of already-muted colors, which fail contrast on the light off-white background.
 
-## Change
-Insert the Umami script tag into `index.html`.
+## Changes
 
-```html
-<script defer src="https://cloud.umami.is/script.js" data-website-id="b695d41f-6d17-4e7e-ac5a-015b378efb44"></script>
-```
+1. **`src/components/quiz/ResultsScreen.tsx` (line 349)** — the AI-disclaimer subtitle under the swipe hint uses `text-muted-foreground/60 text-[11px]`. The `/60` opacity on top of muted grey, at 11px, fails AA. Drop the opacity (use full `text-muted-foreground`) and bump to `text-[12px]` so it still reads as fine print but meets contrast.
 
-- Placed in the `<head>` alongside other meta tags and scripts.
-- Uses `defer` so it does not block page rendering.
-- No other files need to change.
+2. **`src/components/quiz/SwipeCard.tsx` (line 119)** — the image source/credit pill uses `bg-foreground/40` with `text-background/80`. Both translucent layers blend with the photo behind, leaving the label illegible. Switch to solid `bg-foreground/80` with `text-background` so the chip reads on any image.
 
-## After implementation
-The site will begin sending pageview events to Umami at `https://cloud.umami.is`.
+## Out of scope
+
+Other `/50`-style opacities in the codebase (Radix calendar disabled days, dropdown disabled items, dialog close button) are standard shadcn defaults on interactive/disabled states and are not what the Lighthouse audit is flagging.
+
+## After approval
+
+Two small edits, then surface the publish dialog so the fix lands on the live site (the SEO finding is scored against the published version) and mark the finding fixed.
