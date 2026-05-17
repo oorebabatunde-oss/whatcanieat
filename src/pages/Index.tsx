@@ -64,6 +64,7 @@ const Index = () => {
   if (mode === "quiz") {
     return (
       <QuizProvider>
+        {seoHead}
         <div className="min-h-screen bg-background flex flex-col">
           <FlowHeader title={t("quiz.headerTitle")} onBack={goWelcome} />
           <main className="flex-1 flex items-start justify-center pt-4 pb-4">
@@ -77,6 +78,7 @@ const Index = () => {
   if (mode === "scan") {
     return (
       <div className="min-h-screen bg-background flex flex-col">
+        {seoHead}
         <FridgeScanner onBack={goWelcome} />
       </div>
     );
@@ -85,6 +87,7 @@ const Index = () => {
   if (mode === "mealplan") {
     return (
       <div className="min-h-screen bg-background flex flex-col">
+        {seoHead}
         <FlowHeader title={t("mealplan.headerTitle")} onBack={goWelcome} />
         <main className="flex-1 flex items-start justify-center pt-4 pb-4">
           <MealPlanFlow />
@@ -95,6 +98,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-5 relative overflow-hidden">
+      {seoHead}
 
       <div className="relative z-10 w-full flex flex-col items-center flex-1">
 
