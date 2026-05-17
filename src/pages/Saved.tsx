@@ -6,6 +6,7 @@ import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import SavedRecommendations from "@/components/saved/SavedRecommendations";
 import SavedMealPlans from "@/components/saved/SavedMealPlans";
+import SeoHead from "@/components/SeoHead";
 
 export default function Saved() {
   const { user, loading: authLoading } = useAuth();
@@ -14,6 +15,11 @@ export default function Saved() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SeoHead
+        title="Saved Dishes & Meal Plans — What Can I Eat?"
+        description="View your saved dish recommendations and meal plans. Revisit favorites and pick up where you left off on What Can I Eat?."
+        path="/saved"
+      />
       <div className="max-w-sm mx-auto px-4 py-6">
         <div className="flex items-center gap-3 mb-6">
           <Button variant="ghost" size="icon" onClick={() => {

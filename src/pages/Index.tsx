@@ -6,6 +6,7 @@ import MealPlanFlow from "@/components/mealplan/MealPlanFlow";
 import FlowHeader from "@/components/FlowHeader";
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import SeoHead from "@/components/SeoHead";
 
 type AppMode = "welcome" | "quiz" | "scan" | "mealplan";
 const MODE_KEY = "app-mode";
@@ -35,9 +36,35 @@ const Index = () => {
     changeMode("welcome");
   };
 
+  const seo = {
+    welcome: {
+      title: "What Can I Eat? — Food Recommendations & Meal Ideas",
+      description: "Figure out what you want to eat now with 3 steps, scan your fridge for recipe ideas, or plan meals ahead. No brands, no ads — just food.",
+      path: "/",
+    },
+    quiz: {
+      title: "Craving Quiz — What Can I Eat?",
+      description: "Answer a few quick questions about your mood, cravings, and dietary needs to get personalized dish recommendations.",
+      path: "/",
+    },
+    scan: {
+      title: "Scan Your Fridge — What Can I Eat?",
+      description: "Snap a photo of your fridge or pantry and get recipe ideas based on the ingredients you already have at home.",
+      path: "/",
+    },
+    mealplan: {
+      title: "Meal Planner — What Can I Eat?",
+      description: "Build a personalized meal plan from 1 to 30 days, tailored to your diet, preferences, and any medical considerations.",
+      path: "/",
+    },
+  }[mode];
+
+  const seoHead = <SeoHead title={seo.title} description={seo.description} path={seo.path} />;
+
   if (mode === "quiz") {
     return (
       <QuizProvider>
+        {seoHead}
         <div className="min-h-screen bg-background flex flex-col">
           <FlowHeader title={t("quiz.headerTitle")} onBack={goWelcome} />
           <main className="flex-1 flex items-start justify-center pt-4 pb-4">
@@ -51,6 +78,7 @@ const Index = () => {
   if (mode === "scan") {
     return (
       <div className="min-h-screen bg-background flex flex-col">
+        {seoHead}
         <FridgeScanner onBack={goWelcome} />
       </div>
     );
@@ -59,6 +87,7 @@ const Index = () => {
   if (mode === "mealplan") {
     return (
       <div className="min-h-screen bg-background flex flex-col">
+        {seoHead}
         <FlowHeader title={t("mealplan.headerTitle")} onBack={goWelcome} />
         <main className="flex-1 flex items-start justify-center pt-4 pb-4">
           <MealPlanFlow />
@@ -69,6 +98,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-5 relative overflow-hidden">
+      {seoHead}
 
       <div className="relative z-10 w-full flex flex-col items-center flex-1">
 

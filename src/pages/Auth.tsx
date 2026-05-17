@@ -10,6 +10,7 @@ import { Mail, Loader2, ArrowLeft, KeyRound } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Link } from "react-router-dom";
+import SeoHead from "@/components/SeoHead";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -76,6 +77,11 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center px-4">
+      <SeoHead
+        title="Sign In — What Can I Eat?"
+        description="Sign in to What Can I Eat? to save dish recommendations and meal plans across devices. Quick 8-digit email code, no password needed."
+        path="/auth"
+      />
       <div className="flex items-center gap-2 px-4 pt-4 pb-2 w-full">
         <Link to="/">
           <Button variant="ghost" size="icon">
