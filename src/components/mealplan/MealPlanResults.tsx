@@ -188,7 +188,7 @@ const MealPlanResults = React.forwardRef<HTMLDivElement, object>(function MealPl
                           <ArrowRightLeft className="w-3.5 h-3.5" /> {t("mealplan.swap")}
                         </Button>
                         {!isComplete && (
-                          <span className="text-[10px] text-muted-foreground/60 text-center -mt-1">{t("mealplan.swapDisabled")}</span>
+                          <span className="text-[10px] text-muted-foreground text-center -mt-1">{t("mealplan.swapDisabled")}</span>
                         )}
                       </div>
                     </div>
