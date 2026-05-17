@@ -89,9 +89,41 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playpen+Sans:wght@400;500;600;700;800&display=swap"
+      as="font"
+      type="font/woff2"
+      href="/fonts/playpen-sans-700-latin.woff2"
+      crossorigin
     />
+    <style>
+      @font-face {
+        font-family: 'Playpen Sans';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/playpen-sans-700-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      #initial-shell {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+        background: hsl(40 10% 97%);
+        color: hsl(220 14% 20%);
+        text-align: center;
+      }
+      #initial-shell h1 {
+        font-family: 'Playpen Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-weight: 700;
+        font-size: 2rem;
+        line-height: 1.15;
+        margin: 0;
+      }
+      @media (prefers-color-scheme: dark) {
+        #initial-shell { background: hsl(220 14% 8%); color: hsl(40 10% 88%); }
+      }
+    </style>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playpen+Sans:wght@400;500;600;700;800&display=swap"
@@ -104,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playpen+Sans:wght@400;500;600;700;800&display=swap"
       />
     </noscript>
-
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="b695d41f-6d17-4e7e-ac5a-015b378efb44"></script>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="initial-shell"><h1>What Can I Eat?</h1></div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
