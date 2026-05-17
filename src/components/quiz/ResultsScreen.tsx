@@ -346,7 +346,7 @@ export default function ResultsScreen() {
           <p className="text-muted-foreground text-body-xs text-center -mt-4 whitespace-pre-line">
             {t("results.swipeHint")}
           </p>
-          <p className="text-muted-foreground/60 text-[11px] text-center -mt-4 whitespace-pre-line italic">
+          <p className="text-muted-foreground text-[12px] text-center -mt-4 whitespace-pre-line italic">
             {t("results.subtitle")}
           </p>
 
