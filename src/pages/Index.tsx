@@ -103,19 +103,14 @@ const Index = () => {
       <div className="relative z-10 w-full flex flex-col items-center flex-1">
 
         <div className="flex-1 flex flex-col items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="text-center mb-10"
-          >
+          <div className="text-center mb-10">
             <h1 className="text-display-1 md:text-5xl font-bold text-foreground mb-2 leading-tight" style={{ fontFamily: "'Playpen Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
               {t("app.title")}
             </h1>
             <p className="text-muted-foreground text-body-sm">
               {t("home.subtitle")}
             </p>
-          </motion.div>
+          </div>
 
           <div className="flex flex-col items-stretch gap-3 w-full max-w-[28rem]">
             <motion.button
