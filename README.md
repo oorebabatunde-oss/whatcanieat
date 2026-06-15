@@ -16,6 +16,3 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
-
-This repository is for whatcanieat.food and is not open for public forks. Unauthorized forks are prohibited.
